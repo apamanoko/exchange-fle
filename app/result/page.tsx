@@ -7,14 +7,13 @@ import {
   X, RefreshCw, Loader2, TrendingUp, Shield,
 } from 'lucide-react'
 import { getT, SUPPORTED_LANGS, type Lang } from '../lib/i18n'
-import type { LiteracyScore, TrapResult, Language } from '@/types'
+import type { LiteracyScore, TrapResult } from '@/types'
 import type { FeedbackOutput } from '@/lib/ai'
 
 // ─── 型 ──────────────────────────────────────────────────────────────────────
 
 type ApiResponse = {
   session_id: string
-  ui_lang: Language
   score: LiteracyScore
   trapResults: TrapResult[]
   feedback: FeedbackOutput
@@ -61,7 +60,7 @@ function getTrapInfo(trapId: string, lang: Lang): TrapInfo {
       de: { name: 'BEC (Lieferanten-Impersonation)', description: 'Angreifer geben sich als Lieferant aus und fordern Kontoänderungen oder Dateidownloads. Merkmale: ähnliche Domains, Doppelerweiterungen wie .pdf.exe.' },
       zh: { name: 'BEC（供应商冒充）', description: '攻击者冒充供应商，要求更改银行账户或下载文件。特征：相似域名、双重扩展名如.pdf.exe。' },
       ko: { name: 'BEC(공급업체 사칭)', description: '공격자가 공급업체를 사칭하여 계좌 변경이나 파일 다운로드를 요청합니다. 특징: 유사한 도메인명, .pdf.exe 같은 이중 확장자.' },
-      it: { name: 'BEC (Impersonazione Fornitore)', description: "Gli attaccanti si spacciano per un fornitore e chiedono di cambiare conto o scaricare file. Segnali: domini simili, doppie estensioni come .pdf.exe." },
+      it: { name: 'BEC (Impersonazione Fornitore)', description: 'Gli attaccanti si spacciano per un fornitore e chiedono di cambiare conto o scaricare file. Segnali: domini simili, doppie estensioni come .pdf.exe.' },
       vi: { name: 'BEC (Giả mạo nhà cung cấp)', description: 'Kẻ tấn công giả mạo nhà cung cấp và yêu cầu thay đổi tài khoản hoặc tải tệp. Dấu hiệu: tên miền tương tự, phần mở rộng kép như .pdf.exe.' },
       es: { name: 'BEC (Suplantación de Proveedor)', description: 'Los atacantes se hacen pasar por un proveedor y solicitan cambios de cuenta o descargas. Señales: dominios similares, extensiones dobles como .pdf.exe.' },
     },
@@ -71,7 +70,7 @@ function getTrapInfo(trapId: string, lang: Lang): TrapInfo {
       de: { name: 'BEC (Autoritäts-Impersonation)', description: 'Angreifer geben sich als Vorgesetzten aus und fordern dringende, vertrauliche Maßnahmen. Warnsignale: kostenlose E-Mail-Adressen, gefälschte Links.' },
       zh: { name: 'BEC（权威人士冒充）', description: '攻击者冒充上级要求紧急、保密的行动。警告信号：免费邮箱地址、看起来官方的伪造链接。' },
       ko: { name: 'BEC(권위자 사칭)', description: '공격자가 상급자를 사칭하여 긴급하고 기밀인 행동을 요구합니다. 경고 신호: 무료 이메일 주소, 공식처럼 보이는 스푸핑 링크.' },
-      it: { name: 'BEC (Impersonazione di Autorità)', description: "Gli attaccanti si spacciano per un superiore richiedendo azioni urgenti e riservate. Segnali: indirizzi email gratuiti, link contraffatti." },
+      it: { name: 'BEC (Impersonazione di Autorità)', description: 'Gli attaccanti si spacciano per un superiore richiedendo azioni urgenti e riservate. Segnali: indirizzi email gratuiti, link contraffatti.' },
       vi: { name: 'BEC (Giả mạo người có thẩm quyền)', description: 'Kẻ tấn công giả mạo người có thẩm quyền và yêu cầu hành động khẩn cấp, bí mật. Dấu hiệu: email miễn phí, liên kết giả mạo.' },
       es: { name: 'BEC (Suplantación de Autoridad)', description: 'Los atacantes se hacen pasar por una figura de autoridad exigiendo acción urgente y confidencial. Señales: emails gratuitos, enlaces falsificados.' },
     },
@@ -81,7 +80,7 @@ function getTrapInfo(trapId: string, lang: Lang): TrapInfo {
       de: { name: 'Spear-Phishing (Thread-Hijacking)', description: 'Angreifer kapern bestehende E-Mail-Threads als vertrauenswürdiger Kontakt. Malware wird in passwortgeschützten ZIPs oder Doppelerweiterungen versteckt.' },
       zh: { name: '鱼叉式网络钓鱼（邮件线程劫持）', description: '攻击者劫持现有邮件线程，伪装成可信联系人。将恶意软件隐藏在密码保护的ZIP或双重扩展名文件中。' },
       ko: { name: '스피어 피싱(스레드 하이재킹)', description: '공격자가 기존 이메일 스레드를 장악하여 신뢰할 수 있는 연락처인 척합니다. 악성코드를 ZIP 또는 이중 확장자 파일에 숨깁니다.' },
-      it: { name: 'Spear Phishing (Dirottamento Thread)', description: "Gli attaccanti si inseriscono in thread email esistenti fingendosi un contatto fidato. Nascondono malware in ZIP protetti da password o file con doppie estensioni." },
+      it: { name: 'Spear Phishing (Dirottamento Thread)', description: 'Gli attaccanti si inseriscono in thread email esistenti fingendosi un contatto fidato. Nascondono malware in ZIP protetti da password o file con doppie estensioni.' },
       vi: { name: 'Tấn công có chủ đích (Chiếm đoạt chuỗi email)', description: 'Kẻ tấn công chiếm đoạt chuỗi email và giả vờ là liên hệ đáng tin cậy. Chúng ẩn phần mềm độc hại trong file ZIP hoặc file có phần mở rộng kép.' },
       es: { name: 'Spear Phishing (Secuestro de Hilo)', description: 'Los atacantes secuestran hilos de correo haciéndose pasar por un contacto de confianza. Ocultan malware en ZIPs con contraseña o archivos con doble extensión.' },
     },
@@ -119,7 +118,7 @@ function SkeletonPage() {
       </div>
       <Skeleton className="h-24" />
       <div className="space-y-4">
-        {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-20" />)}
+        {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-20" />)}
       </div>
     </div>
   )
@@ -151,20 +150,17 @@ function ResultContent() {
   const [data, setData]       = useState<ApiResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState<string | null>(null)
-  const [visibleCount, setVisibleCount] = useState(0)
+  const [visibleItems, setVisibleItems] = useState<number>(0)
 
-  // ui_lang の優先順位: URLパラメータ > APIレスポンス > デフォルト 'ja'
   const urlLangRaw = searchParams.get('ui_lang')
-  const lang: Lang = urlLangRaw
-    ? parseLang(urlLangRaw, 'ja')
-    : parseLang((data?.ui_lang as string) ?? null, 'ja')
+  const lang: Lang = parseLang(urlLangRaw, 'ja')
 
   const t = getT(lang)
 
   const fetchData = useCallback(async () => {
     setLoading(true)
     setError(null)
-    setVisibleCount(0)
+    setVisibleItems(0)
     try {
       const res = await fetch('/api/feedback', {
         method:  'POST',
@@ -175,7 +171,11 @@ function ResultContent() {
         const body = await res.json().catch(() => ({}))
         throw new Error((body as { error?: string }).error ?? `HTTP ${res.status}`)
       }
-      setData(await res.json() as ApiResponse)
+      const json = await res.json() as ApiResponse
+      console.log('[result] API response:', JSON.stringify({ score: json.score, hasFeedback: !!json.feedback, feedbackKeys: json.feedback ? Object.keys(json.feedback) : [] }))
+      setData(json)
+      console.log('[result] feedback object:', json.feedback)
+      console.log('[result] feedback headline:', json.feedback?.headline)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error')
     } finally {
@@ -185,14 +185,26 @@ function ResultContent() {
 
   useEffect(() => { fetchData() }, [fetchData])
 
-  // フィードバック段階的フェードイン（500ms 間隔）
+  // feedback が確定したらアニメーション開始（setInterval 600ms × 6ステップ）
+  const feedbackHeadline = data?.feedback?.headline ?? null
+
   useEffect(() => {
-    if (!data) return
-    const timers = [1, 2, 3, 4, 5].map((n, i) =>
-      setTimeout(() => setVisibleCount(n), 300 + i * 500)
-    )
-    return () => timers.forEach(clearTimeout)
-  }, [data])
+    console.log('[result] feedbackHeadline changed:', feedbackHeadline)
+    if (!feedbackHeadline) return
+
+    setVisibleItems(0)
+    const timer = setInterval(() => {
+      setVisibleItems((prev) => {
+        console.log('[result] visibleItems:', prev + 1)
+        if (prev >= 6) {
+          clearInterval(timer)
+          return prev
+        }
+        return prev + 1
+      })
+    }, 600)
+    return () => clearInterval(timer)
+  }, [feedbackHeadline])
 
   if (loading) return <SkeletonPage />
 
@@ -216,6 +228,9 @@ function ResultContent() {
   if (!data) return null
 
   const { score, trapResults, feedback } = data
+  if (!feedback || !feedback.headline) {
+    console.warn('[result] feedback is missing or incomplete', feedback)
+  }
   const missed = trapResults.filter((tr) => tr.fellForTrap)
 
   const scoreItems: { key: keyof LiteracyScore; label: string }[] = [
@@ -231,8 +246,8 @@ function ResultContent() {
   const overallLabel = overallLevel === 'high' ? t.levelHigh : overallLevel === 'mid' ? t.levelMid : t.levelLow
 
   return (
-    <div className="min-h-screen bg-gray-50 print:bg-white">
-      <div className="max-w-2xl mx-auto px-4 py-10 space-y-8 print:py-4 print:space-y-6">
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-2xl mx-auto space-y-8 pb-16">
 
         {/* ① ヘッダー */}
         <header className="text-center space-y-2">
@@ -293,9 +308,7 @@ function ResultContent() {
                       <span className="text-sm font-semibold text-red-700">{info.name}</span>
                       {tr.hesitationCount > 0 && (
                         <span className="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full font-medium">
-                          {lang === 'ja'
-                            ? `${tr.hesitationCount}回保留`
-                            : `Held ${tr.hesitationCount}×`}
+                          {lang === 'ja' ? `${tr.hesitationCount}回保留` : `Held ${tr.hesitationCount}×`}
                         </span>
                       )}
                     </div>
@@ -307,94 +320,132 @@ function ResultContent() {
           )}
         </section>
 
-        {/* ④ AI フィードバック（段階的フェードイン） */}
-        <section>
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-purple-500 print:hidden" />
-            {t.feedbackTitle}
-          </h2>
+        {/* ④ AI フィードバック（段階的フェードイン・インラインスタイルで確実動作） */}
+        {feedback && (
+          <section>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+              <Lightbulb className="w-5 h-5 text-purple-500 print:hidden" />
+              {t.feedbackTitle}
+            </h2>
 
-          <div className="space-y-4">
-            {/* headline */}
-            <div className={`transition-all duration-500 ${visibleCount >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} print:opacity-100 print:translate-y-0`}>
-              <p className="text-xl font-bold text-gray-900 leading-snug">
-                {feedback.headline}
-              </p>
-            </div>
-
-            {/* whatYouDidWell */}
-            <div className={`transition-all duration-500 ${visibleCount >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} print:opacity-100 print:translate-y-0`}>
-              <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-                <p className="text-xs font-semibold text-green-700 uppercase tracking-wider mb-1.5">
-                  {t.feedbackWell}
+            <div className="space-y-4">
+              {/* 1. headline */}
+              <div
+                style={{
+                  opacity:    visibleItems >= 1 ? 1 : 0,
+                  transform:  visibleItems >= 1 ? 'translateY(0)' : 'translateY(16px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease',
+                }}
+              >
+                <p className="text-xl font-bold text-gray-900 leading-snug">
+                  {feedback.headline}
                 </p>
-                <p className="text-sm text-green-900 leading-relaxed">{feedback.whatYouDidWell}</p>
               </div>
-            </div>
 
-            {/* whatYouMissed */}
-            <div className={`transition-all duration-500 ${visibleCount >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} print:opacity-100 print:translate-y-0`}>
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                <p className="text-xs font-semibold text-yellow-700 uppercase tracking-wider mb-1.5">
-                  {t.feedbackMissed}
-                </p>
-                <p className="text-sm text-yellow-900 leading-relaxed">{feedback.whatYouMissed}</p>
-              </div>
-            </div>
-
-            {/* keyInsight */}
-            <div className={`transition-all duration-500 ${visibleCount >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} print:opacity-100 print:translate-y-0`}>
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
-                <Lightbulb className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5 print:hidden" />
-                <div>
-                  <p className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-1.5">
-                    {t.feedbackInsight}
+              {/* 2. whatYouDidWell */}
+              <div
+                style={{
+                  opacity:    visibleItems >= 2 ? 1 : 0,
+                  transform:  visibleItems >= 2 ? 'translateY(0)' : 'translateY(16px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease',
+                }}
+              >
+                <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+                  <p className="text-xs font-semibold text-green-700 uppercase tracking-wider mb-1.5">
+                    {t.feedbackWell}
                   </p>
-                  <p className="text-sm text-blue-900 leading-relaxed">{feedback.keyInsight}</p>
+                  <p className="text-sm text-green-900 leading-relaxed">{feedback.whatYouDidWell}</p>
+                </div>
+              </div>
+
+              {/* 3. whatYouMissed */}
+              <div
+                style={{
+                  opacity:    visibleItems >= 3 ? 1 : 0,
+                  transform:  visibleItems >= 3 ? 'translateY(0)' : 'translateY(16px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease',
+                }}
+              >
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                  <p className="text-xs font-semibold text-yellow-700 uppercase tracking-wider mb-1.5">
+                    {t.feedbackMissed}
+                  </p>
+                  <p className="text-sm text-yellow-900 leading-relaxed">{feedback.whatYouMissed}</p>
+                </div>
+              </div>
+
+              {/* 4. keyInsight */}
+              <div
+                style={{
+                  opacity:    visibleItems >= 4 ? 1 : 0,
+                  transform:  visibleItems >= 4 ? 'translateY(0)' : 'translateY(16px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease',
+                }}
+              >
+                <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3">
+                  <Lightbulb className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5 print:hidden" />
+                  <div>
+                    <p className="text-xs font-semibold text-blue-700 uppercase tracking-wider mb-1.5">
+                      {t.feedbackInsight}
+                    </p>
+                    <p className="text-sm text-blue-900 leading-relaxed">{feedback.keyInsight}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 5. oneAction */}
+              <div
+                style={{
+                  opacity:    visibleItems >= 5 ? 1 : 0,
+                  transform:  visibleItems >= 5 ? 'translateY(0)' : 'translateY(16px)',
+                  transition: 'opacity 0.6s ease, transform 0.6s ease',
+                }}
+              >
+                <div className="border-2 border-gray-800 rounded-xl p-4 flex gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-gray-800 flex-shrink-0 mt-0.5 print:hidden" />
+                  <div>
+                    <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
+                      {t.feedbackAction}
+                    </p>
+                    <p className="text-sm text-gray-900 font-medium leading-relaxed">{feedback.oneAction}</p>
+                  </div>
                 </div>
               </div>
             </div>
+          </section>
+        )}
 
-            {/* oneAction */}
-            <div className={`transition-all duration-500 ${visibleCount >= 5 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} print:opacity-100 print:translate-y-0`}>
-              <div className="border-2 border-gray-800 rounded-xl p-4 flex gap-3">
-                <CheckCircle2 className="w-5 h-5 text-gray-800 flex-shrink-0 mt-0.5 print:hidden" />
-                <div>
-                  <p className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1.5">
-                    {t.feedbackAction}
-                  </p>
-                  <p className="text-sm text-gray-900 font-medium leading-relaxed">{feedback.oneAction}</p>
-                </div>
-              </div>
+        {/* ⑤ 終了アクション（5項目表示後にフェードイン） */}
+        {visibleItems >= 5 && (
+          <footer
+            style={{
+              opacity:    visibleItems >= 6 ? 1 : 0,
+              transform:  visibleItems >= 6 ? 'translateY(0)' : 'translateY(16px)',
+              transition: 'opacity 0.6s ease, transform 0.6s ease',
+            }}
+            className="space-y-4 pt-4 border-t border-gray-200 print:border-gray-300"
+          >
+            <p className="text-center text-sm text-gray-500">{t.thankYou}</p>
+
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => window.print()}
+                className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors print:hidden"
+              >
+                <Printer className="w-4 h-4" />
+                {t.printReport}
+              </button>
+
+              <button
+                onClick={() => window.close()}
+                className="flex items-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors print:hidden"
+              >
+                <X className="w-4 h-4" />
+                {t.close}
+              </button>
             </div>
-          </div>
-        </section>
-
-        {/* ⑤ 終了アクション */}
-        <footer className="space-y-4 pt-4 border-t border-gray-200 print:border-gray-300">
-          <p className="text-center text-sm text-gray-500">{t.thankYou}</p>
-
-          {/* ボタン群: 印刷時は非表示 */}
-          <div className="flex flex-wrap items-center justify-center gap-3 print:hidden">
-            {/* 印刷・PDF保存ボタン */}
-            <button
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-            >
-              <Printer className="w-4 h-4" />
-              {t.printReport}
-            </button>
-
-            {/* 閉じるボタン */}
-            <button
-              onClick={() => window.close()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-800 text-white rounded-lg text-sm font-semibold hover:bg-gray-900 transition-colors"
-            >
-              <X className="w-4 h-4" />
-              {t.close}
-            </button>
-          </div>
-        </footer>
+          </footer>
+        )}
 
       </div>
     </div>

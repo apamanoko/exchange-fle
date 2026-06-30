@@ -28,3 +28,15 @@ body {
 .email-body a:hover {
   color: #1d4ed8;
 }
+
+/* 印刷用スタイル */
+@media print {
+  nav,
+  button,
+  .print-hidden {
+    display: none !important;
+  }
+  body {
+    font-size: 12pt;
+  }
+}

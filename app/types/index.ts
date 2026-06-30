@@ -85,6 +85,7 @@ export type EventType =
   | 'action_delete'    // 削除・ブロックアクション
   | 'tab_hidden'       // タブ非アクティブ化（TTA計測から除外するため記録）
   | 'tab_visible'      // タブ再アクティブ化
+  | 'devtools_open'    // DevTools 開検出（ウィンドウ内外サイズ差による推定）
 
 /** Supabase `sessions` テーブルの行型（SELECT結果の完全な型） */
 export interface Session {

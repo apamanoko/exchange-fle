@@ -6,6 +6,7 @@ import { Mail, Search, Bell, Settings, Loader2, AlertCircle, CheckCircle2 } from
 import { getT, SUPPORTED_LANGS, type Lang } from '../lib/i18n'
 import { getEmailSet } from '@/data/emailUtils'
 import { useTracker, type DebugEvent } from '../hooks/useTracker'
+import { useDevToolsGuard } from '../hooks/useDevToolsGuard'
 import type { Email, Language } from '@/types'
 import type { FolderId } from '../store/mailStore'
 import MailSidebar from '../components/MailSidebar'
@@ -57,6 +58,7 @@ function InboxContent() {
   const tracker = useTracker(sessionId, {
     onDebugEvent: IS_DEV ? handleDebugEvent : undefined,
   })
+  useDevToolsGuard(sessionId)
 
   // ── メールデータ ────────────────────────────────────────────────────────────
   const [emails] = useState<Email[]>(() =>

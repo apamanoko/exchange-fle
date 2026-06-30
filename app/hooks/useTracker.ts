@@ -78,6 +78,7 @@ export function useTracker(sessionId: string, options?: UseTrackerOptions) {
   // ─── Supabase バッチ INSERT ────────────────────────────────────────────────
 
   const flushQueue = useCallback(async () => {
+    if (!sessionId || sessionId.trim() === '') return
     if (queue.current.length === 0) return
     const batch = queue.current.splice(0)
     try {
@@ -164,6 +165,7 @@ export function useTracker(sessionId: string, options?: UseTrackerOptions) {
   // ─── 公開インターフェース ─────────────────────────────────────────────────
 
   const onEmailOpen = useCallback((emailId: string, emailLang: Language) => {
+    if (!sessionId || sessionId.trim() === '') return
     try {
       currentEmailId.current   = emailId
       currentEmailLang.current = emailLang
@@ -175,10 +177,12 @@ export function useTracker(sessionId: string, options?: UseTrackerOptions) {
   }, [sessionId, enqueue])
 
   const onHoverStart = useCallback((target: string) => {
+    if (!sessionId || sessionId.trim() === '') return
     hoverStartMap.current.set(target, performance.now())
-  }, [])
+  }, [sessionId])
 
   const onHoverEnd = useCallback((target: string, eventType: EventType) => {
+    if (!sessionId || sessionId.trim() === '') return
     try {
       const startedAt = hoverStartMap.current.get(target)
       if (startedAt === undefined) return
@@ -191,6 +195,7 @@ export function useTracker(sessionId: string, options?: UseTrackerOptions) {
 
   const onAction = useCallback(
     (actionType: 'action_reply' | 'action_hold' | 'action_delete') => {
+      if (!sessionId || sessionId.trim() === '') return
       try {
         let tta: number | null = null
         if (openedAt.current !== null) {
@@ -203,6 +208,7 @@ export function useTracker(sessionId: string, options?: UseTrackerOptions) {
   )
 
   const onLinkClick = useCallback((displayUrl: string) => {
+    if (!sessionId || sessionId.trim() === '') return
     try { enqueue(makeEntry('link_click', { value: displayUrl })) }
     catch (e) { console.error('[tracker] onLinkClick', e) }
   }, [enqueue])

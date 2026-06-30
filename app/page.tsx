@@ -2,20 +2,38 @@
 
 import { useState, useCallback, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Copy, Check, ExternalLink, Loader2 } from 'lucide-react'
-import { getT, SUPPORTED_LANGS, type Lang } from './lib/i18n'
+import {
+  Copy, Check, ExternalLink, Loader2,
+  AlertTriangle, ChevronRight,
+} from 'lucide-react'
+import { getT, type Lang } from './lib/i18n'
 import { getFormUrls, generateParticipantCode } from './lib/formUrls'
 import { supabase } from './lib/supabase'
 
-// ─── ユーティリティ ──────────────────────────────────────────────────────────
+// ─── 定数：留学生の母語選択肢 ────────────────────────────────────────────────
 
-function parseLang(raw: string | null, fallback: Lang): Lang {
-  return (SUPPORTED_LANGS as readonly string[]).includes(raw ?? '')
-    ? (raw as Lang)
-    : fallback
+type MotherTongueLang = 'en' | 'zh' | 'ko' | 'de' | 'it' | 'vi' | 'es'
+
+const MOTHER_TONGUES: { code: MotherTongueLang; ja: string; native: string }[] = [
+  { code: 'en', ja: '英語',       native: 'English'    },
+  { code: 'zh', ja: '中国語',     native: '中文'       },
+  { code: 'ko', ja: '韓国語',     native: '한국어'     },
+  { code: 'de', ja: 'ドイツ語',   native: 'Deutsch'    },
+  { code: 'it', ja: 'イタリア語', native: 'Italiano'   },
+  { code: 'vi', ja: 'ベトナム語', native: 'Tiếng Việt' },
+  { code: 'es', ja: 'スペイン語', native: 'Español'    },
+]
+
+// ─── 状況確定パラメータ型 ────────────────────────────────────────────────────
+
+type SituationParams = {
+  uiLang:    Lang
+  l1Lang:    Lang
+  l2Lang:    'ja' | 'en'
+  condition: 'L1' | 'L2'
 }
 
-// ─── ステップインジケーター ───────────────────────────────────────────────────
+// ─── StepIndicator ────────────────────────────────────────────────────────────
 
 function StepIndicator({ current }: { current: number }) {
   return (
@@ -42,7 +60,7 @@ function StepIndicator({ current }: { current: number }) {
   )
 }
 
-// ─── カード共通ラッパー ────────────────────────────────────────────────────────
+// ─── カード共通ラッパー ───────────────────────────────────────────────────────
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
@@ -52,16 +70,138 @@ function Card({ children }: { children: React.ReactNode }) {
   )
 }
 
-// ─── メインコンテンツ ─────────────────────────────────────────────────────────
+// ─── SituationSelector ───────────────────────────────────────────────────────
+
+function SituationSelector({ onConfirm }: { onConfirm: (p: SituationParams) => void }) {
+  const [situation, setSituation]     = useState<'ryugakusei' | 'nichijapan' | null>(null)
+  const [motherTongue, setMotherTongue] = useState<MotherTongueLang | null>(null)
+
+  const canConfirm =
+    situation === 'nichijapan' ||
+    (situation === 'ryugakusei' && motherTongue !== null)
+
+  function handleConfirm() {
+    if (!canConfirm) return
+    if (situation === 'nichijapan') {
+      onConfirm({ uiLang: 'ja', l1Lang: 'ja', l2Lang: 'en', condition: 'L1' })
+    } else {
+      const lang = motherTongue as MotherTongueLang
+      onConfirm({ uiLang: lang, l1Lang: lang, l2Lang: 'ja', condition: 'L2' })
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 w-full max-w-xl space-y-6">
+
+        <div className="text-center">
+          <h1 className="text-lg font-bold text-gray-900">
+            あなたの状況を選択してください
+          </h1>
+          <p className="text-sm text-gray-500 mt-1">Please select your situation</p>
+        </div>
+
+        <div className="space-y-3">
+
+          {/* 選択肢1: 日本在住の留学生 */}
+          <button
+            onClick={() => { setSituation('ryugakusei'); setMotherTongue(null) }}
+            className={`w-full text-left p-5 rounded-xl border-2 transition-colors ${
+              situation === 'ryugakusei'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 bg-white hover:border-gray-300'
+            }`}
+          >
+            <p className="font-semibold text-gray-900">日本在住の留学生</p>
+            <p className="text-sm text-gray-500 mt-0.5">International student in Japan</p>
+          </button>
+
+          {/* 母語選択（留学生選択時のみ展開） */}
+          {situation === 'ryugakusei' && (
+            <div className="ml-4 space-y-2">
+              <p className="text-xs font-medium text-gray-600">
+                母語を選択してください / Select your native language
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                {MOTHER_TONGUES.map(({ code, ja, native }) => (
+                  <button
+                    key={code}
+                    onClick={() => setMotherTongue(code)}
+                    className={`px-3 py-2.5 rounded-lg border text-left transition-colors ${
+                      motherTongue === code
+                        ? 'border-blue-500 bg-blue-50 text-blue-700'
+                        : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'
+                    }`}
+                  >
+                    <span className="block text-xs text-gray-500">{ja}</span>
+                    <span className="block text-sm font-semibold">{native}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 選択肢2: ドイツ在住の日本人 */}
+          <button
+            onClick={() => { setSituation('nichijapan'); setMotherTongue(null) }}
+            className={`w-full text-left p-5 rounded-xl border-2 transition-colors ${
+              situation === 'nichijapan'
+                ? 'border-blue-500 bg-blue-50'
+                : 'border-gray-200 bg-white hover:border-gray-300'
+            }`}
+          >
+            <p className="font-semibold text-gray-900">ドイツ在住の日本人</p>
+            <p className="text-sm text-gray-500 mt-0.5">Japanese student in Germany</p>
+          </button>
+
+        </div>
+
+        <button
+          onClick={handleConfirm}
+          disabled={!canConfirm}
+          className="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors
+            disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+            bg-blue-600 text-white hover:bg-blue-700
+            flex items-center justify-center gap-2"
+        >
+          次へ / Next
+          <ChevronRight className="w-4 h-4" />
+        </button>
+
+      </div>
+    </div>
+  )
+}
+
+// ─── HomeContent ─────────────────────────────────────────────────────────────
 
 function HomeContent() {
   const searchParams = useSearchParams()
-  const router = useRouter()
+  const router       = useRouter()
 
-  const uiLang = parseLang(searchParams.get('ui_lang'), 'ja')
-  const l1Lang = parseLang(searchParams.get('l1_lang'), uiLang)
+  const hasNoSessionError = searchParams.get('error') === 'no_session'
+
+  // ── 状況選択で確定する言語・条件 ───────────────────────────────────────────
+  const [situationConfirmed, setSituationConfirmed] = useState(false)
+  const [uiLang,    setUiLang]    = useState<Lang>('ja')
+  const [l1Lang,    setL1Lang]    = useState<Lang>('ja')
+  const [l2Lang,    setL2Lang]    = useState<'ja' | 'en'>('ja')
+  const [condition, setCondition] = useState<'L1' | 'L2'>('L2')
+
   const t = getT(uiLang)
 
+  const handleSituationConfirm = useCallback(
+    ({ uiLang: ul, l1Lang: l1, l2Lang: l2, condition: cond }: SituationParams) => {
+      setUiLang(ul)
+      setL1Lang(l1)
+      setL2Lang(l2)
+      setCondition(cond)
+      setSituationConfirmed(true)
+    },
+    [],
+  )
+
+  // ── ステップ状態 ──────────────────────────────────────────────────────────
   const [step, setStep]               = useState<0 | 1 | 2 | 3>(0)
   const [consentChecked, setConsent]  = useState(false)
   const [preFormDone, setPreFormDone] = useState(false)
@@ -83,21 +223,22 @@ function HomeContent() {
     setIsLoading(true)
     setError(null)
     try {
-      const condition: 'L1' | 'L2' = uiLang === l1Lang ? 'L1' : 'L2'
+      // l2_lang カラムがないため email_set_id で L2言語を表現
+      const emailSetId = l2Lang === 'en' ? 'en-l2' : 'ja-l2'
+
       const { data, error: dbError } = await supabase
         .from('sessions')
         .insert({
           participant_code: participantCode,
-          ui_lang: uiLang,
-          l1_lang: l1Lang,
+          ui_lang:          uiLang,
+          l1_lang:          l1Lang,
           condition,
-          email_set_id: 'default',
+          email_set_id:     emailSetId,
         })
         .select('id')
         .single()
 
       if (dbError) {
-        // PostgrestError は Error のインスタンスではないため個別に処理
         const msg = dbError.message
           ? `DB error: ${dbError.message}${dbError.hint ? ` (hint: ${dbError.hint})` : ''}`
           : JSON.stringify(dbError)
@@ -108,25 +249,57 @@ function HomeContent() {
       setError(err instanceof Error ? err.message : String(err))
       setIsLoading(false)
     }
-  }, [uiLang, l1Lang, participantCode, router])
+  }, [uiLang, l1Lang, l2Lang, condition, participantCode, router])
 
+  // ── 状況未確定: セレクター表示 ────────────────────────────────────────────
+  if (!situationConfirmed) {
+    return (
+      <>
+        {hasNoSessionError && (
+          <div className="fixed top-4 left-0 right-0 flex justify-center z-50 px-4 pointer-events-none">
+            <div className="flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 max-w-xl w-full pointer-events-auto">
+              <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <p className="text-sm text-red-700">
+                有効なセッションがありません。最初からやり直してください。
+              </p>
+            </div>
+          </div>
+        )}
+        <SituationSelector onConfirm={handleSituationConfirm} />
+      </>
+    )
+  }
+
+  // ── 状況確定後: 実験ステップ表示 ──────────────────────────────────────────
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+
+      {hasNoSessionError && (
+        <div className="w-full max-w-xl mb-6 flex items-center gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
+          <p className="text-sm text-red-700">
+            有効なセッションがありません。最初からやり直してください。
+          </p>
+        </div>
+      )}
+
       <StepIndicator current={step} />
 
-      {/* ── STEP 0: 研究同意 ──────────────────────────────────────────────── */}
+      {/* ── STEP 0: 研究同意 ───────────────────────────────────────────────── */}
       {step === 0 && (
         <Card>
           <h1 className="text-xl font-bold text-gray-900 mb-6">{t.consentTitle}</h1>
           <ol className="space-y-3 mb-6">
-            {([t.consentItem1, t.consentItem2, t.consentItem3, t.consentItem4] as string[]).map((item, i) => (
-              <li key={i} className="flex gap-3 text-sm text-gray-700">
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
-                  {i + 1}
-                </span>
-                <span>{item}</span>
-              </li>
-            ))}
+            {([t.consentItem1, t.consentItem2, t.consentItem3, t.consentItem4] as string[]).map(
+              (item, i) => (
+                <li key={i} className="flex gap-3 text-sm text-gray-700">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
+                    {i + 1}
+                  </span>
+                  <span>{item}</span>
+                </li>
+              ),
+            )}
           </ol>
           <p className="text-xs text-gray-500 border-t border-gray-100 pt-4 mb-1 leading-relaxed">
             {t.consentNote}
@@ -144,14 +317,16 @@ function HomeContent() {
           <button
             onClick={() => setStep(1)}
             disabled={!consentChecked}
-            className="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700"
+            className="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors
+              disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+              bg-blue-600 text-white hover:bg-blue-700"
           >
             {t.nextStep}
           </button>
         </Card>
       )}
 
-      {/* ── STEP 1: 参加者コード ─────────────────────────────────────────── */}
+      {/* ── STEP 1: 参加者コード ──────────────────────────────────────────── */}
       {step === 1 && (
         <Card>
           <h1 className="text-xl font-bold text-gray-900 mb-2">{t.participantCodeLabel}</h1>
@@ -179,7 +354,7 @@ function HomeContent() {
         </Card>
       )}
 
-      {/* ── STEP 2: 事前アンケート ───────────────────────────────────────── */}
+      {/* ── STEP 2: 事前アンケート ────────────────────────────────────────── */}
       {step === 2 && (
         <Card>
           <h1 className="text-xl font-bold text-gray-900 mb-6">{t.preFormButton}</h1>
@@ -204,14 +379,16 @@ function HomeContent() {
           <button
             onClick={() => setStep(3)}
             disabled={!preFormDone}
-            className="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700"
+            className="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors
+              disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+              bg-blue-600 text-white hover:bg-blue-700"
           >
             {t.nextStep}
           </button>
         </Card>
       )}
 
-      {/* ── STEP 3: カバーストーリー + 実験開始 ─────────────────────────── */}
+      {/* ── STEP 3: カバーストーリー + 実験開始 ──────────────────────────── */}
       {step === 3 && (
         <Card>
           <h1 className="text-xl font-bold text-gray-900 mb-4">{t.coverStoryTitle}</h1>
@@ -229,19 +406,21 @@ function HomeContent() {
             />
             <span className="text-sm text-gray-700">{t.readyToStart}</span>
           </label>
-          {error && (
-            <p className="text-xs text-red-600 mb-4">{error}</p>
-          )}
+          {error && <p className="text-xs text-red-600 mb-4">{error}</p>}
           <button
             onClick={handleStart}
             disabled={!readyChecked || isLoading}
-            className="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700 flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded-lg text-sm font-semibold transition-colors
+              disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed
+              bg-blue-600 text-white hover:bg-blue-700
+              flex items-center justify-center gap-2"
           >
             {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
             {isLoading ? t.loading : t.startExperiment}
           </button>
         </Card>
       )}
+
     </div>
   )
 }

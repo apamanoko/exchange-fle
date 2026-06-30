@@ -20,8 +20,13 @@ import {
  *   その他 → emailsEn（フォールバック）
  */
 export function getEmailSet(uiLang: Language, l1Lang: Language): Email[] {
-  const l2Emails = getL2Emails(uiLang, l1Lang)
-  return interleaveEmails(emailsJa, l2Emails)
+  if (l1Lang === 'ja') {
+    // ドイツ在住日本人：ja（L1） + de_en（L2）
+    return interleaveEmails(emailsJa, emailsDe_en)
+  }
+  // 日本在住留学生：母語（L1） + ja（L2）
+  const l1Emails = getL2Emails(uiLang, l1Lang)
+  return interleaveEmails(l1Emails, emailsJa)
 }
 
 /**

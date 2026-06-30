@@ -1,0 +1,9 @@
+ADMIN_KEY=birthdayCake2026
+
+
+【被験者AIフィードバック画面URL】
+http://localhost:3000/result?session_id=their_id
+
+【研究者用管理ダッシュボードURL】
+http://localhost:3000/admin?admin_key=birthdayCake2026
+
