@@ -1,61 +1,60 @@
 'use client'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ActionButtons.tsx  —  Phase 3-A
+// ActionButtons.tsx
 //
-// 【設計上の重要な決定】
-//   返信・転送・削除 の3種のみ実装。
-//   「フィッシングとして報告」ボタンは意図的に実装しない。
-//   （カバーストーリー維持: 被験者に実験目的を悟らせないための研究設計）
-//
-// 【トラッキング層との分離】
-//   各ボタンの onClick は必ず props 経由で受け取る。
-//   Phase 8（トラッキング実装）では MailLayout 側でラップするだけでよい。
+// 3ボタン構成：返信する / 保留する / 削除・ブロック
+// フィッシング報告ボタンは Hawthorne 効果排除のため意図的に非実装。
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { Reply, CornerUpRight, Trash2 } from 'lucide-react'
+import { Reply, Clock, ShieldX } from 'lucide-react'
 import type { Translations } from '../lib/i18n'
 
 export type ActionButtonsProps = {
   onReply: () => void
-  onForward: () => void
+  onHold: () => void
   onDelete: () => void
   t: Translations
 }
 
 export default function ActionButtons({
   onReply,
-  onForward,
+  onHold,
   onDelete,
   t,
 }: ActionButtonsProps) {
   return (
     <div className="flex items-center gap-0.5">
+
+      {/* 返信する */}
       <button
         onClick={onReply}
         className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 rounded hover:bg-gray-100 active:bg-gray-200 transition-colors font-medium"
       >
         <Reply className="w-4 h-4" />
-        {t.reply}
+        {t.actionReply}
       </button>
 
+      {/* 保留する */}
       <button
-        onClick={onForward}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 rounded hover:bg-gray-100 active:bg-gray-200 transition-colors font-medium"
+        onClick={onHold}
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-yellow-700 rounded hover:bg-yellow-50 active:bg-yellow-100 transition-colors font-medium"
       >
-        <CornerUpRight className="w-4 h-4" />
-        {t.forward}
+        <Clock className="w-4 h-4" />
+        {t.actionHold}
       </button>
 
       <div className="w-px h-4 bg-gray-200 mx-1" aria-hidden />
 
+      {/* 削除・ブロック */}
       <button
         onClick={onDelete}
         className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-red-600 rounded hover:bg-red-50 active:bg-red-100 transition-colors font-medium"
       >
-        <Trash2 className="w-4 h-4" />
-        {t.delete}
+        <ShieldX className="w-4 h-4" />
+        {t.actionDeleteBlock}
       </button>
+
     </div>
   )
 }

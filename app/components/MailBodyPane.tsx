@@ -1,35 +1,27 @@
 'use client'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MailBodyPane.tsx  —  Phase 3-B
+// MailBodyPane.tsx  —  Phase 3-B + tracker integration
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import DOMPurify from 'dompurify'
 import { Mail, Paperclip, MoreHorizontal, FileText } from 'lucide-react'
 import { getT, type Lang } from '../lib/i18n'
+import type { Email, Attachment, EventType } from '@/types'
 import ActionButtons from './ActionButtons'
 
-// PROVISIONAL — Phase 1-C で本番型に差し替える
-export type ProvisionalAttachment = {
-  name: string
-  size: string
+// ─── トラッカーハンドラ型 ─────────────────────────────────────────────────────
+
+export type TrackerHandlers = {
+  onHoverStart: (target: string) => void
+  onHoverEnd: (target: string, eventType: EventType) => void
+  onLinkClick: (displayUrl: string) => void
+  onAttachmentOpen: () => void
 }
 
-export type ProvisionalEmail = {
-  id: string
-  fromName: string
-  fromEmail: string
-  toName: string
-  subject: string
-  bodyHtml: string
-  fullDate: string
-  attachments: ProvisionalAttachment[]
-  isTrap: boolean
-  trapType?: 'T1' | 'T2' | 'T3' | 'T4' | 'T5'
-}
+// ─── アバター色・イニシャル（MailListItem と共有）────────────────────────────
 
-// アバター色・イニシャル（MailListItem と共有するユーティリティ）
 const AVATAR_COLORS = [
   'bg-blue-500', 'bg-emerald-500', 'bg-violet-500', 'bg-orange-500',
   'bg-rose-500',  'bg-teal-500',   'bg-pink-500',   'bg-indigo-500',
@@ -48,12 +40,9 @@ export function initials(name: string): string {
   return name.slice(0, 2)
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// HTML サニタイズ + リンク後処理
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── HTML サニタイズ + リンク後処理（data-link-id を付与）────────────────────
 
 function processBodyHtml(raw: string): string {
-  // DOMPurify / DOMParser はブラウザ API — SSR では空文字を返す
   if (typeof window === 'undefined') return ''
 
   const clean = DOMPurify.sanitize(raw, {
@@ -62,38 +51,48 @@ function processBodyHtml(raw: string): string {
 
   const doc = new DOMParser().parseFromString(clean, 'text/html')
 
+  let linkIdx = 0
   doc.querySelectorAll('a').forEach((a) => {
-    // 実際の遷移先を data-actual-href に退避してからナビゲートを無効化
-    const realHref = a.getAttribute('href') ?? ''
-    a.setAttribute('data-actual-href', realHref)
+    const displayUrl  = a.getAttribute('data-display-url')
+    const originalHref = a.getAttribute('href') ?? ''
+    // T3: data-display-url があればそれを status bar に表示（偽装URL検出ポイント）
+    a.setAttribute('data-actual-href', displayUrl ?? originalHref)
     a.setAttribute('href', 'javascript:void(0)')
-
-    // T3: data-display-url → title に移動（偽装URLは表示テキストに残す）
-    const displayUrl = a.getAttribute('data-display-url')
-    if (displayUrl) {
-      a.setAttribute('title', displayUrl)
-      a.removeAttribute('data-display-url')
-    }
+    a.setAttribute('data-link-id', `link-${linkIdx++}`)
+    if (displayUrl) a.removeAttribute('data-display-url')
   })
 
   return doc.body.innerHTML
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SenderAddress — アドレス部分はホバーで下線表示（T① ドメイン検証誘導）
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── SenderAddress ────────────────────────────────────────────────────────────
 
-type SenderAddressProps = { name: string; email: string }
+type SenderAddressProps = {
+  name: string
+  email: string
+  onHoverStart?: () => void
+  onHoverEnd?: () => void
+}
 
-function SenderAddress({ name, email }: SenderAddressProps) {
+function SenderAddress({ name, email, onHoverStart, onHoverEnd }: SenderAddressProps) {
   const [hovered, setHovered] = useState(false)
+
+  const handleEnter = () => {
+    setHovered(true)
+    onHoverStart?.()
+  }
+  const handleLeave = () => {
+    setHovered(false)
+    onHoverEnd?.()
+  }
+
   return (
     <div className="flex items-baseline flex-wrap gap-x-1">
       <span className="font-semibold text-gray-900 text-sm">{name}</span>
       <span
         className={`text-xs text-gray-400 cursor-default transition-colors ${hovered ? 'underline text-gray-600' : ''}`}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        onMouseEnter={handleEnter}
+        onMouseLeave={handleLeave}
       >
         &lt;{email}&gt;
       </span>
@@ -101,53 +100,61 @@ function SenderAddress({ name, email }: SenderAddressProps) {
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AttachmentCard — .pdf.exe はPDFアイコンで偽装（T2）
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── AttachmentCard ────────────────────────────────────────────────────────────
 
-type AttachmentCardProps = { att: ProvisionalAttachment }
+type AttachmentCardProps = {
+  att: Attachment
+  onHoverStart?: () => void
+  onHoverEnd?: () => void
+  onAttachmentOpen?: () => void
+}
 
-function AttachmentCard({ att }: AttachmentCardProps) {
-  const parts = att.name.split('.')
-  const isPseudoPdf =
-    parts.length > 2 &&
-    parts[parts.length - 1].toLowerCase() === 'exe' &&
-    parts[parts.length - 2].toLowerCase() === 'pdf'
+function AttachmentCard({ att, onHoverStart, onHoverEnd, onAttachmentOpen }: AttachmentCardProps) {
+  // isTrapped かつ PDF mime type → PDFアイコンで偽装（T2）
+  const isPseudoPdf = att.isTrapped && att.mimeType === 'application/pdf'
 
   return (
-    <div className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors max-w-xs">
+    <div
+      className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors max-w-xs"
+      onMouseEnter={onHoverStart}
+      onMouseLeave={onHoverEnd}
+      onClick={onAttachmentOpen}
+    >
       {isPseudoPdf ? (
-        // T2: PDF アイコンで .exe を偽装
         <div className="flex-shrink-0 flex flex-col items-center justify-center w-7">
           <FileText className="w-5 h-5 text-red-500" />
-          <span className="text-[8px] font-bold text-red-500 leading-none tracking-tight">
-            PDF
-          </span>
+          <span className="text-[8px] font-bold text-red-500 leading-none tracking-tight">PDF</span>
         </div>
       ) : (
         <Paperclip className="w-4 h-4 text-gray-500 flex-shrink-0" />
       )}
       <div className="min-w-0">
-        {/* 二重拡張子を含む完全なファイル名を表示 */}
+        {/* displayName を表示（拡張子偽装）。isTrapped でない場合は name と同じ */}
         <div className="text-sm text-gray-800 font-medium leading-tight break-all">
-          {att.name}
+          {att.displayName}
         </div>
-        <div className="text-xs text-gray-400">{att.size}</div>
       </div>
     </div>
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// BodyContent — HTML レンダリング + リンクホバー追跡（T③）
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── BodyContent ──────────────────────────────────────────────────────────────
 
 type BodyContentProps = {
   rawHtml: string
   onLinkHover: (url: string | null) => void
+  onLinkHoverStart?: (linkId: string) => void
+  onLinkHoverEnd?: (linkId: string) => void
+  onLinkClick?: (displayUrl: string) => void
 }
 
-function BodyContent({ rawHtml, onLinkHover }: BodyContentProps) {
+function BodyContent({
+  rawHtml,
+  onLinkHover,
+  onLinkHoverStart,
+  onLinkHoverEnd,
+  onLinkClick,
+}: BodyContentProps) {
   const [safeHtml, setSafeHtml] = useState('')
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -155,27 +162,42 @@ function BodyContent({ rawHtml, onLinkHover }: BodyContentProps) {
     setSafeHtml(processBodyHtml(rawHtml))
   }, [rawHtml])
 
-  // イベント委譲: コンテナに一度だけ登録し、内部リンクのホバーを追跡
+  // イベント委譲: コンテナに一度だけ登録
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
     const onOver = (e: MouseEvent) => {
       const a = (e.target as Element).closest<HTMLAnchorElement>('a[data-actual-href]')
-      if (a) onLinkHover(a.dataset.actualHref ?? null)
+      if (!a) return
+      onLinkHover(a.dataset.actualHref ?? null)
+      const linkId = a.dataset.linkId
+      if (linkId) onLinkHoverStart?.(linkId)
     }
     const onOut = (e: MouseEvent) => {
       const a = (e.target as Element).closest<HTMLAnchorElement>('a[data-actual-href]')
-      if (a) onLinkHover(null)
+      if (!a) return
+      onLinkHover(null)
+      const linkId = a.dataset.linkId
+      if (linkId) onLinkHoverEnd?.(linkId)
+    }
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as Element).closest<HTMLAnchorElement>('a[data-actual-href]')
+      if (!a) return
+      e.preventDefault()
+      const displayUrl = a.dataset.actualHref ?? ''
+      onLinkClick?.(displayUrl)
     }
 
     container.addEventListener('mouseover', onOver)
     container.addEventListener('mouseout', onOut)
+    container.addEventListener('click', onClick)
     return () => {
       container.removeEventListener('mouseover', onOver)
       container.removeEventListener('mouseout', onOut)
+      container.removeEventListener('click', onClick)
     }
-  }, [onLinkHover])
+  }, [onLinkHover, onLinkHoverStart, onLinkHoverEnd, onLinkClick])
 
   return (
     <div
@@ -186,23 +208,23 @@ function BodyContent({ rawHtml, onLinkHover }: BodyContentProps) {
   )
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MailBodyPane
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── MailBodyPane ─────────────────────────────────────────────────────────────
 
 type MailBodyPaneProps = {
-  email: ProvisionalEmail | null
+  email: Email | null
   lang: Lang
+  tracker?: TrackerHandlers
   onReply: (emailId: string) => void
-  onForward: (emailId: string) => void
+  onHold: (emailId: string) => void
   onDelete: (emailId: string) => void
 }
 
 export default function MailBodyPane({
   email,
   lang,
+  tracker,
   onReply,
-  onForward,
+  onHold,
   onDelete,
 }: MailBodyPaneProps) {
   const t = getT(lang)
@@ -211,6 +233,18 @@ export default function MailBodyPane({
   const handleLinkHover = useCallback((url: string | null) => {
     setHoveredLinkUrl(url)
   }, [])
+
+  const handleLinkHoverStart = useCallback((linkId: string) => {
+    tracker?.onHoverStart(`link_${linkId}`)
+  }, [tracker])
+
+  const handleLinkHoverEnd = useCallback((linkId: string) => {
+    tracker?.onHoverEnd(`link_${linkId}`, 'hover_link')
+  }, [tracker])
+
+  const handleLinkClick = useCallback((displayUrl: string) => {
+    tracker?.onLinkClick(displayUrl)
+  }, [tracker])
 
   if (!email) {
     return (
@@ -231,7 +265,7 @@ export default function MailBodyPane({
       <div className="flex-shrink-0 flex items-center gap-0.5 px-6 py-2.5 border-b border-gray-100">
         <ActionButtons
           onReply={() => onReply(email.id)}
-          onForward={() => onForward(email.id)}
+          onHold={() => onHold(email.id)}
           onDelete={() => onDelete(email.id)}
           t={t}
         />
@@ -254,35 +288,45 @@ export default function MailBodyPane({
           {/* 差出人情報 */}
           <div className="flex items-start gap-3 mb-6">
             <div
-              className={`flex-shrink-0 w-10 h-10 rounded-full ${avatarColor(email.fromName)} flex items-center justify-center text-white text-sm font-semibold select-none`}
+              className={`flex-shrink-0 w-10 h-10 rounded-full ${avatarColor(email.from.display)} flex items-center justify-center text-white text-sm font-semibold select-none`}
             >
-              {initials(email.fromName)}
+              {initials(email.from.display)}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  {/* Phase 3-B: ホバーで下線表示（T① ドメイン検証誘導） */}
-                  <SenderAddress name={email.fromName} email={email.fromEmail} />
+                  <SenderAddress
+                    name={email.from.display}
+                    email={email.from.address}
+                    onHoverStart={() => tracker?.onHoverStart('sender')}
+                    onHoverEnd={() => tracker?.onHoverEnd('sender', 'hover_sender')}
+                  />
                 </div>
                 <span className="flex-shrink-0 text-xs text-gray-400 whitespace-nowrap">
-                  {email.fullDate}
+                  {email.date}
                 </span>
               </div>
               <div className="text-xs text-gray-500 mt-0.5">
-                {t.to}：<span className="text-gray-700">{email.toName}</span>
+                {t.to}：<span className="text-gray-700">{email.to}</span>
               </div>
             </div>
           </div>
 
           {/* 添付ファイル */}
-          {email.attachments.length > 0 && (
+          {(email.attachments?.length ?? 0) > 0 && (
             <div className="mb-6">
               <p className="text-xs text-gray-500 font-medium mb-2">
-                {t.attachmentCount(email.attachments.length)}
+                {t.attachmentCount(email.attachments!.length)}
               </p>
               <div className="flex flex-wrap gap-2">
-                {email.attachments.map((att) => (
-                  <AttachmentCard key={att.name} att={att} />
+                {email.attachments!.map((att) => (
+                  <AttachmentCard
+                    key={att.name}
+                    att={att}
+                    onHoverStart={() => tracker?.onHoverStart('attachment')}
+                    onHoverEnd={() => tracker?.onHoverEnd('attachment', 'hover_attachment')}
+                    onAttachmentOpen={() => tracker?.onAttachmentOpen()}
+                  />
                 ))}
               </div>
             </div>
@@ -290,13 +334,19 @@ export default function MailBodyPane({
 
           <div className="border-t border-gray-100 mb-6" />
 
-          {/* 本文: HTML レンダリング（Phase 3-B） */}
-          <BodyContent rawHtml={email.bodyHtml} onLinkHover={handleLinkHover} />
+          {/* 本文 */}
+          <BodyContent
+            rawHtml={email.bodyHtml}
+            onLinkHover={handleLinkHover}
+            onLinkHoverStart={handleLinkHoverStart}
+            onLinkHoverEnd={handleLinkHoverEnd}
+            onLinkClick={handleLinkClick}
+          />
 
         </div>
       </div>
 
-      {/* ── ブラウザ風ステータスバー: リンクホバー時に実際のURLを表示（T③） ── */}
+      {/* ── ブラウザ風ステータスバー（T3: リンクホバーで実URLを表示）── */}
       {hoveredLinkUrl && (
         <div className="absolute bottom-0 left-0 right-0 px-3 py-1.5 bg-gray-100 border-t border-gray-300 text-xs text-gray-600 truncate z-20 select-none">
           {hoveredLinkUrl}

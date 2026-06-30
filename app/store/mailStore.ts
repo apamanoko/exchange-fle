@@ -1,14 +1,11 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// mailStore.ts  —  Phase 3-A 仮実装
-// Phase 1-C（型定義本番化）で EmailAction 等を差し替える
+// mailStore.ts  —  Phase 1-C
 // ─────────────────────────────────────────────────────────────────────────────
 import { create } from 'zustand'
+import type { FolderId, EmailAction } from '../types'
 
-// PROVISIONAL — Phase 1-C で本番型に差し替える
-export type FolderId = 'inbox' | 'sent' | 'deleted'
+export type { FolderId, EmailAction }
 export type EmailId = string
-// 返信・転送・削除の3種のみ（フィッシング報告は研究設計上実装しない）
-export type EmailAction = 'replied' | 'forwarded' | 'deleted'
 
 type MailStore = {
   selectedFolder: FolderId

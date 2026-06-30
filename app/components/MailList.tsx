@@ -1,19 +1,20 @@
 'use client'
 
 // ─────────────────────────────────────────────────────────────────────────────
-// MailList.tsx  —  Phase 3-A
+// MailList.tsx
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { RefreshCw, ChevronDown, MoreHorizontal } from 'lucide-react'
-import type { EmailAction } from '../store/mailStore'
-import MailListItem, { type ProvisionalListEmail } from './MailListItem'
+import type { EmailAction } from '../types'
+import MailListItem, { type ListEmail } from './MailListItem'
 
 type MailListProps = {
   folderLabel: string
-  emails: ProvisionalListEmail[]
+  emails: ListEmail[]
   selectedId: string | null
-  pendingCount: number          // 未処理件数（受信トレイのみ）
+  pendingCount: number
   processedMap: Record<string, EmailAction>
+  heldLabel: string
   onSelect: (id: string) => void
 }
 
@@ -23,6 +24,7 @@ export default function MailList({
   selectedId,
   pendingCount,
   processedMap,
+  heldLabel,
   onSelect,
 }: MailListProps) {
   return (
@@ -81,6 +83,7 @@ export default function MailList({
               email={email}
               isSelected={selectedId === email.id}
               processedAction={processedMap[email.id]}
+              heldLabel={heldLabel}
               onClick={onSelect}
             />
           ))
