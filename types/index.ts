@@ -33,9 +33,9 @@ export type EventType =
   | 'text_copy'         // テキストコピー（真偽検証の試み）
   | 'link_click'        // リンククリック（不審リンクへのアクセス）
   | 'attachment_open'   // 添付ファイルを開く（疑似マルウェア実行）
-  | 'action_reply'      // 返信アクション
-  | 'action_hold'       // 保留アクション
-  | 'action_delete'     // 削除・ブロックアクション
+  | 'action_reply'      // 返信アクション（信頼して対応）
+  | 'action_ignore'     // 既読にして放置（判断保留）
+  | 'action_block'      // ブロック・報告（危険と判断）
   | 'tab_hidden'        // タブ非アクティブ化（TTA計測から除外するため記録）
   | 'tab_visible'       // タブ再アクティブ化
   | 'devtools_open'     // DevTools 起動検知
@@ -133,21 +133,19 @@ export type ExperimentLogInsert = {
 /**
  * ITリテラシースコア
  * 「結果（騙されたか）」ではなく「プロセス（どう確認したか）」で評価する
- * 重み: domain25% + link20% + urgency20% + extension10% + text10% + hesitation15% = 100%
+ * 重み: domain30% + link25% + urgency25% + extension10% + text10% = 100%
  */
 export type LiteracyScore = {
-  /** ドメイン検証スコア（重み25%）: hover_sender合計ms ÷ 閾値2000ms × 100 */
+  /** ドメイン検証スコア（重み30%）: hover_sender合計ms ÷ 閾値2000ms × 100 */
   domainVerification: number
-  /** リンク検証スコア（重み20%）: リンク罠メールに対するhover_linkイベント発生比率 */
+  /** リンク検証スコア（重み25%）: リンク罠メールに対するhover_linkイベント発生比率 */
   linkInspection: number
-  /** 焦り耐性スコア（重み20%）: 罠メールTTAの中央値（≥8000ms→100点、<2000ms→0点） */
+  /** 焦り耐性スコア（重み25%）: 罠メールTTAの中央値（≥8000ms→100点、<2000ms→0点） */
   urgencyResistance: number
   /** 拡張子確認スコア（重み10%）: 拡張子罠メールでhover_attachmentが発生したか */
   extensionAwareness: number
   /** テキスト検証スコア（重み10%）: text_selectまたはtext_copyが1件以上あるか */
   textVerification: number
-  /** 保留による熟慮スコア（重み15%）: 罠メールのうち1回以上保留した割合 */
-  hesitationAwareness: number
   /** 重み付き総合スコア（0〜100） */
   overallScore: number
 }
@@ -158,12 +156,10 @@ export type LiteracyScore = {
 export type TrapResult = {
   /** 罠メールの ID（例: trap-1-ja） */
   trapId: string
-  /** 最終的に選択したアクション（replied=騙された / deleted=正しく排除） */
-  finalAction: 'replied' | 'deleted'
-  /** 保留した回数（迷いの指標） */
-  hesitationCount: number
+  /** 最終的に選択したアクション（replied=騙された / ignored=判断保留 / blocked=正しく排除） */
+  finalAction: 'replied' | 'ignored' | 'blocked'
   /** 最終アクションまでの TTA（ms） */
   ttaMs: number
-  /** 騙されたか（replied=true, deleted=false） */
-  fellForTrap: boolean
+  /** 騙されたか（replied=true, ignored=null=判断保留, blocked=false） */
+  fellForTrap: boolean | null
 }

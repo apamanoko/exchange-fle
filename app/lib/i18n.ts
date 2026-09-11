@@ -52,9 +52,8 @@ export type Translations = {
   loading: string
   // ── アクションボタン ─────────────────────────────────────────────────────
   actionReply: string
-  actionHold: string
-  actionDeleteBlock: string
-  statusHeld: string
+  actionIgnore: string
+  actionBlock: string
   // ── 結果画面 ────────────────────────────────────────────────────────────
   resultTitle: string
   levelHigh: string
@@ -66,7 +65,6 @@ export type Translations = {
   scoreUrgency: string
   scoreExtension: string
   scoreText: string
-  scoreHesitation: string
   scoreOverall: string
   missedTrapsTitle: string
   noMissedTraps: string
@@ -88,6 +86,7 @@ export type Translations = {
   feedbackTitle: string
   thankYou: string
   close: string
+  judgmentDeferred: string
 }
 
 const translations: Record<Lang, Translations> = {
@@ -134,9 +133,8 @@ const translations: Record<Lang, Translations> = {
     startExperiment: '実験を開始する',
     loading: '開始中...',
     actionReply: '返信する',
-    actionHold: '保留する',
-    actionDeleteBlock: '削除・ブロック',
-    statusHeld: '保留中',
+    actionIgnore: '既読にして放置',
+    actionBlock: 'ブロック・報告',
     resultTitle: '実験お疲れさまでした',
     levelHigh: '高',
     levelMid: '中',
@@ -147,7 +145,6 @@ const translations: Record<Lang, Translations> = {
     scoreUrgency: '焦らない判断',
     scoreExtension: '拡張子確認',
     scoreText: 'テキスト検証',
-    scoreHesitation: '迷いの記録',
     scoreOverall: '総合評価',
     missedTrapsTitle: '今回見落とした攻撃パターン',
     noMissedTraps: '全ての罠メールを正しく識別しました！',
@@ -168,6 +165,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AIからのフィードバック',
     thankYou: '実験にご参加いただきありがとうございました',
     close: '閉じる',
+    judgmentDeferred: '判断を保留しました',
   },
 
   // ── English ──────────────────────────────────────────────────────────────
@@ -212,9 +210,8 @@ const translations: Record<Lang, Translations> = {
     startExperiment: 'Start Experiment',
     loading: 'Starting...',
     actionReply: 'Reply',
-    actionHold: 'Hold',
-    actionDeleteBlock: 'Delete & Block',
-    statusHeld: 'Held',
+    actionIgnore: 'Mark as Read & Ignore',
+    actionBlock: 'Block & Report',
     resultTitle: 'Experiment Complete',
     levelHigh: 'High',
     levelMid: 'Medium',
@@ -225,7 +222,6 @@ const translations: Record<Lang, Translations> = {
     scoreUrgency: 'Calm Judgment',
     scoreExtension: 'Extension Check',
     scoreText: 'Text Verification',
-    scoreHesitation: 'Hesitation Awareness',
     scoreOverall: 'Overall',
     missedTrapsTitle: 'Attack Patterns You Missed',
     noMissedTraps: 'You correctly identified all phishing emails!',
@@ -246,6 +242,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AI Feedback',
     thankYou: 'Thank you for participating in the experiment',
     close: 'Close',
+    judgmentDeferred: 'Judgment deferred',
   },
 
   // ── Deutsch ──────────────────────────────────────────────────────────────
@@ -290,9 +287,8 @@ const translations: Record<Lang, Translations> = {
     startExperiment: 'Experiment starten',
     loading: 'Wird gestartet...',
     actionReply: 'Antworten',
-    actionHold: 'Zurückstellen',
-    actionDeleteBlock: 'Löschen & Blockieren',
-    statusHeld: 'Zurückgestellt',
+    actionIgnore: 'Als gelesen markieren & ignorieren',
+    actionBlock: 'Blockieren & Melden',
     resultTitle: 'Experiment abgeschlossen',
     levelHigh: 'Hoch',
     levelMid: 'Mittel',
@@ -303,7 +299,6 @@ const translations: Record<Lang, Translations> = {
     scoreUrgency: 'Besonnene Entscheidung',
     scoreExtension: 'Dateiendung-Prüfung',
     scoreText: 'Text-Verifizierung',
-    scoreHesitation: 'Zögern-Bewusstsein',
     scoreOverall: 'Gesamt',
     missedTrapsTitle: 'Übersehene Angriffsmuster',
     noMissedTraps: 'Sie haben alle Phishing-E-Mails korrekt erkannt!',
@@ -324,6 +319,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'KI-Feedback',
     thankYou: 'Vielen Dank für Ihre Teilnahme am Experiment',
     close: 'Schließen',
+    judgmentDeferred: 'Urteil zurückgestellt',
   },
 
   // ── 中文（简体）──────────────────────────────────────────────────────────
@@ -368,9 +364,8 @@ const translations: Record<Lang, Translations> = {
     startExperiment: '开始实验',
     loading: '正在启动...',
     actionReply: '回复',
-    actionHold: '暂缓处理',
-    actionDeleteBlock: '删除并屏蔽',
-    statusHeld: '待处理',
+    actionIgnore: '标记已读并忽略',
+    actionBlock: '屏蔽并举报',
     resultTitle: '实验完成',
     levelHigh: '高',
     levelMid: '中',
@@ -381,7 +376,6 @@ const translations: Record<Lang, Translations> = {
     scoreUrgency: '冷静判断',
     scoreExtension: '扩展名确认',
     scoreText: '文本验证',
-    scoreHesitation: '迟疑记录',
     scoreOverall: '综合评分',
     missedTrapsTitle: '您遗漏的攻击模式',
     noMissedTraps: '您正确识别了所有钓鱼邮件！',
@@ -402,6 +396,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AI反馈',
     thankYou: '感谢您参与本次实验',
     close: '关闭',
+    judgmentDeferred: '已保留判断',
   },
 
   // ── 한국어 ────────────────────────────────────────────────────────────────
@@ -446,9 +441,8 @@ const translations: Record<Lang, Translations> = {
     startExperiment: '실험 시작',
     loading: '시작 중...',
     actionReply: '답장하기',
-    actionHold: '보류하기',
-    actionDeleteBlock: '삭제 및 차단',
-    statusHeld: '보류 중',
+    actionIgnore: '읽음 처리 후 방치',
+    actionBlock: '차단 및 신고',
     resultTitle: '실험 완료',
     levelHigh: '높음',
     levelMid: '보통',
@@ -459,7 +453,6 @@ const translations: Record<Lang, Translations> = {
     scoreUrgency: '침착한 판단',
     scoreExtension: '확장자 확인',
     scoreText: '텍스트 검증',
-    scoreHesitation: '망설임 인식',
     scoreOverall: '종합 평가',
     missedTrapsTitle: '놓친 공격 패턴',
     noMissedTraps: '모든 피싱 이메일을 정확히 식별하셨습니다!',
@@ -480,6 +473,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AI 피드백',
     thankYou: '실험에 참여해 주셔서 감사합니다',
     close: '닫기',
+    judgmentDeferred: '판단을 보류했습니다',
   },
 
   // ── Italiano ─────────────────────────────────────────────────────────────
@@ -524,9 +518,8 @@ const translations: Record<Lang, Translations> = {
     startExperiment: "Inizia l'esperimento",
     loading: 'Avvio in corso...',
     actionReply: 'Rispondi',
-    actionHold: 'Sospendi',
-    actionDeleteBlock: 'Elimina e Blocca',
-    statusHeld: 'In sospeso',
+    actionIgnore: 'Segna come letto e ignora',
+    actionBlock: 'Blocca e Segnala',
     resultTitle: "Esperimento completato",
     levelHigh: 'Alto',
     levelMid: 'Medio',
@@ -537,7 +530,6 @@ const translations: Record<Lang, Translations> = {
     scoreUrgency: 'Giudizio calmo',
     scoreExtension: 'Verifica estensione',
     scoreText: 'Verifica testo',
-    scoreHesitation: 'Consapevolezza esitazione',
     scoreOverall: 'Valutazione complessiva',
     missedTrapsTitle: 'Schemi di attacco mancati',
     noMissedTraps: 'Hai identificato correttamente tutte le email di phishing!',
@@ -558,6 +550,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'Feedback AI',
     thankYou: "Grazie per aver partecipato all'esperimento",
     close: 'Chiudi',
+    judgmentDeferred: 'Giudizio sospeso',
   },
 
   // ── Tiếng Việt ───────────────────────────────────────────────────────────
@@ -602,9 +595,8 @@ const translations: Record<Lang, Translations> = {
     startExperiment: 'Bắt đầu thí nghiệm',
     loading: 'Đang khởi động...',
     actionReply: 'Trả lời',
-    actionHold: 'Tạm giữ',
-    actionDeleteBlock: 'Xóa & Chặn',
-    statusHeld: 'Đang giữ',
+    actionIgnore: 'Đánh dấu đã đọc & bỏ qua',
+    actionBlock: 'Chặn & Báo cáo',
     resultTitle: 'Hoàn thành thí nghiệm',
     levelHigh: 'Cao',
     levelMid: 'Trung bình',
@@ -615,7 +607,6 @@ const translations: Record<Lang, Translations> = {
     scoreUrgency: 'Nhận định bình tĩnh',
     scoreExtension: 'Kiểm tra phần mở rộng',
     scoreText: 'Xác minh văn bản',
-    scoreHesitation: 'Nhận thức do dự',
     scoreOverall: 'Đánh giá tổng thể',
     missedTrapsTitle: 'Các kiểu tấn công bạn bỏ lỡ',
     noMissedTraps: 'Bạn đã nhận diện chính xác tất cả email lừa đảo!',
@@ -636,6 +627,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'Phản hồi AI',
     thankYou: 'Cảm ơn bạn đã tham gia thí nghiệm',
     close: 'Đóng',
+    judgmentDeferred: 'Đã hoãn phán đoán',
   },
 
   // ── Español ──────────────────────────────────────────────────────────────
@@ -680,9 +672,8 @@ const translations: Record<Lang, Translations> = {
     startExperiment: 'Iniciar experimento',
     loading: 'Iniciando...',
     actionReply: 'Responder',
-    actionHold: 'Poner en espera',
-    actionDeleteBlock: 'Eliminar y Bloquear',
-    statusHeld: 'En espera',
+    actionIgnore: 'Marcar como leído e ignorar',
+    actionBlock: 'Bloquear y Reportar',
     resultTitle: 'Experimento completado',
     levelHigh: 'Alto',
     levelMid: 'Medio',
@@ -693,7 +684,6 @@ const translations: Record<Lang, Translations> = {
     scoreUrgency: 'Juicio tranquilo',
     scoreExtension: 'Verificación extensión',
     scoreText: 'Verificación texto',
-    scoreHesitation: 'Consciencia vacilación',
     scoreOverall: 'Evaluación general',
     missedTrapsTitle: 'Patrones de ataque que pasaste por alto',
     noMissedTraps: '¡Identificaste correctamente todos los correos de phishing!',
@@ -714,6 +704,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'Comentarios de IA',
     thankYou: 'Gracias por participar en el experimento',
     close: 'Cerrar',
+    judgmentDeferred: 'Juicio aplazado',
   },
 }
 

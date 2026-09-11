@@ -215,8 +215,8 @@ type MailBodyPaneProps = {
   lang: Lang
   tracker?: TrackerHandlers
   onReply: (emailId: string) => void
-  onHold: (emailId: string) => void
-  onDelete: (emailId: string) => void
+  onIgnore: (emailId: string) => void
+  onBlock: (emailId: string) => void
 }
 
 export default function MailBodyPane({
@@ -224,8 +224,8 @@ export default function MailBodyPane({
   lang,
   tracker,
   onReply,
-  onHold,
-  onDelete,
+  onIgnore,
+  onBlock,
 }: MailBodyPaneProps) {
   const t = getT(lang)
   const [hoveredLinkUrl, setHoveredLinkUrl] = useState<string | null>(null)
@@ -265,8 +265,8 @@ export default function MailBodyPane({
       <div className="flex-shrink-0 flex items-center gap-0.5 px-6 py-2.5 border-b border-gray-100">
         <ActionButtons
           onReply={() => onReply(email.id)}
-          onHold={() => onHold(email.id)}
-          onDelete={() => onDelete(email.id)}
+          onIgnore={() => onIgnore(email.id)}
+          onBlock={() => onBlock(email.id)}
           t={t}
         />
         <div className="ml-auto">

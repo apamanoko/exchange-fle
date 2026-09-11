@@ -38,8 +38,8 @@ export default function MailLayout({ lang = 'ja' }: MailLayoutProps) {
   }, [initPending])
 
   const handleReply  = (id: string) => processEmail(id, 'replied')
-  const handleHold   = (id: string) => processEmail(id, 'held')
-  const handleDelete = (id: string) => processEmail(id, 'deleted')
+  const handleIgnore = (id: string) => processEmail(id, 'ignored')
+  const handleBlock  = (id: string) => processEmail(id, 'blocked')
 
   const listEmails: ListEmail[] = []
   const selectedEmail: Email | null = null
@@ -99,15 +99,14 @@ export default function MailLayout({ lang = 'ja' }: MailLayoutProps) {
           selectedId={selectedId}
           pendingCount={0}
           processedMap={processedMap as Record<string, EmailAction>}
-          heldLabel="保留中"
           onSelect={selectEmail}
         />
         <MailBodyPane
           email={selectedEmail}
           lang={lang}
           onReply={handleReply}
-          onHold={handleHold}
-          onDelete={handleDelete}
+          onIgnore={handleIgnore}
+          onBlock={handleBlock}
         />
       </div>
     </div>

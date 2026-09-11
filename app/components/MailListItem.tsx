@@ -22,7 +22,6 @@ type MailListItemProps = {
   email: ListEmail
   isSelected: boolean
   processedAction: EmailAction | undefined
-  heldLabel: string
   onClick: (id: string) => void
 }
 
@@ -30,11 +29,9 @@ export default function MailListItem({
   email,
   isSelected,
   processedAction,
-  heldLabel,
   onClick,
 }: MailListItemProps) {
   const isReplied = processedAction === 'replied'
-  const isHeld    = processedAction === 'held'
 
   return (
     <li>
@@ -44,8 +41,6 @@ export default function MailListItem({
           w-full text-left px-4 py-3 transition-colors border-l-2
           ${isSelected
             ? 'bg-blue-50 border-l-blue-600'
-            : isHeld
-            ? 'border-l-yellow-400 bg-yellow-50/40 hover:bg-yellow-50/70'
             : isReplied
             ? 'border-l-transparent bg-gray-50/50 hover:bg-gray-100/60'
             : 'border-l-transparent hover:bg-gray-50'}
@@ -90,7 +85,7 @@ export default function MailListItem({
               </span>
             </div>
 
-            {/* 件名 + 保留中バッジ */}
+            {/* 件名 */}
             <div className="flex items-center gap-1.5 mb-0.5">
               <div
                 className={`text-xs truncate ${
@@ -103,21 +98,12 @@ export default function MailListItem({
               >
                 {email.subject}
               </div>
-              {isHeld && (
-                <span className="flex-shrink-0 px-1.5 py-0.5 rounded text-[9px] font-semibold bg-yellow-100 text-yellow-700 border border-yellow-200 leading-none">
-                  {heldLabel}
-                </span>
-              )}
             </div>
 
             {/* プレビュー */}
             <div className="flex items-center gap-1">
               <span className="text-xs text-gray-400 truncate leading-snug">
-                {isReplied
-                  ? '↩ 返信済み'
-                  : isHeld
-                  ? email.preview
-                  : email.preview}
+                {isReplied ? '↩ 返信済み' : email.preview}
               </span>
               {email.hasAttachment && !isReplied && (
                 <Paperclip className="flex-shrink-0 w-3 h-3 text-gray-300 ml-auto" />

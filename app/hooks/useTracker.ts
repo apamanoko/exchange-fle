@@ -194,7 +194,7 @@ export function useTracker(sessionId: string, options?: UseTrackerOptions) {
   }, [enqueue])
 
   const onAction = useCallback(
-    (actionType: 'action_reply' | 'action_hold' | 'action_delete') => {
+    (actionType: 'action_reply' | 'action_ignore' | 'action_block') => {
       if (!sessionId || sessionId.trim() === '') return
       try {
         let tta: number | null = null

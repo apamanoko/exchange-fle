@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Mail, Search, Bell, Settings, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { Mail, Search, Bell, Settings, Loader2, CheckCircle2 } from 'lucide-react'
 import { getT, SUPPORTED_LANGS, type Lang } from '../lib/i18n'
 import { getEmailSet } from '@/data/emailUtils'
 import { useTracker, type DebugEvent } from '../hooks/useTracker'
@@ -20,10 +20,10 @@ const IS_DEV = process.env.NODE_ENV === 'development'
 // ─── 型定義 ──────────────────────────────────────────────────────────────────
 
 /** メールの処理状態 */
-type MailStatus = 'unread' | 'read' | 'replied' | 'held' | 'deleted'
+type MailStatus = 'unread' | 'read' | 'replied' | 'ignored' | 'blocked'
 
 // EmailAction として MailList/MailListItem に渡せる部分集合
-type DisplayAction = 'replied' | 'held' | 'deleted'
+type DisplayAction = 'replied' | 'ignored' | 'blocked'
 
 // ─── ユーティリティ ──────────────────────────────────────────────────────────
 
@@ -77,32 +77,22 @@ function InboxContent() {
     [emails, selectedId]
   )
 
-  // 実験終了判定: 全メールが replied か deleted になった場合
+  // 実験終了判定: 全メールが replied か ignored か blocked になった場合
   const allResolved = useMemo(
     () => emails.every((e) => {
       const s = statusMap[e.id] ?? 'unread'
-      return s === 'replied' || s === 'deleted'
+      return s === 'replied' || s === 'ignored' || s === 'blocked'
     }),
     [emails, statusMap]
   )
 
-  // 保留中のメール件数
-  const heldCount = useMemo(
-    () => emails.filter((e) => statusMap[e.id] === 'held').length,
-    [emails, statusMap]
-  )
-
   // フォルダごとの表示対象
-  // inbox: deleted 以外を全て表示。held は先頭付近に並べる
+  // inbox: blocked 以外を全て表示（ignored は既読のまま受信トレイに残る）
   const folderEmails = useMemo(() => {
     if (selectedFolder === 'deleted') {
-      return emails.filter((e) => statusMap[e.id] === 'deleted')
+      return emails.filter((e) => statusMap[e.id] === 'blocked')
     }
-    const nonDeleted = emails.filter((e) => statusMap[e.id] !== 'deleted')
-    // held メールを先頭に、それ以外は元の順序を維持
-    const held  = nonDeleted.filter((e) => statusMap[e.id] === 'held')
-    const other = nonDeleted.filter((e) => statusMap[e.id] !== 'held')
-    return [...held, ...other]
+    return emails.filter((e) => statusMap[e.id] !== 'blocked')
   }, [emails, statusMap, selectedFolder])
 
   const listEmails: ListEmail[] = useMemo(
@@ -123,19 +113,19 @@ function InboxContent() {
   const displayMap = useMemo(() => {
     const result: Record<string, DisplayAction> = {}
     for (const [id, status] of Object.entries(statusMap)) {
-      if (status === 'replied' || status === 'held' || status === 'deleted') {
+      if (status === 'replied' || status === 'ignored' || status === 'blocked') {
         result[id] = status
       }
     }
     return result
   }, [statusMap])
 
-  // サイドバーバッジ / リストカウンター用: 未確定件数（unread / read / held）
+  // サイドバーバッジ / リストカウンター用: 未確定件数（unread / read）
   const pendingCount = useMemo(
     () =>
       emails.filter((e) => {
         const s = statusMap[e.id] ?? 'unread'
-        return s === 'unread' || s === 'read' || s === 'held'
+        return s === 'unread' || s === 'read'
       }).length,
     [emails, statusMap]
   )
@@ -148,28 +138,19 @@ function InboxContent() {
   // ── ハンドラ ─────────────────────────────────────────────────────────────────
 
   /**
-   * 次の unread / read メールへ自動遷移。
-   * なければ held メールへ（保留中のものを再処理できるよう誘導）。
-   * どちらもなければ選択解除。
+   * 次の unread / read メールへ自動遷移。なければ選択解除。
+   * reply / ignore / block はすべて終端アクションのため、再訪は発生しない。
    */
   const advanceToNext = useCallback(
     (currentId: string) => {
-      // 未読・既読（未確定）から次を探す
-      const nextUnprocessed = emails.find((e) => {
+      const next = emails.find((e) => {
         if (e.id === currentId) return false
         const s = statusMap[e.id] ?? 'unread'
         return s === 'unread' || s === 'read'
       })
-      // なければ保留中を探す（保留は何度でも選択可能）
-      const nextHeld = emails.find((e) => {
-        if (e.id === currentId) return false
-        return statusMap[e.id] === 'held'
-      })
-      const next = nextUnprocessed ?? nextHeld ?? null
 
       if (next) {
         setSelectedId(next.id)
-        // unread のみ read に昇格（held は held のまま維持）
         setStatusMap((prev) => {
           const s = prev[next.id] ?? 'unread'
           return s === 'unread' ? { ...prev, [next.id]: 'read' } : prev
@@ -187,7 +168,7 @@ function InboxContent() {
       const email = emails.find((e) => e.id === id)
       if (!email) return
       setSelectedId(id)
-      // unread → read。held / replied はステータスを変えない
+      // unread → read。replied / ignored / blocked はステータスを変えない
       setStatusMap((prev) => {
         const s = prev[id] ?? 'unread'
         return s === 'unread' ? { ...prev, [id]: 'read' } : prev
@@ -207,23 +188,21 @@ function InboxContent() {
   )
 
   /**
-   * 保留: status を 'held' にし次のメールへ。
-   * 同じメールに何度でも保留可能（ログは毎回 action_hold として記録）。
-   * held → held の再保留も許可（tracker.onAction で都度ログに残す）。
+   * 既読にして放置: status を 'ignored' にし次のメールへ。終端アクション（再訪なし）。
    */
-  const handleHold = useCallback(
+  const handleIgnore = useCallback(
     (emailId: string) => {
-      tracker.onAction('action_hold')   // 複数回記録 OK（迷いの回数として分析）
-      setStatusMap((prev) => ({ ...prev, [emailId]: 'held' }))
+      tracker.onAction('action_ignore')
+      setStatusMap((prev) => ({ ...prev, [emailId]: 'ignored' }))
       advanceToNext(emailId)
     },
     [tracker, advanceToNext]
   )
 
-  const handleDelete = useCallback(
+  const handleBlock = useCallback(
     (emailId: string) => {
-      tracker.onAction('action_delete')
-      setStatusMap((prev) => ({ ...prev, [emailId]: 'deleted' }))
+      tracker.onAction('action_block')
+      setStatusMap((prev) => ({ ...prev, [emailId]: 'blocked' }))
       if (selectedId === emailId) advanceToNext(emailId)
     },
     [tracker, advanceToNext, selectedId]
@@ -276,14 +255,6 @@ function InboxContent() {
         </div>
       </header>
 
-      {/* ── 保留中バナー ── */}
-      {heldCount > 0 && !allResolved && (
-        <div className="flex-shrink-0 flex items-center gap-2 px-4 py-2 bg-yellow-50 border-b border-yellow-200 text-yellow-800 text-sm">
-          <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          <span>保留中のメールが残っています（{heldCount}件）。リストの先頭に表示されています。</span>
-        </div>
-      )}
-
       {/* ── 全メール解決バナー ── */}
       {allResolved && (
         <div className="flex-shrink-0 flex items-center justify-between gap-4 px-4 py-2 bg-green-50 border-b border-green-200">
@@ -315,7 +286,6 @@ function InboxContent() {
           selectedId={selectedId}
           pendingCount={selectedFolder === 'inbox' ? pendingCount : 0}
           processedMap={displayMap}
-          heldLabel={t.statusHeld}
           onSelect={handleSelect}
         />
 
@@ -324,8 +294,8 @@ function InboxContent() {
           lang={uiLang}
           tracker={tracker}
           onReply={handleReply}
-          onHold={handleHold}
-          onDelete={handleDelete}
+          onIgnore={handleIgnore}
+          onBlock={handleBlock}
         />
       </div>
 

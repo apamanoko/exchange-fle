@@ -100,8 +100,8 @@ const SYSTEM_PROMPT = `あなたはサイバーセキュリティ教育の専門
 - 各フィールドは 100〜200 文字程度
 - 被験者が指定した言語でフィールドを記述すること
 - whatYouMissed には具体的な攻撃タイプ名を含めること
-- 一度でも保留した被験者には「疑問を持ったこと」を評価し、
-  最終的に騙された場合は「その直感を信じてほしかった」というニュアンスを加えること`
+- 既読のまま放置（判断保留）した被験者には「危険性に気づき断定を避けた慎重さ」を評価しつつ、
+  ブロック・報告という確実な行動には至らなかった点についても優しく言及すること`
 
 // ─── ユーザープロンプト生成 ────────────────────────────────────────────────────
 
@@ -110,21 +110,21 @@ function buildUserPrompt(input: FeedbackInput): string {
   const langInstr = LANG_INSTRUCTION[uiLang]
 
   const trapLines = trapResults.map((tr, i) => {
-    const outcome  = tr.finalAction === 'replied' ? '❌ 騙された（replied）' : '✅ 排除（deleted）'
-    const hesiNote = tr.hesitationCount > 0
-      ? `（${tr.hesitationCount}回保留した後で最終判断）`
-      : ''
-    return `  ${i + 1}. ${tr.trapId} [${describeTrap(tr.trapId)}]\n     → ${outcome}${hesiNote}, TTA: ${tr.ttaMs}ms`
+    const outcome =
+      tr.finalAction === 'replied' ? '❌ 騙された（返信）' :
+      tr.finalAction === 'ignored' ? '⚠️ 判断保留（既読のまま放置）' :
+      '✅ 見抜いた（ブロック・報告）'
+    return `  ${i + 1}. ${tr.trapId} [${describeTrap(tr.trapId)}]\n     → ${outcome}, TTA: ${tr.ttaMs}ms`
   }).join('\n')
 
   const contextNotes: string[] = []
-  if (trapResults.every((tr) => !tr.fellForTrap)) {
-    contextNotes.push('- 全ての罠メールを正しく排除した優秀な被験者です')
+  if (trapResults.every((tr) => tr.finalAction === 'blocked')) {
+    contextNotes.push('- 全ての罠メールを正しく見抜いた優秀な被験者です')
   }
-  const hesitatedDeceived = trapResults.filter((tr) => tr.fellForTrap && tr.hesitationCount > 0)
-  if (hesitatedDeceived.length > 0) {
+  const ignoredCount = trapResults.filter((tr) => tr.finalAction === 'ignored').length
+  if (ignoredCount > 0) {
     contextNotes.push(
-      `- ${hesitatedDeceived.length}通の罠メールで一度は保留したが最終的に返信してしまいました（直感を持っていたのに行動に踏み切れなかった）`
+      `- ${ignoredCount}通の罠メールで危険性を確信できず、既読のまま放置するにとどまりました（疑いは持てたが断定的な行動には至らなかった可能性があります）`
     )
   }
 
@@ -138,7 +138,6 @@ function buildUserPrompt(input: FeedbackInput): string {
 - 焦り耐性: ${score.urgencyResistance}点
 - 拡張子確認: ${score.extensionAwareness}点
 - テキスト検証: ${score.textVerification}点
-- 保留による熟慮: ${score.hesitationAwareness}点
 
 罠メール ${trapResults.length}通の結果:
 ${trapLines}

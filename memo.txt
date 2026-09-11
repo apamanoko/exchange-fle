@@ -1,9 +1,19 @@
 ADMIN_KEY=birthdayCake2026
 
+【実験環境URL】
+https://exchange-fle.vercel.app/
 
 【被験者AIフィードバック画面URL】
-http://localhost:3000/result?session_id=their_id
+https://exchange-fle.vercel.app/result?session_id=their_id
 
 【研究者用管理ダッシュボードURL】
-http://localhost:3000/admin?admin_key=birthdayCake2026
+https://exchange-fle.vercel.app/admin?admin_key=birthdayCake2026
+
+【Versel復旧コード】
+3cbb6c19-b6b541e8
+7861f5a0-79d63d94
+4b470e0a-2bd3e4b7
+207d236c-608e333d
+01d9ba46-0919bd1a
+673af358-072f1ea9
 

@@ -35,6 +35,9 @@ function clamp(v: number): number {
   return Math.min(100, Math.max(0, Math.round(v * 10) / 10))
 }
 
+// 罠メールへの最終判断となりうるアクション種別
+const FINAL_ACTION_EVENTS = new Set(['action_reply', 'action_ignore', 'action_block'])
+
 // ─── スコア算出 ────────────────────────────────────────────────────────────────
 
 export function computeScore(
@@ -55,7 +58,7 @@ export function computeScore(
 
   const trapLogs = logs.filter((l) => trapIds.has(l.email_id))
 
-  // ── domainVerification（25%）─────────────────────────────────────────────
+  // ── domainVerification（30%）─────────────────────────────────────────────
   const hoverSenderMs = trapLogs
     .filter((l) => l.event_type === 'hover_sender' && l.duration_ms != null)
     .reduce((sum, l) => sum + (l.duration_ms ?? 0), 0)
@@ -63,7 +66,7 @@ export function computeScore(
   const domainThreshold  = 2000 * (trapEmails.length / 4)
   const domainVerification = clamp(linearScore(hoverSenderMs, 0, domainThreshold))
 
-  // ── linkInspection（20%）────────────────────────────────────────────────
+  // ── linkInspection（25%）────────────────────────────────────────────────
   const emailsWithHoverLink = new Set(
     trapLogs
       .filter((l) => l.event_type === 'hover_link' && linkTrapIds.has(l.email_id))
@@ -73,14 +76,11 @@ export function computeScore(
     linkTrapIds.size > 0 ? (emailsWithHoverLink.size / linkTrapIds.size) * 100 : 0
   )
 
-  // ── urgencyResistance（20%）──────────────────────────────────────────────
-  // 罠メールの最終 TTA（action_reply / action_delete の duration_ms）の中央値
+  // ── urgencyResistance（25%）──────────────────────────────────────────────
+  // 罠メールの最終 TTA（action_reply / action_ignore / action_block の duration_ms）の中央値
   const finalTtaByEmail: Record<string, number> = {}
   for (const log of trapLogs) {
-    if (
-      (log.event_type === 'action_reply' || log.event_type === 'action_delete') &&
-      log.duration_ms != null
-    ) {
+    if (FINAL_ACTION_EVENTS.has(log.event_type) && log.duration_ms != null) {
       finalTtaByEmail[log.email_id] = log.duration_ms
     }
   }
@@ -105,22 +105,13 @@ export function computeScore(
   )
   const textVerification = hasTextActivity ? 100 : 0
 
-  // ── hesitationAwareness（15%）────────────────────────────────────────────
-  const emailsWithHold = new Set(
-    trapLogs.filter((l) => l.event_type === 'action_hold').map((l) => l.email_id)
-  )
-  const hesitationAwareness = clamp(
-    trapEmails.length > 0 ? (emailsWithHold.size / trapEmails.length) * 100 : 0
-  )
-
   // ── overallScore ─────────────────────────────────────────────────────────
   const overallScore = clamp(
-    domainVerification  * 0.25 +
-    linkInspection      * 0.20 +
-    urgencyResistance   * 0.20 +
+    domainVerification  * 0.30 +
+    linkInspection      * 0.25 +
+    urgencyResistance   * 0.25 +
     extensionAwareness  * 0.10 +
-    textVerification    * 0.10 +
-    hesitationAwareness * 0.15
+    textVerification    * 0.10
   )
 
   const score: LiteracyScore = {
@@ -129,28 +120,32 @@ export function computeScore(
     urgencyResistance,
     extensionAwareness,
     textVerification,
-    hesitationAwareness,
     overallScore,
   }
 
   // ── trapResults ───────────────────────────────────────────────────────────
   const trapResults: TrapResult[] = trapEmails.map((email) => {
-    const emailLogs       = trapLogs.filter((l) => l.email_id === email.id)
-    const hesitationCount = emailLogs.filter((l) => l.event_type === 'action_hold').length
+    const emailLogs = trapLogs.filter((l) => l.email_id === email.id)
 
     const finalActionLog = [...emailLogs]
       .reverse()
-      .find((l) => l.event_type === 'action_reply' || l.event_type === 'action_delete')
+      .find((l) => FINAL_ACTION_EVENTS.has(l.event_type))
 
-    const finalAction: 'replied' | 'deleted' =
-      finalActionLog?.event_type === 'action_delete' ? 'deleted' : 'replied'
+    const finalAction: 'replied' | 'ignored' | 'blocked' =
+      finalActionLog?.event_type === 'action_block'  ? 'blocked' :
+      finalActionLog?.event_type === 'action_ignore' ? 'ignored' :
+      'replied'
+
+    const fellForTrap: boolean | null =
+      finalAction === 'replied' ? true :
+      finalAction === 'ignored' ? null :
+      false
 
     return {
-      trapId:          email.id,
+      trapId:      email.id,
       finalAction,
-      hesitationCount,
-      ttaMs:           finalActionLog?.duration_ms ?? 0,
-      fellForTrap:     finalAction === 'replied',
+      ttaMs:       finalActionLog?.duration_ms ?? 0,
+      fellForTrap,
     }
   })
 

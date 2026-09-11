@@ -65,7 +65,7 @@ export type FolderId = 'inbox' | 'sent' | 'deleted'
  * メールに対するユーザーアクション種別。
  * action_report_phishing は Hawthorne 効果排除のため意図的に定義しない。
  */
-export type EmailAction = 'replied' | 'held' | 'deleted'
+export type EmailAction = 'replied' | 'ignored' | 'blocked'
 
 /**
  * 行動ログのイベント種別（experiment_logs.event_type カラムに格納）。
@@ -80,9 +80,9 @@ export type EventType =
   | 'text_copy'        // テキストコピー（真偽検証の試み）
   | 'link_click'       // リンククリック（不審リンクへのアクセス）
   | 'attachment_open'  // 添付ファイルを開く操作（疑似マルウェア実行）
-  | 'action_reply'     // 返信アクション
-  | 'action_hold'      // 保留アクション
-  | 'action_delete'    // 削除・ブロックアクション
+  | 'action_reply'     // 返信アクション（信頼して対応）
+  | 'action_ignore'    // 既読にして放置（判断保留）
+  | 'action_block'     // ブロック・報告（危険と判断）
   | 'tab_hidden'       // タブ非アクティブ化（TTA計測から除外するため記録）
   | 'tab_visible'      // タブ再アクティブ化
   | 'devtools_open'    // DevTools 開検出（ウィンドウ内外サイズ差による推定）

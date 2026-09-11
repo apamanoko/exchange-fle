@@ -3,56 +3,54 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // ActionButtons.tsx
 //
-// 3ボタン構成：返信する / 保留する / 削除・ブロック
-// フィッシング報告ボタンは Hawthorne 効果排除のため意図的に非実装。
+// 3ボタン構成：返信する / 既読にして放置 / ブロック・報告
+// フィッシング報告ボタンとは別物。Hawthorne 効果排除のため action_report_phishing 相当は非実装。
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { Reply, Clock, ShieldX } from 'lucide-react'
+import { Reply, CheckCheck, ShieldX } from 'lucide-react'
 import type { Translations } from '../lib/i18n'
 
 export type ActionButtonsProps = {
   onReply: () => void
-  onHold: () => void
-  onDelete: () => void
+  onIgnore: () => void
+  onBlock: () => void
   t: Translations
 }
 
 export default function ActionButtons({
   onReply,
-  onHold,
-  onDelete,
+  onIgnore,
+  onBlock,
   t,
 }: ActionButtonsProps) {
   return (
-    <div className="flex items-center gap-0.5">
+    <div className="flex items-center gap-2">
 
       {/* 返信する */}
       <button
         onClick={onReply}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 rounded hover:bg-gray-100 active:bg-gray-200 transition-colors font-medium"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-white bg-blue-600 rounded hover:bg-blue-700 active:bg-blue-800 transition-colors font-medium"
       >
         <Reply className="w-4 h-4" />
         {t.actionReply}
       </button>
 
-      {/* 保留する */}
+      {/* 既読にして放置 */}
       <button
-        onClick={onHold}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-yellow-700 rounded hover:bg-yellow-50 active:bg-yellow-100 transition-colors font-medium"
+        onClick={onIgnore}
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-700 bg-gray-200 rounded hover:bg-gray-300 active:bg-gray-400 transition-colors font-medium"
       >
-        <Clock className="w-4 h-4" />
-        {t.actionHold}
+        <CheckCheck className="w-4 h-4" />
+        {t.actionIgnore}
       </button>
 
-      <div className="w-px h-4 bg-gray-200 mx-1" aria-hidden />
-
-      {/* 削除・ブロック */}
+      {/* ブロック・報告 */}
       <button
-        onClick={onDelete}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-red-600 rounded hover:bg-red-50 active:bg-red-100 transition-colors font-medium"
+        onClick={onBlock}
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-white bg-red-600 rounded hover:bg-red-700 active:bg-red-800 transition-colors font-medium"
       >
         <ShieldX className="w-4 h-4" />
-        {t.actionDeleteBlock}
+        {t.actionBlock}
       </button>
 
     </div>

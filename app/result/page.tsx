@@ -231,7 +231,8 @@ function ResultContent() {
   if (!feedback || !feedback.headline) {
     console.warn('[result] feedback is missing or incomplete', feedback)
   }
-  const missed = trapResults.filter((tr) => tr.fellForTrap)
+  // block（正解）以外は学びの機会として表示する（replied: 騙された / ignored: 判断保留）
+  const missed = trapResults.filter((tr) => tr.fellForTrap !== false)
 
   const scoreItems: { key: keyof LiteracyScore; label: string }[] = [
     { key: 'domainVerification',  label: t.scoreDomain },
@@ -239,7 +240,6 @@ function ResultContent() {
     { key: 'urgencyResistance',   label: t.scoreUrgency },
     { key: 'extensionAwareness',  label: t.scoreExtension },
     { key: 'textVerification',    label: t.scoreText },
-    { key: 'hesitationAwareness', label: t.scoreHesitation },
   ]
 
   const overallLevel = getLevel(score.overallScore)
@@ -302,13 +302,23 @@ function ResultContent() {
             <div className="space-y-3">
               {missed.map((tr) => {
                 const info = getTrapInfo(tr.trapId, lang)
+                const isDeferred = tr.fellForTrap === null
                 return (
-                  <div key={tr.trapId} className="bg-white border border-red-100 rounded-xl p-4 space-y-1 print:border-red-200">
+                  <div
+                    key={tr.trapId}
+                    className={
+                      isDeferred
+                        ? 'bg-yellow-50 border border-yellow-200 rounded-xl p-4 space-y-1 print:border-yellow-300'
+                        : 'bg-white border border-red-100 rounded-xl p-4 space-y-1 print:border-red-200'
+                    }
+                  >
                     <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <span className="text-sm font-semibold text-red-700">{info.name}</span>
-                      {tr.hesitationCount > 0 && (
+                      <span className={`text-sm font-semibold ${isDeferred ? 'text-yellow-700' : 'text-red-700'}`}>
+                        {info.name}
+                      </span>
+                      {isDeferred && (
                         <span className="text-xs px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded-full font-medium">
-                          {lang === 'ja' ? `${tr.hesitationCount}回保留` : `Held ${tr.hesitationCount}×`}
+                          {t.judgmentDeferred}
                         </span>
                       )}
                     </div>

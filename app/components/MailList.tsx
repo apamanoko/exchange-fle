@@ -14,7 +14,6 @@ type MailListProps = {
   selectedId: string | null
   pendingCount: number
   processedMap: Record<string, EmailAction>
-  heldLabel: string
   onSelect: (id: string) => void
 }
 
@@ -24,7 +23,6 @@ export default function MailList({
   selectedId,
   pendingCount,
   processedMap,
-  heldLabel,
   onSelect,
 }: MailListProps) {
   return (
@@ -83,7 +81,6 @@ export default function MailList({
               email={email}
               isSelected={selectedId === email.id}
               processedAction={processedMap[email.id]}
-              heldLabel={heldLabel}
               onClick={onSelect}
             />
           ))
