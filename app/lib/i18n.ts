@@ -87,6 +87,17 @@ export type Translations = {
   thankYou: string
   close: string
   judgmentDeferred: string
+  // ── フィッシング警告画面 ──────────────────────────────────────────────────
+  closeTab: string
+  phishedTitle: string
+  phishedExplainLink: string
+  phishedExplainAttachment: string
+  phishedRecordedNote: string
+  phishedShockTitle: string
+  phishedShockLinkLine1: string
+  phishedShockLinkLine2: string
+  phishedShockAttachmentLine1: string
+  phishedShockAttachmentLine2: string
 }
 
 const translations: Record<Lang, Translations> = {
@@ -166,6 +177,16 @@ const translations: Record<Lang, Translations> = {
     thankYou: '実験にご参加いただきありがとうございました',
     close: '閉じる',
     judgmentDeferred: '判断を保留しました',
+    closeTab: 'このタブを閉じる',
+    phishedTitle: 'これはフィッシング詐欺シミュレーションです',
+    phishedExplainLink: 'あなたがクリックしたリンクは、実際のフィッシング詐欺であれば攻撃者のサーバーに誘導される偽サイトでした。',
+    phishedExplainAttachment: 'あなたが開こうとした添付ファイルは、実際のフィッシング詐欺であればマルウェア（悪意のあるプログラム）でした。実行された場合、あなたのPCが遠隔操作される可能性があります。',
+    phishedRecordedNote: 'このページへの到達は記録されました。実験を続けるには、このタブを閉じて元のメール画面に戻ってください。',
+    phishedShockTitle: 'セキュリティ警告',
+    phishedShockLinkLine1: 'このページへのアクセスは記録されました。',
+    phishedShockLinkLine2: '不審な接続を検出しています...',
+    phishedShockAttachmentLine1: 'ファイルを実行しています...',
+    phishedShockAttachmentLine2: 'システムへのアクセスを確認中',
   },
 
   // ── English ──────────────────────────────────────────────────────────────
@@ -243,6 +264,16 @@ const translations: Record<Lang, Translations> = {
     thankYou: 'Thank you for participating in the experiment',
     close: 'Close',
     judgmentDeferred: 'Judgment deferred',
+    closeTab: 'Close this tab',
+    phishedTitle: 'This is a phishing simulation',
+    phishedExplainLink: 'The link you clicked would have led to a fake site controlled by an attacker in a real phishing attack.',
+    phishedExplainAttachment: 'The attachment you tried to open would have been malware in a real phishing attack. If executed, an attacker could have gained remote control of your computer.',
+    phishedRecordedNote: 'Your arrival on this page has been recorded. To continue the experiment, please close this tab and return to the email screen.',
+    phishedShockTitle: 'Security Alert',
+    phishedShockLinkLine1: 'Your access to this page has been logged.',
+    phishedShockLinkLine2: 'Detecting suspicious connection...',
+    phishedShockAttachmentLine1: 'Executing file...',
+    phishedShockAttachmentLine2: 'Verifying system access',
   },
 
   // ── Deutsch ──────────────────────────────────────────────────────────────
@@ -320,6 +351,16 @@ const translations: Record<Lang, Translations> = {
     thankYou: 'Vielen Dank für Ihre Teilnahme am Experiment',
     close: 'Schließen',
     judgmentDeferred: 'Urteil zurückgestellt',
+    closeTab: 'Diesen Tab schließen',
+    phishedTitle: 'Dies ist eine Phishing-Simulation',
+    phishedExplainLink: 'Der Link, auf den Sie geklickt haben, hätte Sie bei einem echten Phishing-Angriff auf eine gefälschte, vom Angreifer kontrollierte Website geführt.',
+    phishedExplainAttachment: 'Der Anhang, den Sie öffnen wollten, wäre bei einem echten Phishing-Angriff Schadsoftware gewesen. Bei Ausführung hätte ein Angreifer möglicherweise die Fernsteuerung Ihres Computers übernehmen können.',
+    phishedRecordedNote: 'Ihr Aufruf dieser Seite wurde protokolliert. Um mit dem Experiment fortzufahren, schließen Sie bitte diesen Tab und kehren Sie zum E-Mail-Bildschirm zurück.',
+    phishedShockTitle: 'Sicherheitswarnung',
+    phishedShockLinkLine1: 'Ihr Zugriff auf diese Seite wurde protokolliert.',
+    phishedShockLinkLine2: 'Verdächtige Verbindung wird erkannt...',
+    phishedShockAttachmentLine1: 'Datei wird ausgeführt...',
+    phishedShockAttachmentLine2: 'Systemzugriff wird überprüft',
   },
 
   // ── 中文（简体）──────────────────────────────────────────────────────────
@@ -397,6 +438,16 @@ const translations: Record<Lang, Translations> = {
     thankYou: '感谢您参与本次实验',
     close: '关闭',
     judgmentDeferred: '已保留判断',
+    closeTab: '关闭此标签页',
+    phishedTitle: '这是一次网络钓鱼模拟',
+    phishedExplainLink: '如果这是真实的网络钓鱼攻击，您点击的链接将会把您带到攻击者控制的虚假网站。',
+    phishedExplainAttachment: '如果这是真实的网络钓鱼攻击，您试图打开的附件将是恶意软件。一旦执行，攻击者可能会远程控制您的电脑。',
+    phishedRecordedNote: '您访问此页面的记录已被保存。要继续实验，请关闭此标签页并返回邮件界面。',
+    phishedShockTitle: '安全警告',
+    phishedShockLinkLine1: '您对此页面的访问已被记录。',
+    phishedShockLinkLine2: '正在检测可疑连接...',
+    phishedShockAttachmentLine1: '正在执行文件...',
+    phishedShockAttachmentLine2: '正在验证系统访问权限',
   },
 
   // ── 한국어 ────────────────────────────────────────────────────────────────
@@ -474,6 +525,16 @@ const translations: Record<Lang, Translations> = {
     thankYou: '실험에 참여해 주셔서 감사합니다',
     close: '닫기',
     judgmentDeferred: '판단을 보류했습니다',
+    closeTab: '이 탭 닫기',
+    phishedTitle: '이것은 피싱 시뮬레이션입니다',
+    phishedExplainLink: '실제 피싱 공격이었다면, 당신이 클릭한 링크는 공격자가 통제하는 가짜 사이트로 연결되었을 것입니다.',
+    phishedExplainAttachment: '실제 피싱 공격이었다면, 당신이 열려고 한 첨부 파일은 악성코드였을 것입니다. 실행되었다면 공격자가 당신의 컴퓨터를 원격으로 조종할 수 있었을 것입니다.',
+    phishedRecordedNote: '이 페이지에 도달한 기록이 저장되었습니다. 실험을 계속하려면 이 탭을 닫고 이메일 화면으로 돌아가세요.',
+    phishedShockTitle: '보안 경고',
+    phishedShockLinkLine1: '이 페이지에 대한 접근이 기록되었습니다.',
+    phishedShockLinkLine2: '의심스러운 연결을 감지하는 중...',
+    phishedShockAttachmentLine1: '파일을 실행하는 중...',
+    phishedShockAttachmentLine2: '시스템 접근을 확인하는 중',
   },
 
   // ── Italiano ─────────────────────────────────────────────────────────────
@@ -551,6 +612,16 @@ const translations: Record<Lang, Translations> = {
     thankYou: "Grazie per aver partecipato all'esperimento",
     close: 'Chiudi',
     judgmentDeferred: 'Giudizio sospeso',
+    closeTab: 'Chiudi questa scheda',
+    phishedTitle: 'Questa è una simulazione di phishing',
+    phishedExplainLink: 'Il link su cui hai cliccato, in un vero attacco di phishing, ti avrebbe portato a un sito falso controllato da un aggressore.',
+    phishedExplainAttachment: "L'allegato che hai provato ad aprire, in un vero attacco di phishing, sarebbe stato un malware. Se eseguito, un aggressore avrebbe potuto prendere il controllo remoto del tuo computer.",
+    phishedRecordedNote: "L'accesso a questa pagina è stato registrato. Per continuare l'esperimento, chiudi questa scheda e torna alla schermata email.",
+    phishedShockTitle: 'Avviso di sicurezza',
+    phishedShockLinkLine1: "L'accesso a questa pagina è stato registrato.",
+    phishedShockLinkLine2: 'Rilevamento di una connessione sospetta...',
+    phishedShockAttachmentLine1: 'Esecuzione del file in corso...',
+    phishedShockAttachmentLine2: "Verifica dell'accesso al sistema in corso",
   },
 
   // ── Tiếng Việt ───────────────────────────────────────────────────────────
@@ -628,6 +699,16 @@ const translations: Record<Lang, Translations> = {
     thankYou: 'Cảm ơn bạn đã tham gia thí nghiệm',
     close: 'Đóng',
     judgmentDeferred: 'Đã hoãn phán đoán',
+    closeTab: 'Đóng tab này',
+    phishedTitle: 'Đây là mô phỏng tấn công lừa đảo (phishing)',
+    phishedExplainLink: 'Liên kết bạn đã nhấp vào, nếu là một cuộc tấn công lừa đảo thật sự, sẽ dẫn bạn đến một trang web giả do kẻ tấn công kiểm soát.',
+    phishedExplainAttachment: 'Tệp đính kèm bạn đã cố mở, nếu là một cuộc tấn công lừa đảo thật sự, sẽ là phần mềm độc hại. Nếu được thực thi, kẻ tấn công có thể điều khiển máy tính của bạn từ xa.',
+    phishedRecordedNote: 'Việc bạn truy cập trang này đã được ghi lại. Để tiếp tục thí nghiệm, vui lòng đóng tab này và quay lại màn hình email.',
+    phishedShockTitle: 'Cảnh báo bảo mật',
+    phishedShockLinkLine1: 'Việc bạn truy cập trang này đã được ghi lại.',
+    phishedShockLinkLine2: 'Đang phát hiện kết nối đáng ngờ...',
+    phishedShockAttachmentLine1: 'Đang thực thi tệp...',
+    phishedShockAttachmentLine2: 'Đang xác minh quyền truy cập hệ thống',
   },
 
   // ── Español ──────────────────────────────────────────────────────────────
@@ -705,6 +786,16 @@ const translations: Record<Lang, Translations> = {
     thankYou: 'Gracias por participar en el experimento',
     close: 'Cerrar',
     judgmentDeferred: 'Juicio aplazado',
+    closeTab: 'Cerrar esta pestaña',
+    phishedTitle: 'Esto es una simulación de phishing',
+    phishedExplainLink: 'El enlace en el que hiciste clic, en un ataque de phishing real, te habría llevado a un sitio falso controlado por un atacante.',
+    phishedExplainAttachment: 'El archivo adjunto que intentaste abrir, en un ataque de phishing real, habría sido malware. Si se ejecutaba, un atacante podría haber tomado el control remoto de tu ordenador.',
+    phishedRecordedNote: 'Tu acceso a esta página ha quedado registrado. Para continuar con el experimento, cierra esta pestaña y vuelve a la pantalla de correo.',
+    phishedShockTitle: 'Alerta de seguridad',
+    phishedShockLinkLine1: 'Tu acceso a esta página ha sido registrado.',
+    phishedShockLinkLine2: 'Detectando conexión sospechosa...',
+    phishedShockAttachmentLine1: 'Ejecutando archivo...',
+    phishedShockAttachmentLine2: 'Verificando acceso al sistema',
   },
 }
 

@@ -9,8 +9,9 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ShieldAlert, ShieldCheck, Loader2, ArrowLeft, FileWarning } from 'lucide-react'
+import { ShieldAlert, ShieldCheck, Loader2, X, FileWarning } from 'lucide-react'
 import { supabase } from '@/app/lib/supabase'
+import { getT, type Lang } from '@/app/lib/i18n'
 import type { EventType } from '@/types'
 
 type PhishType = 'link' | 'attachment'
@@ -19,9 +20,15 @@ function parseType(raw: string | null): PhishType {
   return raw === 'attachment' ? 'attachment' : 'link'
 }
 
+function parseLang(raw: string | null): Lang {
+  const supported: Lang[] = ['ja', 'en', 'de', 'zh', 'ko', 'it', 'vi', 'es']
+  return supported.includes(raw as Lang) ? (raw as Lang) : 'ja'
+}
+
 // ─── 第1段階: 本物のフィッシング被害画面を模した警告 ─────────────────────────
 
-function ShockStage({ type }: { type: PhishType }) {
+function ShockStage({ type, lang }: { type: PhishType; lang: Lang }) {
+  const t = getT(lang)
   const [progress, setProgress] = useState(0)
 
   useEffect(() => {
@@ -34,18 +41,18 @@ function ShockStage({ type }: { type: PhishType }) {
       <ShieldAlert className="w-20 h-20 text-red-600 mb-6 animate-pulse" />
 
       <h1 className="text-3xl sm:text-4xl font-extrabold text-red-600 tracking-wide mb-3">
-        セキュリティ警告
+        {t.phishedShockTitle}
       </h1>
 
       {type === 'link' ? (
         <>
-          <p className="text-sm text-red-200 mb-1">このページへのアクセスは記録されました。</p>
-          <p className="text-xs text-gray-400 mb-8">不審な接続を検出しています...</p>
+          <p className="text-sm text-red-200 mb-1">{t.phishedShockLinkLine1}</p>
+          <p className="text-xs text-gray-400 mb-8">{t.phishedShockLinkLine2}</p>
         </>
       ) : (
         <>
-          <p className="text-sm text-red-200 mb-1">ファイルを実行しています...</p>
-          <p className="text-xs text-gray-400 mb-8">システムへのアクセスを確認中</p>
+          <p className="text-sm text-red-200 mb-1">{t.phishedShockAttachmentLine1}</p>
+          <p className="text-xs text-gray-400 mb-8">{t.phishedShockAttachmentLine2}</p>
         </>
       )}
 
@@ -65,7 +72,8 @@ function ShockStage({ type }: { type: PhishType }) {
 
 // ─── 第2段階: 実験の説明（教育的トーン） ──────────────────────────────────────
 
-function RevealStage({ type, onBack }: { type: PhishType; onBack: () => void }) {
+function RevealStage({ type, lang, onClose }: { type: PhishType; lang: Lang; onClose: () => void }) {
+  const t = getT(lang)
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white px-6 text-center">
       <div className="max-w-md w-full">
@@ -74,30 +82,26 @@ function RevealStage({ type, onBack }: { type: PhishType; onBack: () => void }) 
         </div>
 
         <h1 className="text-xl font-bold text-gray-900 mb-4">
-          これはフィッシング詐欺シミュレーションです
+          {t.phishedTitle}
         </h1>
 
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6 text-left flex gap-2.5">
           <FileWarning className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-gray-700 leading-relaxed">
-            {type === 'link'
-              ? 'あなたがクリックしたリンクは、実際のフィッシング詐欺であれば攻撃者のサーバーに誘導される偽サイトでした。'
-              : 'あなたが開こうとした添付ファイルは、実際のフィッシング詐欺であればマルウェア（悪意のあるプログラム）でした。実行された場合、あなたのPCが遠隔操作される可能性があります。'}
+            {type === 'link' ? t.phishedExplainLink : t.phishedExplainAttachment}
           </p>
         </div>
 
         <p className="text-sm text-gray-500 mb-8 leading-relaxed">
-          このページへの到達は記録されました。
-          <br />
-          実験を続けるには元のメール画面に戻ってください。
+          {t.phishedRecordedNote}
         </p>
 
         <button
-          onClick={onBack}
+          onClick={onClose}
           className="inline-flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 active:bg-black transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
-          メール画面に戻る
+          <X className="w-4 h-4" />
+          {t.closeTab}
         </button>
       </div>
     </div>
@@ -109,6 +113,7 @@ function RevealStage({ type, onBack }: { type: PhishType; onBack: () => void }) 
 function PhishedContent() {
   const searchParams = useSearchParams()
   const type      = parseType(searchParams.get('type'))
+  const lang      = parseLang(searchParams.get('ui_lang'))
   const sessionId = searchParams.get('session_id')
   const emailId   = searchParams.get('email_id')
 
@@ -141,8 +146,8 @@ function PhishedContent() {
       })
   }, [sessionId, emailId, type])
 
-  const handleBack = useCallback(() => {
-    window.history.back()
+  const handleClose = useCallback(() => {
+    window.close()
   }, [])
 
   return (
@@ -155,11 +160,11 @@ function PhishedContent() {
           transition:    'opacity 0.7s ease',
         }}
       >
-        <ShockStage type={type} />
+        <ShockStage type={type} lang={lang} />
       </div>
 
       <div style={{ opacity: revealed ? 1 : 0, transition: 'opacity 0.7s ease' }}>
-        <RevealStage type={type} onBack={handleBack} />
+        <RevealStage type={type} lang={lang} onClose={handleClose} />
       </div>
     </div>
   )

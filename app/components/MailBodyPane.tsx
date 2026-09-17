@@ -249,22 +249,22 @@ export default function MailBodyPane({
     tracker?.onLinkClick(displayUrl)
     if (email && sessionId) {
       window.open(
-        `/phished?type=link&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}`,
+        `/phished?type=link&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}&ui_lang=${encodeURIComponent(lang)}`,
         '_blank'
       )
     }
-  }, [tracker, sessionId, email])
+  }, [tracker, sessionId, email, lang])
 
   // 添付ファイルを開く: マルウェア実行を模した /phished ページを新しいタブで開く
   const handleAttachmentOpen = useCallback(() => {
     tracker?.onAttachmentOpen()
     if (email && sessionId) {
       window.open(
-        `/phished?type=attachment&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}`,
+        `/phished?type=attachment&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}&ui_lang=${encodeURIComponent(lang)}`,
         '_blank'
       )
     }
-  }, [tracker, sessionId, email])
+  }, [tracker, sessionId, email, lang])
 
   if (!email) {
     return (
