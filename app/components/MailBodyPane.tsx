@@ -214,6 +214,7 @@ type MailBodyPaneProps = {
   email: Email | null
   lang: Lang
   tracker?: TrackerHandlers
+  sessionId?: string
   onReply: (emailId: string) => void
   onIgnore: (emailId: string) => void
   onBlock: (emailId: string) => void
@@ -223,6 +224,7 @@ export default function MailBodyPane({
   email,
   lang,
   tracker,
+  sessionId,
   onReply,
   onIgnore,
   onBlock,
@@ -242,9 +244,27 @@ export default function MailBodyPane({
     tracker?.onHoverEnd(`link_${linkId}`, 'hover_link')
   }, [tracker])
 
+  // リンククリック: 罠サイトへの誘導を模した /phished ページを新しいタブで開く
   const handleLinkClick = useCallback((displayUrl: string) => {
     tracker?.onLinkClick(displayUrl)
-  }, [tracker])
+    if (email && sessionId) {
+      window.open(
+        `/phished?type=link&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}`,
+        '_blank'
+      )
+    }
+  }, [tracker, sessionId, email])
+
+  // 添付ファイルを開く: マルウェア実行を模した /phished ページを新しいタブで開く
+  const handleAttachmentOpen = useCallback(() => {
+    tracker?.onAttachmentOpen()
+    if (email && sessionId) {
+      window.open(
+        `/phished?type=attachment&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}`,
+        '_blank'
+      )
+    }
+  }, [tracker, sessionId, email])
 
   if (!email) {
     return (
@@ -325,7 +345,7 @@ export default function MailBodyPane({
                     att={att}
                     onHoverStart={() => tracker?.onHoverStart('attachment')}
                     onHoverEnd={() => tracker?.onHoverEnd('attachment', 'hover_attachment')}
-                    onAttachmentOpen={() => tracker?.onAttachmentOpen()}
+                    onAttachmentOpen={handleAttachmentOpen}
                   />
                 ))}
               </div>

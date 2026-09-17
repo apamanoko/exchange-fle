@@ -293,6 +293,7 @@ function InboxContent() {
           email={selectedEmail}
           lang={uiLang}
           tracker={tracker}
+          sessionId={sessionId}
           onReply={handleReply}
           onIgnore={handleIgnore}
           onBlock={handleBlock}
