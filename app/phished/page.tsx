@@ -21,7 +21,7 @@ function parseType(raw: string | null): PhishType {
 }
 
 function parseLang(raw: string | null): Lang {
-  const supported: Lang[] = ['ja', 'en', 'de', 'zh', 'ko', 'it', 'vi', 'es']
+  const supported: Lang[] = ['ja', 'en', 'de', 'zh', 'ko', 'it', 'vi', 'es', 'pl', 'no', 'fi']
   return supported.includes(raw as Lang) ? (raw as Lang) : 'ja'
 }
 

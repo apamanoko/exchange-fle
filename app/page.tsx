@@ -12,16 +12,19 @@ import { supabase } from './lib/supabase'
 
 // ─── 定数：留学生の母語選択肢 ────────────────────────────────────────────────
 
-type MotherTongueLang = 'en' | 'zh' | 'ko' | 'de' | 'it' | 'vi' | 'es'
+type MotherTongueLang = 'en' | 'zh' | 'ko' | 'de' | 'it' | 'vi' | 'es' | 'pl' | 'no' | 'fi'
 
 const MOTHER_TONGUES: { code: MotherTongueLang; ja: string; native: string }[] = [
-  { code: 'en', ja: '英語',       native: 'English'    },
-  { code: 'zh', ja: '中国語',     native: '中文'       },
-  { code: 'ko', ja: '韓国語',     native: '한국어'     },
-  { code: 'de', ja: 'ドイツ語',   native: 'Deutsch'    },
-  { code: 'it', ja: 'イタリア語', native: 'Italiano'   },
-  { code: 'vi', ja: 'ベトナム語', native: 'Tiếng Việt' },
-  { code: 'es', ja: 'スペイン語', native: 'Español'    },
+  { code: 'en', ja: '英語',         native: 'English'    },
+  { code: 'zh', ja: '中国語',       native: '中文'       },
+  { code: 'ko', ja: '韓国語',       native: '한국어'     },
+  { code: 'de', ja: 'ドイツ語',     native: 'Deutsch'    },
+  { code: 'it', ja: 'イタリア語',   native: 'Italiano'   },
+  { code: 'vi', ja: 'ベトナム語',   native: 'Tiếng Việt' },
+  { code: 'es', ja: 'スペイン語',   native: 'Español'    },
+  { code: 'pl', ja: 'ポーランド語', native: 'Polski'     },
+  { code: 'no', ja: 'ノルウェー語', native: 'Norsk'      },
+  { code: 'fi', ja: 'フィンランド語', native: 'Suomi'    },
 ]
 
 // ─── 状況確定パラメータ型 ────────────────────────────────────────────────────
@@ -29,7 +32,7 @@ const MOTHER_TONGUES: { code: MotherTongueLang; ja: string; native: string }[] =
 type SituationParams = {
   uiLang:    Lang
   l1Lang:    Lang
-  l2Lang:    'ja' | 'en'
+  l2Lang:    'ja'
   condition: 'L1' | 'L2'
 }
 
@@ -73,21 +76,15 @@ function Card({ children }: { children: React.ReactNode }) {
 // ─── SituationSelector ───────────────────────────────────────────────────────
 
 function SituationSelector({ onConfirm }: { onConfirm: (p: SituationParams) => void }) {
-  const [situation, setSituation]     = useState<'ryugakusei' | 'nichijapan' | null>(null)
+  const [situation, setSituation]     = useState<'ryugakusei' | null>(null)
   const [motherTongue, setMotherTongue] = useState<MotherTongueLang | null>(null)
 
-  const canConfirm =
-    situation === 'nichijapan' ||
-    (situation === 'ryugakusei' && motherTongue !== null)
+  const canConfirm = situation === 'ryugakusei' && motherTongue !== null
 
   function handleConfirm() {
     if (!canConfirm) return
-    if (situation === 'nichijapan') {
-      onConfirm({ uiLang: 'ja', l1Lang: 'ja', l2Lang: 'en', condition: 'L1' })
-    } else {
-      const lang = motherTongue as MotherTongueLang
-      onConfirm({ uiLang: lang, l1Lang: lang, l2Lang: 'ja', condition: 'L2' })
-    }
+    const lang = motherTongue as MotherTongueLang
+    onConfirm({ uiLang: lang, l1Lang: lang, l2Lang: 'ja', condition: 'L2' })
   }
 
   return (
@@ -140,19 +137,6 @@ function SituationSelector({ onConfirm }: { onConfirm: (p: SituationParams) => v
               </div>
             </div>
           )}
-
-          {/* 選択肢2: ドイツ在住の日本人 */}
-          <button
-            onClick={() => { setSituation('nichijapan'); setMotherTongue(null) }}
-            className={`w-full text-left p-5 rounded-xl border-2 transition-colors ${
-              situation === 'nichijapan'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-gray-200 bg-white hover:border-gray-300'
-            }`}
-          >
-            <p className="font-semibold text-gray-900">ドイツ在住の日本人</p>
-            <p className="text-sm text-gray-500 mt-0.5">Japanese student in Germany</p>
-          </button>
 
         </div>
 

@@ -27,6 +27,9 @@ const LANG_INSTRUCTION: Record<Language, string> = {
   it: 'in italiano',
   vi: 'bằng tiếng Việt',
   es: 'en español',
+  pl: 'po polsku',
+  no: 'på norsk',
+  fi: 'suomeksi',
 }
 
 // ─── デフォルトフィードバック（API 失敗時のフォールバック）──────────────────────
@@ -87,6 +90,27 @@ const DEFAULT_FEEDBACK: Record<Language, FeedbackOutput> = {
     whatYouMissed: 'Algunos correos de phishing pueden no haber sido detectados. Presta atención al dominio del remitente.',
     keyInsight: 'Los correos de phishing usan disfraces sutiles. Desarrolla el hábito de verificar antes de actuar.',
     oneAction: 'Cuando recibas un correo, revisa siempre la dirección completa del remitente, especialmente el dominio.',
+  },
+  pl: {
+    headline: 'Dziękujemy za udział w eksperymencie',
+    whatYouDidWell: 'Uważnie podszedłeś/aś do zadań związanych z weryfikacją wiadomości e-mail.',
+    whatYouMissed: 'Niektóre wiadomości phishingowe mogły zostać niezauważone. Zwracaj uwagę na domenę nadawcy.',
+    keyInsight: 'Wiadomości phishingowe wykorzystują subtelne przebranie. Wyrób w sobie nawyk weryfikacji przed podjęciem działania.',
+    oneAction: 'Gdy otrzymasz wiadomość e-mail, zawsze sprawdzaj pełny adres nadawcy, zwłaszcza domenę.',
+  },
+  no: {
+    headline: 'Takk for at du deltok i eksperimentet',
+    whatYouDidWell: 'Du jobbet grundig med oppgavene knyttet til gjennomgang av e-poster.',
+    whatYouMissed: 'Enkelte phishing-e-poster kan ha gått ubemerket hen. Vær oppmerksom på avsenderens domenenavn.',
+    keyInsight: 'Phishing-e-poster bruker subtile forkledninger. Utvikle vanen med å verifisere før du handler.',
+    oneAction: 'Når du mottar en e-post, sjekk alltid hele avsenderadressen, spesielt domenedelen.',
+  },
+  fi: {
+    headline: 'Kiitos osallistumisestasi kokeeseen',
+    whatYouDidWell: 'Osallistuit huolellisesti sähköpostien tarkistustehtäviin.',
+    whatYouMissed: 'Jotkin tietojenkalasteluviestit ovat saattaneet jäädä huomaamatta. Kiinnitä huomiota lähettäjän verkkotunnukseen.',
+    keyInsight: 'Tietojenkalasteluviestit käyttävät hienovaraisia naamiointeja. Kehitä tapa varmistaa ennen toimimista.',
+    oneAction: 'Kun saat sähköpostin, tarkista aina lähettäjän koko osoite, erityisesti verkkotunnusosa.',
   },
 }
 

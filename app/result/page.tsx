@@ -63,6 +63,9 @@ function getTrapInfo(trapId: string, lang: Lang): TrapInfo {
       it: { name: 'BEC (Impersonazione Fornitore)', description: 'Gli attaccanti si spacciano per un fornitore e chiedono di cambiare conto o scaricare file. Segnali: domini simili, doppie estensioni come .pdf.exe.' },
       vi: { name: 'BEC (Giả mạo nhà cung cấp)', description: 'Kẻ tấn công giả mạo nhà cung cấp và yêu cầu thay đổi tài khoản hoặc tải tệp. Dấu hiệu: tên miền tương tự, phần mở rộng kép như .pdf.exe.' },
       es: { name: 'BEC (Suplantación de Proveedor)', description: 'Los atacantes se hacen pasar por un proveedor y solicitan cambios de cuenta o descargas. Señales: dominios similares, extensiones dobles como .pdf.exe.' },
+      pl: { name: 'BEC (Podszycie się pod dostawcę)', description: 'Atakujący podszywają się pod dostawcę i żądają zmiany danych bankowych lub pobrania pliku. Sygnały ostrzegawcze: podobne domeny, podwójne rozszerzenia jak .pdf.exe.' },
+      no: { name: 'BEC (Utgir seg for leverandør)', description: 'Angripere utgir seg for å være en leverandør og ber om kontoendringer eller filnedlastinger. Advarselstegn: liknende domenenavn, doble filetternavn som .pdf.exe.' },
+      fi: { name: 'BEC (Toimittajan identiteettivarkaus)', description: 'Hyökkääjät esiintyvät toimittajana ja pyytävät tilitietojen muutoksia tai tiedostojen latauksia. Varoitusmerkit: samankaltaiset verkkotunnukset, kaksoispäätteet kuten .pdf.exe.' },
     },
     2: {
       ja: { name: 'BEC（権威者なりすまし）', description: '上司や学部長などの権威者を装い、緊急かつ秘密の依頼として情報入力を求めます。フリーメールアドレスと偽装リンクの組み合わせが典型的な手口です。' },
@@ -73,6 +76,9 @@ function getTrapInfo(trapId: string, lang: Lang): TrapInfo {
       it: { name: 'BEC (Impersonazione di Autorità)', description: 'Gli attaccanti si spacciano per un superiore richiedendo azioni urgenti e riservate. Segnali: indirizzi email gratuiti, link contraffatti.' },
       vi: { name: 'BEC (Giả mạo người có thẩm quyền)', description: 'Kẻ tấn công giả mạo người có thẩm quyền và yêu cầu hành động khẩn cấp, bí mật. Dấu hiệu: email miễn phí, liên kết giả mạo.' },
       es: { name: 'BEC (Suplantación de Autoridad)', description: 'Los atacantes se hacen pasar por una figura de autoridad exigiendo acción urgente y confidencial. Señales: emails gratuitos, enlaces falsificados.' },
+      pl: { name: 'BEC (Podszycie się pod przełożonego)', description: 'Atakujący podszywają się pod przełożonego, żądając pilnego, poufnego działania. Sygnały ostrzegawcze: darmowe adresy e-mail, sfałszowane linki wyglądające na oficjalne.' },
+      no: { name: 'BEC (Utgir seg for autoritetsperson)', description: 'Angripere utgir seg for en overordnet og krever hastende, konfidensielle handlinger. Advarselstegn: gratis e-postadresser, forfalskede lenker som ser offisielle ut.' },
+      fi: { name: 'BEC (Auktoriteetin identiteettivarkaus)', description: 'Hyökkääjät esiintyvät esimiehenä ja vaativat kiireellistä, luottamuksellista toimintaa. Varoitusmerkit: ilmaiset sähköpostiosoitteet, viralliselta näyttävät väärennetyt linkit.' },
     },
     3: {
       ja: { name: '標的型攻撃（業務継続なりすまし）', description: '過去のメールのやり取りに割り込み、信頼済みの相手として修正書類を送付します。パスワード付きZIPや二重拡張子ファイルで悪意のあるプログラムを隠します。' },
@@ -83,6 +89,9 @@ function getTrapInfo(trapId: string, lang: Lang): TrapInfo {
       it: { name: 'Spear Phishing (Dirottamento Thread)', description: 'Gli attaccanti si inseriscono in thread email esistenti fingendosi un contatto fidato. Nascondono malware in ZIP protetti da password o file con doppie estensioni.' },
       vi: { name: 'Tấn công có chủ đích (Chiếm đoạt chuỗi email)', description: 'Kẻ tấn công chiếm đoạt chuỗi email và giả vờ là liên hệ đáng tin cậy. Chúng ẩn phần mềm độc hại trong file ZIP hoặc file có phần mở rộng kép.' },
       es: { name: 'Spear Phishing (Secuestro de Hilo)', description: 'Los atacantes secuestran hilos de correo haciéndose pasar por un contacto de confianza. Ocultan malware en ZIPs con contraseña o archivos con doble extensión.' },
+      pl: { name: 'Spear phishing (Przejęcie wątku)', description: 'Atakujący przejmują istniejące wątki e-mail, podszywając się pod zaufany kontakt. Ukrywają złośliwe oprogramowanie w chronionych hasłem plikach ZIP lub plikach z podwójnym rozszerzeniem.' },
+      no: { name: 'Spear phishing (Kapring av tråd)', description: 'Angripere kaprer eksisterende e-posttråder og utgir seg for en pålitelig kontakt. De skjuler skadevare i passordbeskyttede ZIP-filer eller filer med doble filetternavn.' },
+      fi: { name: 'Kohdennettu tietojenkalastelu (Ketjun kaappaus)', description: 'Hyökkääjät kaappaavat olemassa olevia sähköpostiketjuja esiintyen luotettuna yhteystietona. He piilottavat haittaohjelmia salasanalla suojattuihin ZIP-tiedostoihin tai kaksoispäätteisiin tiedostoihin.' },
     },
     4: {
       ja: { name: 'フィッシング（インフラ偽通知）', description: '公式機関を装ってアカウント停止などの危機感を煽り、偽サイトへ誘導します。本物に見えるURLでも、ドメイン全体をよく見ると正規組織のものでないことがわかります。' },
@@ -93,6 +102,9 @@ function getTrapInfo(trapId: string, lang: Lang): TrapInfo {
       it: { name: 'Phishing (Falso Avviso Infrastrutturale)', description: "Gli attaccanti si spacciano per servizi ufficiali affermando la sospensione di un account. Il dominio sembra plausibile ma non appartiene all'organizzazione reale." },
       vi: { name: 'Lừa đảo (Cảnh báo cơ sở hạ tầng giả)', description: 'Kẻ tấn công giả mạo dịch vụ chính thức và tuyên bố tài khoản bị đình chỉ. Tên miền trông hợp lý nhưng không thuộc tổ chức thực.' },
       es: { name: 'Phishing (Alerta de Infraestructura Falsa)', description: 'Los atacantes se hacen pasar por servicios oficiales alegando suspensión de cuenta. El dominio parece plausible pero no pertenece a la organización real.' },
+      pl: { name: 'Phishing (Fałszywe powiadomienie infrastruktury)', description: 'Atakujący podszywają się pod oficjalne usługi, twierdząc, że konto zostało zawieszone, kierując ofiary na fałszywe strony. Domena wygląda wiarygodnie, ale nie należy do prawdziwej organizacji.' },
+      no: { name: 'Phishing (Falsk infrastrukturvarsel)', description: 'Angripere utgir seg for offisielle tjenester og hevder at kontoen er suspendert, og sender ofre til falske nettsteder. Domenet ser plausibelt ut, men tilhører ikke den virkelige organisasjonen.' },
+      fi: { name: 'Tietojenkalastelu (Väärennetty infrastruktuuri-ilmoitus)', description: 'Hyökkääjät esiintyvät virallisina palveluina väittäen, että tili on jäädytetty, ja ohjaavat uhrit väärennetyille sivustoille. Verkkotunnus näyttää uskottavalta, mutta ei kuulu todelliselle organisaatiolle.' },
     },
   }
 

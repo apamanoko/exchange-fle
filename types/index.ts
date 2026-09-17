@@ -1,7 +1,7 @@
 /**
  * 対応言語
  */
-export type Language = 'ja' | 'en' | 'de' | 'zh' | 'ko' | 'it' | 'es' | 'vi'
+export type Language = 'ja' | 'en' | 'de' | 'zh' | 'ko' | 'it' | 'vi' | 'es' | 'pl' | 'no' | 'fi'
 
 /**
  * 実験条件

@@ -1562,3 +1562,606 @@ Contraseña: <strong>2024</strong></p>
 ccmailg.meijo-u.ac.jp</p>`,
   },
 ]
+
+/**
+ * ポーランド語版メール（通常4通 + 罠4通）
+ * 日本在住のポーランド語母語話者向け。日本語版と攻撃タイプは等価。
+ * 舞台：名城大学に在籍するポーランド人留学生TA
+ */
+export const emailsPl: Email[] = [
+
+  // ============================================================
+  // 通常メール × 4通
+  // ============================================================
+
+  {
+    id: 'normal-1-pl',
+    lang: 'pl',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Prof. Tomasz Kowalski', address: 'kowalski.t@meijo-u.ac.jp' },
+    to: 'Ty (TA)',
+    subject: 'Zmiana terminu seminarium – przyszły tydzień',
+    date: '2026年5月21日 15:00',
+    bodyHtml: `<p>Cześć,</p>
+<p>W przyszły poniedziałek mam nagłe zebranie wydziałowe, więc muszę przesunąć seminarium na wtorek o 15:00. Sala pozostaje ta sama (512).</p>
+<p>Daj mi znać przed końcem tygodnia, czy możesz przyjść. Przepraszam za niedogodności.</p>
+<p>Pozdrawiam,<br>Prof. Tomasz Kowalski</p>`,
+  },
+  {
+    id: 'normal-2-pl',
+    lang: 'pl',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Dziekanat', address: 'gakumu@meijo-u.ac.jp' },
+    to: 'Ty (TA)',
+    subject: 'Termin rejestracji na zajęcia – 25 maja',
+    date: '2026年5月20日 09:00',
+    bodyHtml: `<p>Szanowni Studenci,</p>
+<p>Przypominamy, że rejestracja na zajęcia pierwszego semestru kończy się w poniedziałek 25 maja o godz. 23:59. Prosimy o sprawdzenie swojej sytuacji w portalu.</p>
+<p>【Do sprawdzenia】<br>
+・Czy nie przekroczono rocznego limitu punktów (48 punktów)<br>
+・Czy zarejestrowano wszystkie obowiązkowe przedmioty<br>
+・Czy nie ma konfliktów w planie zajęć</p>
+<p>Kontakt: Dziekanat, wew. 1234</p>`,
+  },
+  {
+    id: 'normal-3-pl',
+    lang: 'pl',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Biblioteka Uniwersytecka', address: 'library@meijo-u.ac.jp' },
+    to: 'Ty (TA)',
+    subject: 'Przypomnienie: termin zwrotu książek',
+    date: '2026年5月19日 10:00',
+    bodyHtml: `<p>Szanowny Czytelniku,</p>
+<p>Przypominamy, że poniższe pozycje należy zwrócić do niedzieli 24 maja:</p>
+<p>・Podstawy cyberbezpieczeństwa (wyd. 2)<br>
+・Wprowadzenie do psychologii poznawczej</p>
+<p>Możesz przedłużyć wypożyczenie przez portal biblioteczny (tylko jedno przedłużenie).</p>`,
+  },
+  {
+    id: 'normal-4-pl',
+    lang: 'pl',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Marta Wiśniewska', address: 'wisniewska.m.2023@meijo-u.ac.jp' },
+    to: 'Ty (TA)',
+    subject: 'Udostępniam slajdy na przyszły tydzień',
+    date: '2026年5月18日 18:30',
+    bodyHtml: `<p>Cześć!</p>
+<p>Udostępniam moje slajdy na wspólne seminarium w przyszłym tygodniu. Rzuć okiem, kiedy masz chwilę!</p>
+<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
+      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
+  Zobacz slajdy na Google Drive
+</a></p>
+<p>Napisz, jeśli masz pytania. Do zobaczenia!</p>
+<p>Marta</p>`,
+  },
+
+  // ============================================================
+  // 罠メール × 4通
+  // ============================================================
+
+  /**
+   * trap-1-pl: 【BEC】Podszywanie się pod dostawcę zagranicznego
+   * 罠: fałszywa domena（oxf0rd）+ podwójne rozszerzenie（.pdf.exe）
+   * Presja psychologiczna: termin（po 31 maja nie przyjmujemy）
+   */
+  {
+    id: 'trap-1-pl',
+    lang: 'pl',
+    isTrap: true,
+    traps: ['domain', 'extension', 'urgency'],
+    from: {
+      display: 'Oxford Education Poland – Wsparcie',
+      address: 'support@oxf0rd-edu-poland.com',
+    },
+    to: 'Ty (TA)',
+    subject: '[Ważne] Zmiana danych bankowych – wsparcie dla studentów zagranicznych',
+    date: '2026年5月22日 14:30',
+    bodyHtml: `<p>Szanowny Użytkowniku,</p>
+<p>Nazywam się Piotr Nowak z działu wsparcia Oxford Education Poland.</p>
+<p>W związku z aktualizacją naszego systemu bankowego zmieniliśmy numer rachunku do wpłat za wsparcie studentów zagranicznych. Przy następnej wpłacie prosimy skorzystać z nowych danych zawartych w <strong>załączonym dokumencie potwierdzającym</strong>.</p>
+<p><strong>※ Po 31 maja płatności na stare konto nie będą przyjmowane.</strong></p>
+<p>Oxford Education Poland<br>Piotr Nowak<br>Tel: 22-XXXX-XXXX</p>`,
+    attachments: [{
+      name: 'Potwierdzenie_Danych_Bankowych.pdf.exe',
+      displayName: 'Potwierdzenie_Danych_Bankowych.pdf',
+      mimeType: 'application/pdf',
+      isTrapped: true,
+    }],
+  },
+
+  /**
+   * trap-2-pl: 【BEC】Podszywanie się pod osobę z autorytetem（CEO fraud）
+   * 罠: darmowa domena（gmail）+ fałszywy link + pilność + autorytet
+   * Presja psychologiczna: w podróży・dzisiaj・poufne
+   */
+  {
+    id: 'trap-2-pl',
+    lang: 'pl',
+    isTrap: true,
+    traps: ['domain', 'link', 'urgency', 'authority'],
+    from: {
+      display: 'Prof. Yoshikawa (Dziekan)',
+      address: 'yoshikawa.meijo.univ@gmail.com',
+    },
+    to: 'Ty (TA)',
+    subject: 'Pilne – Potrzebuję Twojej pomocy dzisiaj',
+    date: '2026年5月20日 11:45',
+    bodyHtml: `<p>Cześć,</p>
+<p>Jestem teraz na konferencji w Londynie i nie mogę odbierać telefonów. Mam do Ciebie pilną prośbę.</p>
+<p>W związku z projektem współpracy z zagraniczną uczelnią muszę dzisiaj udostępnić informacje o odpowiedzialnych studentach. Czy mógłbyś/mogłabyś wypełnić formularz pod poniższym linkiem i wysłać go jak najszybciej?</p>
+<p><a href="javascript:void(0)"
+      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz"
+      data-phished-url="/phished?type=link">
+  Kliknij tutaj, aby wypełnić formularz
+</a></p>
+<p>Na razie proszę zachować to w tajemnicy – projekt nie został jeszcze oficjalnie ogłoszony.</p>
+<p>Dziękuję,<br>Prof. Yoshikawa</p>`,
+  },
+
+  /**
+   * trap-3-pl: 【Spear phishing】Przejęcie wątku e-mail
+   * 罠: podwójne rozszerzenie（.pdf.exe）+ wykorzystanie zaufania
+   * Presja psychologiczna: przeprosiny・ciągłość pracy
+   */
+  {
+    id: 'trap-3-pl',
+    lang: 'pl',
+    isTrap: true,
+    traps: ['extension', 'authority'],
+    from: {
+      display: 'Aleksander Wójcik（Student M1, Informatyka）',
+      address: 'wojcik.aleksander.2024@gmail.com',
+    },
+    to: 'Ty (TA)',
+    subject: 'Re: Brakujące dokumenty w podaniu o stypendium',
+    date: '2026年5月18日 16:30',
+    bodyHtml: `<p>Cześć,</p>
+<p>Poprawiłem wszystko, co mi wskazałeś/wskazałaś. Przepraszam za kłopot!</p>
+<p>Wysyłam poprawione dokumenty jako archiwum ZIP zabezpieczone hasłem.<br>
+Hasło: <strong>2024</strong></p>
+<p>Daj znać, czy tym razem wszystko się zgadza. Dziękuję!</p>
+<p>Aleksander</p>`,
+    attachments: [{
+      name: 'Podanie_Stypendium_Poprawione.pdf.exe',
+      displayName: 'Podanie_Stypendium_Poprawione.pdf',
+      mimeType: 'application/pdf',
+      isTrapped: true,
+    }],
+  },
+
+  /**
+   * trap-4-pl: 【Phishing】Fałszywe powiadomienie o infrastrukturze
+   * 罠: fałszywa domena（ccmallg vs ccmailg）+ fałszywy link + pilność
+   * Presja psychologiczna: podejrzane logowanie・dzisiaj・zawieszenie konta
+   */
+  {
+    id: 'trap-4-pl',
+    lang: 'pl',
+    isTrap: true,
+    traps: ['domain', 'link', 'urgency', 'authority'],
+    from: {
+      display: 'Centrum Informatyczne – Uniwersytet Meijo',
+      address: 'admin@ccmallg.meijo-u.ac.jp',
+    },
+    to: 'Ty (TA)',
+    subject: '[Pilne] Wymagana weryfikacja konta',
+    date: '2026年5月17日 09:00',
+    bodyHtml: `<p>To ważne powiadomienie od Centrum Informatycznego Uniwersytetu Meijo.</p>
+<p><strong>Na Twoim koncie e-mail wykryto podejrzane logowanie.</strong> Aby zabezpieczyć konto, prosimy o weryfikację tożsamości jeszcze dziś.</p>
+<p>▼ Zweryfikuj swoje konto tutaj<br>
+<a href="javascript:void(0)"
+   data-display-url="https://portal.meijo-u.ac.jp/auth/update"
+   data-phished-url="/phished?type=link">
+  https://portal.meijo-u.ac.jp/auth/update
+</a></p>
+<p><strong>※ Jeśli weryfikacja nie zostanie ukończona do godz. 23:59 dzisiaj, Twoje konto zostanie tymczasowo zawieszone.</strong></p>
+<p>Centrum Informatyczne – Uniwersytet Meijo<br>
+ccmailg.meijo-u.ac.jp</p>`,
+  },
+]
+
+/**
+ * ノルウェー語版メール（通常4通 + 罠4通）
+ * 日本在住のノルウェー語母語話者向け。日本語版と攻撃タイプは等価。
+ * 舞台：名城大学に在籍するノルウェー人留学生TA
+ */
+export const emailsNo: Email[] = [
+
+  // ============================================================
+  // 通常メール × 4通
+  // ============================================================
+
+  {
+    id: 'normal-1-no',
+    lang: 'no',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Prof. Erik Andersen', address: 'andersen.e@meijo-u.ac.jp' },
+    to: 'Deg (TA)',
+    subject: 'Endring av seminartid – neste uke',
+    date: '2026年5月21日 15:00',
+    bodyHtml: `<p>Hei,</p>
+<p>Neste mandag har jeg et uforutsett fakultetsmøte, så jeg må flytte seminaret til tirsdag kl. 15:00. Rommet er det samme (512).</p>
+<p>Kan du gi meg beskjed innen slutten av denne uken om du kan komme? Beklager ulempen.</p>
+<p>Med vennlig hilsen,<br>Prof. Erik Andersen</p>`,
+  },
+  {
+    id: 'normal-2-no',
+    lang: 'no',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Studiekontoret', address: 'gakumu@meijo-u.ac.jp' },
+    to: 'Deg (TA)',
+    subject: 'Frist for kursregistrering – 25. mai',
+    date: '2026年5月20日 09:00',
+    bodyHtml: `<p>Kjære studenter,</p>
+<p>Vi minner om at kursregistreringen for første semester avsluttes mandag 25. mai kl. 23:59. Vennligst sjekk din situasjon på portalen.</p>
+<p>【Sjekk følgende】<br>
+・At du ikke har overskredet den årlige studiepoenggrensen (48 studiepoeng)<br>
+・At alle obligatoriske emner er registrert<br>
+・At det ikke er timeplankollisjoner</p>
+<p>Kontakt: Studiekontoret, lokal 1234</p>`,
+  },
+  {
+    id: 'normal-3-no',
+    lang: 'no',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Universitetsbiblioteket', address: 'library@meijo-u.ac.jp' },
+    to: 'Deg (TA)',
+    subject: 'Påminnelse: innleveringsfrist for bøker',
+    date: '2026年5月19日 10:00',
+    bodyHtml: `<p>Kjære låner,</p>
+<p>Vi minner om at følgende bøker må leveres tilbake innen søndag 24. mai:</p>
+<p>・Grunnleggende cybersikkerhet (2. utg.)<br>
+・Introduksjon til kognitiv psykologi</p>
+<p>Du kan fornye lånet via bibliotekets portal (kun én fornyelse tillatt).</p>`,
+  },
+  {
+    id: 'normal-4-no',
+    lang: 'no',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Ingrid Larsen', address: 'larsen.ingrid.2023@meijo-u.ac.jp' },
+    to: 'Deg (TA)',
+    subject: 'Deler lysbildene til neste ukes seminar',
+    date: '2026年5月18日 18:30',
+    bodyHtml: `<p>Hei!</p>
+<p>Sender deg lysbildene mine til det felles seminaret neste uke. Ta en titt når du har anledning!</p>
+<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
+      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
+  Se lysbildene på Google Drive
+</a></p>
+<p>Ta gjerne kontakt hvis du har spørsmål. Vi sees!</p>
+<p>Ingrid</p>`,
+  },
+
+  // ============================================================
+  // 罠メール × 4通
+  // ============================================================
+
+  /**
+   * trap-1-no: 【BEC】Utgi seg for å være utenlandsk leverandør
+   * 罠: falsk domene（oxf0rd）+ dobbel filtype（.pdf.exe）
+   * Psykologisk press: frist（etter 31. mai godtas ikke）
+   */
+  {
+    id: 'trap-1-no',
+    lang: 'no',
+    isTrap: true,
+    traps: ['domain', 'extension', 'urgency'],
+    from: {
+      display: 'Oxford Education Norway – Support',
+      address: 'support@oxf0rd-edu-norway.com',
+    },
+    to: 'Deg (TA)',
+    subject: '[Viktig] Endring av bankdetaljer – støtte til internasjonale studenter',
+    date: '2026年5月22日 14:30',
+    bodyHtml: `<p>Kjære bruker,</p>
+<p>Jeg heter Lars Hansen og jobber i supportteamet til Oxford Education Norway.</p>
+<p>På grunn av en oppgradering av banksystemet vårt har kontonummeret for innbetaling av støtte til internasjonale studenter blitt endret. Ved neste betaling ber vi deg bruke de nye bankdetaljene som finnes i <strong>vedlagt bekreftelsesdokument</strong>.</p>
+<p><strong>※ Etter 31. mai vil ikke betalinger til den gamle kontoen bli godtatt.</strong></p>
+<p>Oxford Education Norway<br>Lars Hansen<br>Tlf: 22-XXXX-XXXX</p>`,
+    attachments: [{
+      name: 'Bekreftelse_Bankdetaljer.pdf.exe',
+      displayName: 'Bekreftelse_Bankdetaljer.pdf',
+      mimeType: 'application/pdf',
+      isTrapped: true,
+    }],
+  },
+
+  /**
+   * trap-2-no: 【BEC】Utgi seg for å være autoritetsperson（CEO-svindel）
+   * 罠: gratis e-postdomene（gmail）+ falsk lenke + hastverk + autoritet
+   * Psykologisk press: på reise・i dag・konfidensielt
+   */
+  {
+    id: 'trap-2-no',
+    lang: 'no',
+    isTrap: true,
+    traps: ['domain', 'link', 'urgency', 'authority'],
+    from: {
+      display: 'Prof. Yoshikawa (Dekan)',
+      address: 'yoshikawa.meijo.univ@gmail.com',
+    },
+    to: 'Deg (TA)',
+    subject: 'Haster – Trenger din hjelp i dag',
+    date: '2026年5月20日 11:45',
+    bodyHtml: `<p>Hei,</p>
+<p>Jeg er på konferanse i London og kan ikke ta telefoner. Jeg har en hastesak jeg trenger hjelp med.</p>
+<p>I forbindelse med et samarbeidsprosjekt med et utenlandsk universitet må jeg dele informasjon om ansvarlige studenter i dag. Kan du fylle ut skjemaet i lenken nedenfor og sende det så snart som mulig?</p>
+<p><a href="javascript:void(0)"
+      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz"
+      data-phished-url="/phished?type=link">
+  Klikk her for å fylle ut skjemaet
+</a></p>
+<p>Hold dette konfidensielt foreløpig – prosjektet er ikke offisielt annonsert ennå.</p>
+<p>Takk,<br>Prof. Yoshikawa</p>`,
+  },
+
+  /**
+   * trap-3-no: 【Spear phishing】Kapring av e-posttråd
+   * 罠: dobbel filtype（.pdf.exe）+ utnyttelse av tillit
+   * Psykologisk press: unnskyldning・kontinuitet i arbeidet
+   */
+  {
+    id: 'trap-3-no',
+    lang: 'no',
+    isTrap: true,
+    traps: ['extension', 'authority'],
+    from: {
+      display: 'Bjørn Olsen（M1-student, Informatikk）',
+      address: 'olsen.bjorn.2024@gmail.com',
+    },
+    to: 'Deg (TA)',
+    subject: 'Re: Manglende dokumenter i stipendsøknaden',
+    date: '2026年5月18日 16:30',
+    bodyHtml: `<p>Hei,</p>
+<p>Jeg har rettet alt du påpekte. Beklager bryderiet!</p>
+<p>Sender de rettede dokumentene som et passordbeskyttet ZIP-arkiv.<br>
+Passord: <strong>2024</strong></p>
+<p>Si ifra hvis alt ser greit ut denne gangen. Takk!</p>
+<p>Bjørn</p>`,
+    attachments: [{
+      name: 'Stipendsoknad_Rettet.pdf.exe',
+      displayName: 'Stipendsoknad_Rettet.pdf',
+      mimeType: 'application/pdf',
+      isTrapped: true,
+    }],
+  },
+
+  /**
+   * trap-4-no: 【Phishing】Falsk infrastrukturvarsel
+   * 罠: falsk domene（ccmallg vs ccmailg）+ falsk lenke + hastverk
+   * Psykologisk press: mistenkelig pålogging・i dag・konto suspendert
+   */
+  {
+    id: 'trap-4-no',
+    lang: 'no',
+    isTrap: true,
+    traps: ['domain', 'link', 'urgency', 'authority'],
+    from: {
+      display: 'IT-senteret – Meijo Universitet',
+      address: 'admin@ccmallg.meijo-u.ac.jp',
+    },
+    to: 'Deg (TA)',
+    subject: '[Haster] Bekreftelse av konto kreves',
+    date: '2026年5月17日 09:00',
+    bodyHtml: `<p>Dette er en viktig melding fra IT-senteret ved Meijo Universitet.</p>
+<p><strong>Det er oppdaget mistenkelig påloggingsaktivitet på e-postkontoen din.</strong> For å sikre kontoen din ber vi deg fullføre identitetsbekreftelsen i dag.</p>
+<p>▼ Bekreft kontoen din her<br>
+<a href="javascript:void(0)"
+   data-display-url="https://portal.meijo-u.ac.jp/auth/update"
+   data-phished-url="/phished?type=link">
+  https://portal.meijo-u.ac.jp/auth/update
+</a></p>
+<p><strong>※ Hvis bekreftelsen ikke er fullført innen kl. 23:59 i dag, vil kontoen din bli midlertidig suspendert.</strong></p>
+<p>IT-senteret – Meijo Universitet<br>
+ccmailg.meijo-u.ac.jp</p>`,
+  },
+]
+
+/**
+ * フィンランド語版メール（通常4通 + 罠4通）
+ * 日本在住のフィンランド語母語話者向け。日本語版と攻撃タイプは等価。
+ * 舞台：名城大学に在籍するフィンランド人留学生TA
+ */
+export const emailsFi: Email[] = [
+
+  // ============================================================
+  // 通常メール × 4通
+  // ============================================================
+
+  {
+    id: 'normal-1-fi',
+    lang: 'fi',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Prof. Mikko Virtanen', address: 'virtanen.m@meijo-u.ac.jp' },
+    to: 'Sinä (TA)',
+    subject: 'Seminaarin aikataulumuutos – ensi viikko',
+    date: '2026年5月21日 15:00',
+    bodyHtml: `<p>Hei,</p>
+<p>Ensi maanantaina on yllättävä tiedekuntakokous, joten seminaari täytyy siirtää tiistaille klo 15:00. Huone pysyy samana (512).</p>
+<p>Voisitko ilmoittaa ennen viikonloppua, pääsetkö paikalle? Pahoittelen häiriötä.</p>
+<p>Ystävällisin terveisin,<br>Prof. Mikko Virtanen</p>`,
+  },
+  {
+    id: 'normal-2-fi',
+    lang: 'fi',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Opintopalvelut', address: 'gakumu@meijo-u.ac.jp' },
+    to: 'Sinä (TA)',
+    subject: 'Kurssien ilmoittautumisen määräaika – 25. toukokuuta',
+    date: '2026年5月20日 09:00',
+    bodyHtml: `<p>Hyvät opiskelijat,</p>
+<p>Muistutamme, että ensimmäisen lukukauden kurssien ilmoittautuminen päättyy maanantaina 25. toukokuuta klo 23:59. Tarkistakaa tilanteenne portaalista.</p>
+<p>【Tarkistettavaa】<br>
+・Vuotuinen opintopisteraja (48 opintopistettä) ei ylity<br>
+・Kaikki pakolliset kurssit on ilmoitettu<br>
+・Ei aikataulukollisioita</p>
+<p>Yhteydenotot: Opintopalvelut, sisänumero 1234</p>`,
+  },
+  {
+    id: 'normal-3-fi',
+    lang: 'fi',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Yliopistokirjasto', address: 'library@meijo-u.ac.jp' },
+    to: 'Sinä (TA)',
+    subject: 'Muistutus: kirjojen palautuspäivä lähestyy',
+    date: '2026年5月19日 10:00',
+    bodyHtml: `<p>Hyvä lainaaja,</p>
+<p>Muistutamme, että seuraavat kirjat tulee palauttaa sunnuntaihin 24. toukokuuta mennessä:</p>
+<p>・Kyberturvallisuuden perusteet (2. painos)<br>
+・Johdatus kognitiiviseen psykologiaan</p>
+<p>Voit uusia lainan kirjaston portaalin kautta (yksi uusinta sallittu).</p>`,
+  },
+  {
+    id: 'normal-4-fi',
+    lang: 'fi',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Aino Mäkinen', address: 'makinen.aino.2023@meijo-u.ac.jp' },
+    to: 'Sinä (TA)',
+    subject: 'Jaan diat ensi viikon seminaariin',
+    date: '2026年5月18日 18:30',
+    bodyHtml: `<p>Hei!</p>
+<p>Lähetän diani ensi viikon yhteisseminaaria varten etukäteen. Katso ne, kun sinulla on hetki aikaa!</p>
+<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
+      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
+  Katso diat Google Drivessa
+</a></p>
+<p>Ota yhteyttä, jos sinulla on kysyttävää. Nähdään!</p>
+<p>Aino</p>`,
+  },
+
+  // ============================================================
+  // 罠メール × 4通
+  // ============================================================
+
+  /**
+   * trap-1-fi: 【BEC】Ulkomaisen toimittajan tekeytyminen
+   * 罠: väärennetty verkkotunnus（oxf0rd）+ kaksoisliite（.pdf.exe）
+   * Psykologinen paine: määräaika（31.5. jälkeen ei hyväksytä）
+   */
+  {
+    id: 'trap-1-fi',
+    lang: 'fi',
+    isTrap: true,
+    traps: ['domain', 'extension', 'urgency'],
+    from: {
+      display: 'Oxford Education Finland – Tuki',
+      address: 'support@oxf0rd-edu-finland.com',
+    },
+    to: 'Sinä (TA)',
+    subject: '[Tärkeää] Pankkitietojen muutos – kansainvälisten opiskelijoiden tuki',
+    date: '2026年5月22日 14:30',
+    bodyHtml: `<p>Hyvä käyttäjä,</p>
+<p>Nimeni on Juhani Korhonen Oxford Education Finlandin tukitiimistä.</p>
+<p>Pankkijärjestelmämme päivityksen vuoksi kansainvälisten opiskelijoiden tukimaksujen tilinumero on muuttunut. Pyydämme käyttämään seuraavassa maksussanne <strong>liitteenä olevassa vahvistusasiakirjassa</strong> olevia uusia pankkitietoja.</p>
+<p><strong>※ Vanhan tilin maksusuorituksia ei hyväksytä 31.5. jälkeen.</strong></p>
+<p>Oxford Education Finland<br>Juhani Korhonen<br>Puh: 09-XXXX-XXXX</p>`,
+    attachments: [{
+      name: 'Pankkitietojen_vahvistus.pdf.exe',
+      displayName: 'Pankkitietojen_vahvistus.pdf',
+      mimeType: 'application/pdf',
+      isTrapped: true,
+    }],
+  },
+
+  /**
+   * trap-2-fi: 【BEC】Auktoriteettihenkilön tekeytyminen（toimitusjohtajahuijaus）
+   * 罠: ilmainen sähköpostitunnus（gmail）+ väärä linkki + kiireellisyys + auktoriteetti
+   * Psykologinen paine: matkalla・tänään・luottamuksellinen
+   */
+  {
+    id: 'trap-2-fi',
+    lang: 'fi',
+    isTrap: true,
+    traps: ['domain', 'link', 'urgency', 'authority'],
+    from: {
+      display: 'Prof. Yoshikawa (Dekaani)',
+      address: 'yoshikawa.meijo.univ@gmail.com',
+    },
+    to: 'Sinä (TA)',
+    subject: 'Kiireellinen – Tarvitsen apuasi tänään',
+    date: '2026年5月20日 11:45',
+    bodyHtml: `<p>Hei,</p>
+<p>Olen tällä hetkellä konferenssissa Lontoossa enkä pysty vastaamaan puheluihin. Minulla on kiireellinen asia, johon tarvitsen apuasi.</p>
+<p>Ulkomaisen yliopiston kanssa tehtävään yhteistyöprojektiin liittyen minun täytyy jakaa vastuuopiskelijoiden tiedot tänään. Voisitko täyttää alla olevan linkin lomakkeen ja lähettää sen mahdollisimman pian?</p>
+<p><a href="javascript:void(0)"
+      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz"
+      data-phished-url="/phished?type=link">
+  Klikkaa tästä täyttääksesi lomakkeen
+</a></p>
+<p>Pidä tämä toistaiseksi luottamuksellisena – projektia ei ole vielä virallisesti julkistettu.</p>
+<p>Kiitos,<br>Prof. Yoshikawa</p>`,
+  },
+
+  /**
+   * trap-3-fi: 【Spear phishing】Sähköpostiketjun kaappaus
+   * 罠: kaksoisliite（.pdf.exe）+ luottamuksen hyväksikäyttö
+   * Psykologinen paine: pahoittelu・työn jatkuvuus
+   */
+  {
+    id: 'trap-3-fi',
+    lang: 'fi',
+    isTrap: true,
+    traps: ['extension', 'authority'],
+    from: {
+      display: 'Ville Heikkinen（M1-opiskelija, Tietotekniikka）',
+      address: 'heikkinen.ville.2024@gmail.com',
+    },
+    to: 'Sinä (TA)',
+    subject: 'Re: Puuttuvat asiakirjat stipendihakemuksessa',
+    date: '2026年5月18日 16:30',
+    bodyHtml: `<p>Hei,</p>
+<p>Olen korjannut kaikki kohdat, jotka mainitsit. Pahoittelen vaivannäköä!</p>
+<p>Lähetän korjatut asiakirjat salasanasuojattuna ZIP-tiedostona.<br>
+Salasana: <strong>2024</strong></p>
+<p>Kerro, jos kaikki näyttää nyt hyvältä. Kiitos!</p>
+<p>Ville</p>`,
+    attachments: [{
+      name: 'Stipendihakemus_Korjattu.pdf.exe',
+      displayName: 'Stipendihakemus_Korjattu.pdf',
+      mimeType: 'application/pdf',
+      isTrapped: true,
+    }],
+  },
+
+  /**
+   * trap-4-fi: 【Phishing】Väärä infrastruktuuriilmoitus
+   * 罠: väärennetty verkkotunnus（ccmallg vs ccmailg）+ väärä linkki + kiireellisyys
+   * Psykologinen paine: epäilyttävä kirjautuminen・tänään・tili jäädytetty
+   */
+  {
+    id: 'trap-4-fi',
+    lang: 'fi',
+    isTrap: true,
+    traps: ['domain', 'link', 'urgency', 'authority'],
+    from: {
+      display: 'IT-keskus – Meijo-yliopisto',
+      address: 'admin@ccmallg.meijo-u.ac.jp',
+    },
+    to: 'Sinä (TA)',
+    subject: '[Kiireellinen] Tilin vahvistus vaaditaan',
+    date: '2026年5月17日 09:00',
+    bodyHtml: `<p>Tämä on tärkeä ilmoitus Meijo-yliopiston IT-keskukselta.</p>
+<p><strong>Sähköpostitililläsi on havaittu epäilyttävää kirjautumisaktiviteettia.</strong> Tilisi suojaamiseksi pyydämme sinua suorittamaan henkilöllisyyden vahvistuksen tänään.</p>
+<p>▼ Vahvista tilisi täällä<br>
+<a href="javascript:void(0)"
+   data-display-url="https://portal.meijo-u.ac.jp/auth/update"
+   data-phished-url="/phished?type=link">
+  https://portal.meijo-u.ac.jp/auth/update
+</a></p>
+<p><strong>※ Jos vahvistusta ei suoriteta tänään klo 23:59 mennessä, tilisi jäädytetään väliaikaisesti.</strong></p>
+<p>IT-keskus – Meijo-yliopisto<br>
+ccmailg.meijo-u.ac.jp</p>`,
+  },
+]

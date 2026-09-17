@@ -1,7 +1,8 @@
 import type { Email, Language } from '@/types'
 import {
-  emailsJa, emailsEn, emailsDe_en,
+  emailsJa, emailsEn,
   emailsKo, emailsZh, emailsIt, emailsVi, emailsEs,
+  emailsPl, emailsNo, emailsFi,
 } from '@/data/emails'
 
 /**
@@ -12,19 +13,12 @@ import {
  * @returns         日本語メール8通 + L2メール8通 = 計16通
  *
  * 振り分けルール：
- * - 全被験者：emailsJa（日本語8通）は共通
- * - ドイツ在住日本人（l1Lang === 'ja'）：emailsDe_en（英語8通）を追加
- * - 日本在住留学生：母語に対応する配列を追加
- *   en → emailsEn / ko → emailsKo / zh → emailsZh
- *   it → emailsIt / vi → emailsVi / es → emailsEs
+ * - 全被験者：母語（L1）に対応する配列 + emailsJa（日本語8通・L2）
+ *   en → emailsEn / ko → emailsKo / zh → emailsZh / it → emailsIt
+ *   vi → emailsVi / es → emailsEs / pl → emailsPl / no → emailsNo / fi → emailsFi
  *   その他 → emailsEn（フォールバック）
  */
 export function getEmailSet(uiLang: Language, l1Lang: Language): Email[] {
-  if (l1Lang === 'ja') {
-    // ドイツ在住日本人：ja（L1） + de_en（L2）
-    return interleaveEmails(emailsJa, emailsDe_en)
-  }
-  // 日本在住留学生：母語（L1） + ja（L2）
   const l1Emails = getL2Emails(uiLang, l1Lang)
   return interleaveEmails(l1Emails, emailsJa)
 }
@@ -33,10 +27,6 @@ export function getEmailSet(uiLang: Language, l1Lang: Language): Email[] {
  * L2言語のメール配列を返す
  */
 export function getL2Emails(uiLang: Language, l1Lang: Language): Email[] {
-  // ドイツ在住日本人：UIは日本語、L2は英語（アウクスブルク大学文脈）
-  if (l1Lang === 'ja') return emailsDe_en
-
-  // 日本在住留学生：母語に対応する配列
   const map: Partial<Record<Language, Email[]>> = {
     en: emailsEn,
     ko: emailsKo,
@@ -44,6 +34,9 @@ export function getL2Emails(uiLang: Language, l1Lang: Language): Email[] {
     it: emailsIt,
     vi: emailsVi,
     es: emailsEs,
+    pl: emailsPl,
+    no: emailsNo,
+    fi: emailsFi,
   }
   return map[l1Lang] ?? emailsEn
 }
@@ -96,14 +89,16 @@ export function getTrapEmails(emails: Email[]): Email[] {
 export function validateEmailData(): { valid: boolean; errors: string[] } {
   const errors: string[] = []
   const allSets = [
-    { name: 'emailsJa',    data: emailsJa    },
-    { name: 'emailsEn',    data: emailsEn    },
-    { name: 'emailsDe_en', data: emailsDe_en },
-    { name: 'emailsKo',    data: emailsKo    },
-    { name: 'emailsZh',    data: emailsZh    },
-    { name: 'emailsIt',    data: emailsIt    },
-    { name: 'emailsVi',    data: emailsVi    },
-    { name: 'emailsEs',    data: emailsEs    },
+    { name: 'emailsJa', data: emailsJa },
+    { name: 'emailsEn', data: emailsEn },
+    { name: 'emailsKo', data: emailsKo },
+    { name: 'emailsZh', data: emailsZh },
+    { name: 'emailsIt', data: emailsIt },
+    { name: 'emailsVi', data: emailsVi },
+    { name: 'emailsEs', data: emailsEs },
+    { name: 'emailsPl', data: emailsPl },
+    { name: 'emailsNo', data: emailsNo },
+    { name: 'emailsFi', data: emailsFi },
   ]
 
   for (const { name, data } of allSets) {
