@@ -272,9 +272,10 @@ function HomeContent() {
       {/* ── STEP 0: 研究同意 ───────────────────────────────────────────────── */}
       {step === 0 && (
         <Card>
-          <h1 className="text-xl font-bold text-gray-900 mb-6">{t.consentTitle}</h1>
+          <h1 className="text-xl font-bold text-gray-900 mb-4">{t.consentTitle}</h1>
+          <p className="text-sm text-gray-700 mb-6 leading-relaxed">{t.consentIntro}</p>
           <ol className="space-y-3 mb-6">
-            {([t.consentItem1, t.consentItem2, t.consentItem3, t.consentItem4] as string[]).map(
+            {t.consentItems.map(
               (item, i) => (
                 <li key={i} className="flex gap-3 text-sm text-gray-700">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
