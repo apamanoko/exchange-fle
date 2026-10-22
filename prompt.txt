@@ -1,1 +1,55 @@
-Aiフィードバックの画面で一番下のcloseボタンを押しても反応しない．反応するようにして．そのボタンを押したらGoogle事後アンケートフォームを入力できるようにしてあげて．実験終了後，事後フォームへの誘導がないからね．事後Googleフォームへ誘導してあげてほしい．
+/lib/scoring.ts の domainVerification スコアの計算ロジックを
+以下の通り修正してください。
+
+# 現在の問題
+hover_senderのホバー時間でdomainVerificationを計算しているが、
+マウスをホバーしなくても目視で確認できるため不正確。
+
+# 修正後のロジック
+ドメイン偽装を含む罠メール（traps配列に'domain'が含まれるもの）
+に対する最終アクションで判定する。
+
+対象メール（domainトラップを持つもの）：
+trap-1-xx（BECベンダー）
+trap-2-xx（権威者なりすまし）
+trap-4-xx（インフラ偽通知）
+※ trap-3-xx は 'domain' トラップを持たないため対象外
+
+判定ロジック：
+- action_block  → 100点（ドメインを見抜いて正しく対処）
+- action_ignore → 50点（疑ったが確信が持てなかった）
+- action_reply  → 0点（ドメイン偽装に気づかなかった）
+
+スコア計算：
+domainVerification = 対象メールの得点の平均
+
+例：
+trap-1-ja: action_block → 100点
+trap-1-l2: action_reply → 0点
+trap-2-ja: action_block → 100点
+trap-2-l2: action_ignore → 50点
+trap-4-ja: action_reply → 0点
+trap-4-l2: action_block → 100点
+
+domainVerification = (100+0+100+50+0+100) / 6 = 58.3点
+
+修正後のコードを出力してください。
+また、同じ理由でlinkInspectionも以下のように修正してください。
+
+# linkInspectionの修正
+現在：hover_linkイベントの発生比率で計算
+修正後：リンク偽装を含む罠メール（traps配列に'link'が含むもの）
+       に対する最終アクションで判定
+
+対象メール（linkトラップを持つもの）：
+trap-2-xx（リンク偽装あり）
+trap-4-xx（リンク偽装あり）
+
+判定ロジック：
+- action_block  → 100点
+- action_ignore → 50点
+- action_reply  → 0点
+
+linkInspection = 対象メールの得点の平均
+
+修正後のコードを全て出力してください。

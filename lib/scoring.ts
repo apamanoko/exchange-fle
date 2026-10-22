@@ -38,6 +38,16 @@ function clamp(v: number): number {
 // 罠メールへの最終判断となりうるアクション種別
 const FINAL_ACTION_EVENTS = new Set(['action_reply', 'action_ignore', 'action_block'])
 
+// 最終アクションを点数化する（ドメイン／リンク判定で共通利用）
+//   action_block  → 100（偽装を見抜いて正しく対処）
+//   action_ignore →  50（疑ったが確信が持てなかった）
+//   action_reply / 未操作 → 0（偽装に気づかなかった）
+function actionScore(eventType: string | undefined): number {
+  if (eventType === 'action_block')  return 100
+  if (eventType === 'action_ignore') return 50
+  return 0
+}
+
 // ─── スコア算出 ────────────────────────────────────────────────────────────────
 
 export function computeScore(
@@ -49,6 +59,9 @@ export function computeScore(
   const trapEmails = emails.filter((e) => e.isTrap)
   const trapIds    = new Set(trapEmails.map((e) => e.id))
 
+  const domainTrapIds = new Set(
+    trapEmails.filter((e) => e.traps.includes('domain')).map((e) => e.id)
+  )
   const linkTrapIds = new Set(
     trapEmails.filter((e) => e.traps.includes('link')).map((e) => e.id)
   )
@@ -58,31 +71,43 @@ export function computeScore(
 
   const trapLogs = logs.filter((l) => trapIds.has(l.email_id))
 
-  // ── domainVerification（30%）─────────────────────────────────────────────
-  const hoverSenderMs = trapLogs
-    .filter((l) => l.event_type === 'hover_sender' && l.duration_ms != null)
-    .reduce((sum, l) => sum + (l.duration_ms ?? 0), 0)
+  // 各罠メールの「最終アクション」ログ（時系列で最後の action_* を採用）。
+  // ドメイン・リンク・緊急性スコアと trapResults で共通利用する。
+  const finalActionLogByEmail: Record<string, LogRow> = {}
+  for (const log of trapLogs) {
+    if (FINAL_ACTION_EVENTS.has(log.event_type)) {
+      finalActionLogByEmail[log.email_id] = log
+    }
+  }
 
-  const domainThreshold  = 2000 * (trapEmails.length / 4)
-  const domainVerification = clamp(linearScore(hoverSenderMs, 0, domainThreshold))
+  // ── domainVerification（30%）─────────────────────────────────────────────
+  // ドメイン偽装を含む罠メール（traps に 'domain'）への最終アクションで判定する。
+  // ホバー時間ではなく最終判断を見るため、目視確認の参加者も正しく評価できる。
+  const domainScores = [...domainTrapIds].map(
+    (id) => actionScore(finalActionLogByEmail[id]?.event_type)
+  )
+  const domainVerification = clamp(
+    domainScores.length > 0
+      ? domainScores.reduce((a, b) => a + b, 0) / domainScores.length
+      : 0
+  )
 
   // ── linkInspection（25%）────────────────────────────────────────────────
-  const emailsWithHoverLink = new Set(
-    trapLogs
-      .filter((l) => l.event_type === 'hover_link' && linkTrapIds.has(l.email_id))
-      .map((l) => l.email_id)
+  // リンク偽装を含む罠メール（traps に 'link'）への最終アクションで判定する。
+  const linkScores = [...linkTrapIds].map(
+    (id) => actionScore(finalActionLogByEmail[id]?.event_type)
   )
   const linkInspection = clamp(
-    linkTrapIds.size > 0 ? (emailsWithHoverLink.size / linkTrapIds.size) * 100 : 0
+    linkScores.length > 0
+      ? linkScores.reduce((a, b) => a + b, 0) / linkScores.length
+      : 0
   )
 
   // ── urgencyResistance（25%）──────────────────────────────────────────────
   // 罠メールの最終 TTA（action_reply / action_ignore / action_block の duration_ms）の中央値
   const finalTtaByEmail: Record<string, number> = {}
-  for (const log of trapLogs) {
-    if (FINAL_ACTION_EVENTS.has(log.event_type) && log.duration_ms != null) {
-      finalTtaByEmail[log.email_id] = log.duration_ms
-    }
+  for (const [emailId, log] of Object.entries(finalActionLogByEmail)) {
+    if (log.duration_ms != null) finalTtaByEmail[emailId] = log.duration_ms
   }
   const medianTta = median(Object.values(finalTtaByEmail))
   const urgencyResistance = clamp(
@@ -125,11 +150,7 @@ export function computeScore(
 
   // ── trapResults ───────────────────────────────────────────────────────────
   const trapResults: TrapResult[] = trapEmails.map((email) => {
-    const emailLogs = trapLogs.filter((l) => l.email_id === email.id)
-
-    const finalActionLog = [...emailLogs]
-      .reverse()
-      .find((l) => FINAL_ACTION_EVENTS.has(l.event_type))
+    const finalActionLog = finalActionLogByEmail[email.id]
 
     const finalAction: 'replied' | 'ignored' | 'blocked' =
       finalActionLog?.event_type === 'action_block'  ? 'blocked' :
