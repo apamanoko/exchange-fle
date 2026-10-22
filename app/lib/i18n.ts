@@ -89,6 +89,9 @@ export type Translations = {
   // ── フィッシング警告画面 ──────────────────────────────────────────────────
   closeTab: string
   phishedTitle: string
+  // ── 安全確認画面（通常メールのリンク）────────────────────────────────────
+  safeLinkTitle: string
+  safeLinkBody: string
   phishedExplainLink: string
   phishedExplainAttachment: string
   phishedRecordedNote: string
@@ -183,6 +186,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: '事後アンケートを開く',
     judgmentDeferred: '判断を保留しました',
     closeTab: 'このタブを閉じる',
+    safeLinkTitle: 'このリンクは安全です',
+    safeLinkBody: 'あなたがクリックしたリンクは通常のリンクです。実験中のため外部サイトへの遷移はブロックされました。メール画面に戻って次のメールを処理してください。',
     phishedTitle: 'これはフィッシング詐欺シミュレーションです',
     phishedExplainLink: 'あなたがクリックしたリンクは、実際のフィッシング詐欺であれば攻撃者のサーバーに誘導される偽サイトでした。',
     phishedExplainAttachment: 'あなたが開こうとした添付ファイルは、実際のフィッシング詐欺であればマルウェア（悪意のあるプログラム）でした。実行された場合、あなたのPCが遠隔操作される可能性があります。',
@@ -276,6 +281,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: 'Open Post-Experiment Survey',
     judgmentDeferred: 'Judgment deferred',
     closeTab: 'Close this tab',
+    safeLinkTitle: 'This link is safe.',
+    safeLinkBody: 'The link you clicked appears to be a legitimate link. For the purposes of this experiment, navigation to external sites has been blocked. Please return to the mail screen and continue.',
     phishedTitle: 'This is a phishing simulation',
     phishedExplainLink: 'The link you clicked would have led to a fake site controlled by an attacker in a real phishing attack.',
     phishedExplainAttachment: 'The attachment you tried to open would have been malware in a real phishing attack. If executed, an attacker could have gained remote control of your computer.',
@@ -369,6 +376,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: 'Nachbefragung öffnen',
     judgmentDeferred: 'Urteil zurückgestellt',
     closeTab: 'Diesen Tab schließen',
+    safeLinkTitle: 'Dieser Link ist sicher.',
+    safeLinkBody: 'Der von Ihnen angeklickte Link ist ein normaler Link. Da das Experiment läuft, wurde die Weiterleitung zu externen Websites blockiert. Bitte kehren Sie zum E-Mail-Bildschirm zurück und bearbeiten Sie die nächste E-Mail.',
     phishedTitle: 'Dies ist eine Phishing-Simulation',
     phishedExplainLink: 'Der Link, auf den Sie geklickt haben, hätte Sie bei einem echten Phishing-Angriff auf eine gefälschte, vom Angreifer kontrollierte Website geführt.',
     phishedExplainAttachment: 'Der Anhang, den Sie öffnen wollten, wäre bei einem echten Phishing-Angriff Schadsoftware gewesen. Bei Ausführung hätte ein Angreifer möglicherweise die Fernsteuerung Ihres Computers übernehmen können.',
@@ -462,6 +471,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: '打开实验后问卷',
     judgmentDeferred: '已保留判断',
     closeTab: '关闭此标签页',
+    safeLinkTitle: '此链接是安全的',
+    safeLinkBody: '您点击的链接是一个正常链接。由于实验正在进行中，已阻止跳转到外部网站。请返回邮件界面并处理下一封邮件。',
     phishedTitle: '这是一次网络钓鱼模拟',
     phishedExplainLink: '如果这是真实的网络钓鱼攻击，您点击的链接将会把您带到攻击者控制的虚假网站。',
     phishedExplainAttachment: '如果这是真实的网络钓鱼攻击，您试图打开的附件将是恶意软件。一旦执行，攻击者可能会远程控制您的电脑。',
@@ -555,6 +566,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: '사후 설문 열기',
     judgmentDeferred: '판단을 보류했습니다',
     closeTab: '이 탭 닫기',
+    safeLinkTitle: '이 링크는 안전합니다',
+    safeLinkBody: '클릭하신 링크는 정상적인 링크입니다. 실험 중이므로 외부 사이트로의 이동이 차단되었습니다. 메일 화면으로 돌아가 다음 메일을 처리해 주세요.',
     phishedTitle: '이것은 피싱 시뮬레이션입니다',
     phishedExplainLink: '실제 피싱 공격이었다면, 당신이 클릭한 링크는 공격자가 통제하는 가짜 사이트로 연결되었을 것입니다.',
     phishedExplainAttachment: '실제 피싱 공격이었다면, 당신이 열려고 한 첨부 파일은 악성코드였을 것입니다. 실행되었다면 공격자가 당신의 컴퓨터를 원격으로 조종할 수 있었을 것입니다.',
@@ -648,6 +661,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: 'Apri il questionario post-esperimento',
     judgmentDeferred: 'Giudizio sospeso',
     closeTab: 'Chiudi questa scheda',
+    safeLinkTitle: 'Questo link è sicuro.',
+    safeLinkBody: "Il link su cui hai cliccato è un link legittimo. Poiché l'esperimento è in corso, la navigazione verso siti esterni è stata bloccata. Torna alla schermata della posta e passa all'email successiva.",
     phishedTitle: 'Questa è una simulazione di phishing',
     phishedExplainLink: 'Il link su cui hai cliccato, in un vero attacco di phishing, ti avrebbe portato a un sito falso controllato da un aggressore.',
     phishedExplainAttachment: "L'allegato che hai provato ad aprire, in un vero attacco di phishing, sarebbe stato un malware. Se eseguito, un aggressore avrebbe potuto prendere il controllo remoto del tuo computer.",
@@ -741,6 +756,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: 'Mở khảo sát sau thí nghiệm',
     judgmentDeferred: 'Đã hoãn phán đoán',
     closeTab: 'Đóng tab này',
+    safeLinkTitle: 'Liên kết này an toàn.',
+    safeLinkBody: 'Liên kết bạn đã nhấp là một liên kết thông thường. Vì đang trong quá trình thí nghiệm, việc chuyển đến các trang web bên ngoài đã bị chặn. Vui lòng quay lại màn hình email và xử lý email tiếp theo.',
     phishedTitle: 'Đây là mô phỏng tấn công lừa đảo (phishing)',
     phishedExplainLink: 'Liên kết bạn đã nhấp vào, nếu là một cuộc tấn công lừa đảo thật sự, sẽ dẫn bạn đến một trang web giả do kẻ tấn công kiểm soát.',
     phishedExplainAttachment: 'Tệp đính kèm bạn đã cố mở, nếu là một cuộc tấn công lừa đảo thật sự, sẽ là phần mềm độc hại. Nếu được thực thi, kẻ tấn công có thể điều khiển máy tính của bạn từ xa.',
@@ -834,6 +851,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: 'Abrir encuesta posterior',
     judgmentDeferred: 'Juicio aplazado',
     closeTab: 'Cerrar esta pestaña',
+    safeLinkTitle: 'Este enlace es seguro.',
+    safeLinkBody: 'El enlace en el que hizo clic es un enlace legítimo. Como el experimento está en curso, se ha bloqueado la navegación a sitios externos. Vuelva a la pantalla de correo y continúe con el siguiente mensaje.',
     phishedTitle: 'Esto es una simulación de phishing',
     phishedExplainLink: 'El enlace en el que hiciste clic, en un ataque de phishing real, te habría llevado a un sitio falso controlado por un atacante.',
     phishedExplainAttachment: 'El archivo adjunto que intentaste abrir, en un ataque de phishing real, habría sido malware. Si se ejecutaba, un atacante podría haber tomado el control remoto de tu ordenador.',
@@ -927,6 +946,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: 'Otwórz ankietę końcową',
     judgmentDeferred: 'Ocena odroczona',
     closeTab: 'Zamknij tę kartę',
+    safeLinkTitle: 'Ten link jest bezpieczny.',
+    safeLinkBody: 'Link, który kliknąłeś, jest zwykłym linkiem. Ponieważ trwa eksperyment, przejście do zewnętrznych witryn zostało zablokowane. Wróć do ekranu poczty i przejdź do następnej wiadomości.',
     phishedTitle: 'To jest symulacja phishingu',
     phishedExplainLink: 'Link, w który kliknąłeś/aś, w prawdziwym ataku phishingowym prowadziłby do fałszywej strony kontrolowanej przez atakującego.',
     phishedExplainAttachment: 'Załącznik, który próbowałeś/aś otworzyć, w prawdziwym ataku phishingowym byłby złośliwym oprogramowaniem. Po uruchomieniu atakujący mógłby przejąć zdalną kontrolę nad Twoim komputerem.',
@@ -1020,6 +1041,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: 'Åpne spørreundersøkelse etter eksperimentet',
     judgmentDeferred: 'Vurdering utsatt',
     closeTab: 'Lukk denne fanen',
+    safeLinkTitle: 'Denne lenken er trygg.',
+    safeLinkBody: 'Lenken du klikket på er en vanlig lenke. Siden eksperimentet pågår, er navigering til eksterne nettsteder blokkert. Gå tilbake til e-postskjermen og fortsett med neste e-post.',
     phishedTitle: 'Dette er en phishing-simulering',
     phishedExplainLink: 'Lenken du klikket på ville i et reelt phishing-angrep ha ført deg til et falskt nettsted kontrollert av en angriper.',
     phishedExplainAttachment: 'Vedlegget du prøvde å åpne ville i et reelt phishing-angrep ha vært skadevare. Hvis det ble kjørt, kunne en angriper ha fått fjernkontroll over datamaskinen din.',
@@ -1113,6 +1136,8 @@ const translations: Record<Lang, Translations> = {
     postFormButton: 'Avaa kokeen jälkeinen kysely',
     judgmentDeferred: 'Arviointi lykätty',
     closeTab: 'Sulje tämä välilehti',
+    safeLinkTitle: 'Tämä linkki on turvallinen.',
+    safeLinkBody: 'Napsauttamasi linkki on tavallinen linkki. Koska koe on käynnissä, siirtyminen ulkoisille sivustoille on estetty. Palaa sähköpostinäkymään ja jatka seuraavaan viestiin.',
     phishedTitle: 'Tämä on tietojenkalastelusimulaatio',
     phishedExplainLink: 'Linkki, jota klikkasit, olisi todellisessa tietojenkalasteluhyökkäyksessä johtanut hyökkääjän hallitsemalle valesivustolle.',
     phishedExplainAttachment: 'Liite, jonka yritit avata, olisi todellisessa tietojenkalasteluhyökkäyksessä ollut haittaohjelma. Jos se olisi suoritettu, hyökkääjä olisi voinut saada etähallinnan tietokoneeseesi.',

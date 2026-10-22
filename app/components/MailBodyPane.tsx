@@ -46,7 +46,7 @@ function processBodyHtml(raw: string): string {
   if (typeof window === 'undefined') return ''
 
   const clean = DOMPurify.sanitize(raw, {
-    ADD_ATTR: ['data-display-url'],
+    ADD_ATTR: ['data-display-url', 'data-phished-url'],
   })
 
   const doc = new DOMParser().parseFromString(clean, 'text/html')
@@ -145,7 +145,7 @@ type BodyContentProps = {
   onLinkHover: (url: string | null) => void
   onLinkHoverStart?: (linkId: string) => void
   onLinkHoverEnd?: (linkId: string) => void
-  onLinkClick?: (displayUrl: string) => void
+  onLinkClick?: (displayUrl: string, isPhished: boolean) => void
 }
 
 function BodyContent({
@@ -185,8 +185,10 @@ function BodyContent({
       const a = (e.target as Element).closest<HTMLAnchorElement>('a[data-actual-href]')
       if (!a) return
       e.preventDefault()
+      // ① data-phished-url あり（罠メールのリンク）→ /phished へ遷移しログを記録
+      // ② data-phished-url なし（通常メールのリンク）→ /safe へ遷移（ログは記録しない）
       const displayUrl = a.dataset.actualHref ?? ''
-      onLinkClick?.(displayUrl)
+      onLinkClick?.(displayUrl, a.dataset.phishedUrl != null)
     }
 
     container.addEventListener('mouseover', onOver)
@@ -244,14 +246,20 @@ export default function MailBodyPane({
     tracker?.onHoverEnd(`link_${linkId}`, 'hover_link')
   }, [tracker])
 
-  // リンククリック: 罠サイトへの誘導を模した /phished ページを新しいタブで開く
-  const handleLinkClick = useCallback((displayUrl: string) => {
-    tracker?.onLinkClick(displayUrl)
-    if (email && sessionId) {
-      window.open(
-        `/phished?type=link&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}&ui_lang=${encodeURIComponent(lang)}`,
-        '_blank'
-      )
+  // リンククリック:
+  //  ① 罠メールのリンク（isPhished）→ /phished を新しいタブで開き、link_click を記録
+  //  ② 通常メールのリンク           → /safe を新しいタブで開く（ログは記録しない）
+  const handleLinkClick = useCallback((displayUrl: string, isPhished: boolean) => {
+    if (isPhished) {
+      tracker?.onLinkClick(displayUrl)
+      if (email && sessionId) {
+        window.open(
+          `/phished?type=link&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}&ui_lang=${encodeURIComponent(lang)}`,
+          '_blank'
+        )
+      }
+    } else {
+      window.open(`/safe?type=link&ui_lang=${encodeURIComponent(lang)}`, '_blank')
     }
   }, [tracker, sessionId, email, lang])
 

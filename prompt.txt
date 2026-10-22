@@ -1,55 +1,95 @@
-/lib/scoring.ts の domainVerification スコアの計算ロジックを
-以下の通り修正してください。
+以下の2つの修正を行ってください。
 
-# 現在の問題
-hover_senderのホバー時間でdomainVerificationを計算しているが、
-マウスをホバーしなくても目視で確認できるため不正確。
+# 1. /app/safe/page.tsx を新規作成
 
-# 修正後のロジック
-ドメイン偽装を含む罠メール（traps配列に'domain'が含まれるもの）
-に対する最終アクションで判定する。
+通常メールのリンクをクリックした際に表示する「安全確認画面」。
+/phished/page.tsx と同じ構造だが、内容は以下の通り：
 
-対象メール（domainトラップを持つもの）：
-trap-1-xx（BECベンダー）
-trap-2-xx（権威者なりすまし）
-trap-4-xx（インフラ偽通知）
-※ trap-3-xx は 'domain' トラップを持たないため対象外
+URLパラメータ：
+/safe?type=link または /safe?type=attachment
+session_id と email_id もパラメータとして受け取る
 
-判定ロジック：
-- action_block  → 100点（ドメインを見抜いて正しく対処）
-- action_ignore → 50点（疑ったが確信が持てなかった）
-- action_reply  → 0点（ドメイン偽装に気づかなかった）
+## 画面デザイン
 
-スコア計算：
-domainVerification = 対象メールの得点の平均
+背景：緑系（安全を示す色）
 
-例：
-trap-1-ja: action_block → 100点
-trap-1-l2: action_reply → 0点
-trap-2-ja: action_block → 100点
-trap-2-l2: action_ignore → 50点
-trap-4-ja: action_reply → 0点
-trap-4-l2: action_block → 100点
+表示内容：
+【アイコン】：lucide-react の ShieldCheck（緑色）
 
-domainVerification = (100+0+100+50+0+100) / 6 = 58.3点
+【タイトル】：
+「このリンクは安全です」（ja）
+"This link is safe." （en）
+他6言語も対応
 
-修正後のコードを出力してください。
-また、同じ理由でlinkInspectionも以下のように修正してください。
+【説明文】：
+「あなたがクリックしたリンクは通常のリンクです。
+ 実験中のため外部サイトへの遷移はブロックされました。
+ メール画面に戻って次のメールを処理してください。」
 
-# linkInspectionの修正
-現在：hover_linkイベントの発生比率で計算
-修正後：リンク偽装を含む罠メール（traps配列に'link'が含むもの）
-       に対する最終アクションで判定
+英語版：
+"The link you clicked appears to be a legitimate link.
+ For the purposes of this experiment, navigation to
+ external sites has been blocked.
+ Please return to the mail screen and continue."
 
-対象メール（linkトラップを持つもの）：
-trap-2-xx（リンク偽装あり）
-trap-4-xx（リンク偽装あり）
+他6言語（de/zh/ko/it/vi/es/pl/no/fi）も同内容で実装。
 
-判定ロジック：
-- action_block  → 100点
-- action_ignore → 50点
-- action_reply  → 0点
+【ボタン】：
+「このタブを閉じる」→ window.close()
+色：緑系（bg-green-600）
+アイコン：lucide-react の X
 
-linkInspection = 対象メールの得点の平均
+## トラッキング
+通常メールのリンククリックはログに記録しない
+（正常行動であり研究データとして不要なため）
 
-修正後のコードを全て出力してください。
+## ui_langの取得
+URLパラメータから ui_lang を取得して表示言語を切り替える
+/lib/i18n.ts の getT(ui_lang) を使用
+
+# 2. メール本文レンダリング部分の修正
+
+通常リンク（data-phished-url なし）のクリック処理を以下に変更：
+
+const handleLinkClick = (e: MouseEvent) => {
+  e.preventDefault()
+  const target = e.currentTarget as HTMLAnchorElement
+  const phishedUrl = target.dataset.phishedUrl
+
+  if (phishedUrl) {
+    // 罠メールのリンク → /phished に遷移
+    tracker.onLinkClick(target.dataset.displayUrl ?? '')
+    window.open(
+      `${phishedUrl}&session_id=${sessionId}&email_id=${currentEmailId}&ui_lang=${uiLang}`,
+      '_blank'
+    )
+  } else {
+    // 通常メールのリンク → /safe に遷移
+    window.open(
+      `/safe?type=link&ui_lang=${uiLang}`,
+      '_blank'
+    )
+  }
+}
+
+# 3. /lib/i18n.ts に以下のキーを7言語で追加
+
+safeLinkTitle:
+  ja: 'このリンクは安全です'
+  en: 'This link is safe.'
+  de: 'Dieser Link ist sicher.'
+  zh: '此链接是安全的'
+  ko: '이 링크는 안전합니다'
+  it: 'Questo link è sicuro.'
+  vi: 'Liên kết này an toàn.'
+  es: 'Este enlace es seguro.'
+  pl: 'Ten link jest bezpieczny.'
+  no: 'Denne lenken er trygg.'
+  fi: 'Tämä linkki on turvallinen.'
+
+safeLinkBody:
+  ja: 'あなたがクリックしたリンクは通常のリンクです。実験中のため外部サイトへの遷移はブロックされました。メール画面に戻って次のメールを処理してください。'
+  en: 'The link you clicked appears to be a legitimate link. For the purposes of this experiment, navigation to external sites has been blocked. Please return to the mail screen and continue.'
+  （他言語も同内容で翻訳して実装）
+
+修正後に npx tsc --noEmit を実行してエラーがないことを確認してください。
