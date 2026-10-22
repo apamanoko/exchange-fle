@@ -42,6 +42,7 @@ export type Translations = {
   // ── STEP 2: 事前アンケート ──────────────────────────────────────────────
   preFormButton: string
   preFormComplete: string
+  postFormButton: string
   // ── STEP 3: カバーストーリー・実験開始 ──────────────────────────────────
   coverStoryTitle: string
   coverStoryBody: string
@@ -179,6 +180,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AIからのフィードバック',
     thankYou: '実験にご参加いただきありがとうございました',
     close: '閉じる',
+    postFormButton: '事後アンケートを開く',
     judgmentDeferred: '判断を保留しました',
     closeTab: 'このタブを閉じる',
     phishedTitle: 'これはフィッシング詐欺シミュレーションです',
@@ -271,6 +273,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AI Feedback',
     thankYou: 'Thank you for participating in the experiment',
     close: 'Close',
+    postFormButton: 'Open Post-Experiment Survey',
     judgmentDeferred: 'Judgment deferred',
     closeTab: 'Close this tab',
     phishedTitle: 'This is a phishing simulation',
@@ -363,6 +366,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'KI-Feedback',
     thankYou: 'Vielen Dank für Ihre Teilnahme am Experiment',
     close: 'Schließen',
+    postFormButton: 'Nachbefragung öffnen',
     judgmentDeferred: 'Urteil zurückgestellt',
     closeTab: 'Diesen Tab schließen',
     phishedTitle: 'Dies ist eine Phishing-Simulation',
@@ -455,6 +459,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AI反馈',
     thankYou: '感谢您参与本次实验',
     close: '关闭',
+    postFormButton: '打开实验后问卷',
     judgmentDeferred: '已保留判断',
     closeTab: '关闭此标签页',
     phishedTitle: '这是一次网络钓鱼模拟',
@@ -547,6 +552,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AI 피드백',
     thankYou: '실험에 참여해 주셔서 감사합니다',
     close: '닫기',
+    postFormButton: '사후 설문 열기',
     judgmentDeferred: '판단을 보류했습니다',
     closeTab: '이 탭 닫기',
     phishedTitle: '이것은 피싱 시뮬레이션입니다',
@@ -639,6 +645,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'Feedback AI',
     thankYou: "Grazie per aver partecipato all'esperimento",
     close: 'Chiudi',
+    postFormButton: 'Apri il questionario post-esperimento',
     judgmentDeferred: 'Giudizio sospeso',
     closeTab: 'Chiudi questa scheda',
     phishedTitle: 'Questa è una simulazione di phishing',
@@ -731,6 +738,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'Phản hồi AI',
     thankYou: 'Cảm ơn bạn đã tham gia thí nghiệm',
     close: 'Đóng',
+    postFormButton: 'Mở khảo sát sau thí nghiệm',
     judgmentDeferred: 'Đã hoãn phán đoán',
     closeTab: 'Đóng tab này',
     phishedTitle: 'Đây là mô phỏng tấn công lừa đảo (phishing)',
@@ -823,6 +831,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'Comentarios de IA',
     thankYou: 'Gracias por participar en el experimento',
     close: 'Cerrar',
+    postFormButton: 'Abrir encuesta posterior',
     judgmentDeferred: 'Juicio aplazado',
     closeTab: 'Cerrar esta pestaña',
     phishedTitle: 'Esto es una simulación de phishing',
@@ -915,6 +924,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'Informacja zwrotna AI',
     thankYou: 'Dziękujemy za udział w eksperymencie',
     close: 'Zamknij',
+    postFormButton: 'Otwórz ankietę końcową',
     judgmentDeferred: 'Ocena odroczona',
     closeTab: 'Zamknij tę kartę',
     phishedTitle: 'To jest symulacja phishingu',
@@ -1007,6 +1017,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'AI-tilbakemelding',
     thankYou: 'Takk for at du deltok i eksperimentet',
     close: 'Lukk',
+    postFormButton: 'Åpne spørreundersøkelse etter eksperimentet',
     judgmentDeferred: 'Vurdering utsatt',
     closeTab: 'Lukk denne fanen',
     phishedTitle: 'Dette er en phishing-simulering',
@@ -1099,6 +1110,7 @@ const translations: Record<Lang, Translations> = {
     feedbackTitle: 'Tekoälyn palaute',
     thankYou: 'Kiitos osallistumisestasi kokeeseen',
     close: 'Sulje',
+    postFormButton: 'Avaa kokeen jälkeinen kysely',
     judgmentDeferred: 'Arviointi lykätty',
     closeTab: 'Sulje tämä välilehti',
     phishedTitle: 'Tämä on tietojenkalastelusimulaatio',

@@ -4,9 +4,10 @@ import { useState, useEffect, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
   Lightbulb, CheckCircle2, AlertTriangle, Printer,
-  X, RefreshCw, Loader2, TrendingUp, Shield,
+  ExternalLink, RefreshCw, Loader2, TrendingUp, Shield,
 } from 'lucide-react'
 import { getT, SUPPORTED_LANGS, type Lang } from '../lib/i18n'
+import { getFormUrls } from '../lib/formUrls'
 import type { LiteracyScore, TrapResult } from '@/types'
 import type { FeedbackOutput } from '@/lib/ai'
 
@@ -14,6 +15,7 @@ import type { FeedbackOutput } from '@/lib/ai'
 
 type ApiResponse = {
   session_id: string
+  participant_code?: string
   score: LiteracyScore
   trapResults: TrapResult[]
   feedback: FeedbackOutput
@@ -240,6 +242,9 @@ function ResultContent() {
   if (!data) return null
 
   const { score, trapResults, feedback } = data
+
+  // 事後アンケート（Googleフォーム）URL。participant_code が取れればプリフィルする
+  const postFormUrl = getFormUrls(lang, data.participant_code ?? '').postUrl
   if (!feedback || !feedback.headline) {
     console.warn('[result] feedback is missing or incomplete', feedback)
   }
@@ -448,23 +453,26 @@ function ResultContent() {
             className="space-y-4 pt-4 border-t border-gray-200 print:border-gray-300"
           >
             <p className="text-center text-sm text-gray-500">{t.thankYou}</p>
+            <p className="text-center text-sm text-gray-700 font-medium print:hidden">{t.postFormPrompt}</p>
 
-            <div className="flex justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-4">
               <button
                 onClick={() => window.print()}
-                className="flex items-center gap-2 px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors print:hidden"
+                className="flex items-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors print:hidden"
               >
                 <Printer className="w-4 h-4" />
                 {t.printReport}
               </button>
 
-              <button
-                onClick={() => window.close()}
-                className="flex items-center gap-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors print:hidden"
+              <a
+                href={postFormUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors print:hidden"
               >
-                <X className="w-4 h-4" />
-                {t.close}
-              </button>
+                <ExternalLink className="w-4 h-4" />
+                {t.postFormButton}
+              </a>
             </div>
           </footer>
         )}

@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     // ① sessions テーブルから ui_lang / l1_lang を取得
     const { data: session, error: sessionErr } = await db
       .from('sessions')
-      .select('ui_lang, l1_lang')
+      .select('ui_lang, l1_lang, participant_code')
       .eq('id', session_id)
       .single()
 
@@ -63,6 +63,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       session_id,
       ui_lang: uiLang,
+      participant_code: (session.participant_code as string | null) ?? '',
       score,
       trapResults,
       feedback,
