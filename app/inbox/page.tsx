@@ -1,13 +1,14 @@
 'use client'
 
-import { useState, useCallback, useMemo, Suspense } from 'react'
+import { useState, useEffect, useCallback, useMemo, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Mail, Search, Bell, Settings, Loader2, CheckCircle2 } from 'lucide-react'
 import { getT, SUPPORTED_LANGS, type Lang } from '../lib/i18n'
-import { getEmailSet } from '@/data/emailUtils'
+import { getAssignedEmailsFromSetId, renderDateTokens, formatRelativeDate, type AssignedEmail } from '@/data/emailUtils'
+import { supabase } from '../lib/supabase'
 import { useTracker, type DebugEvent } from '../hooks/useTracker'
 import { useDevToolsGuard } from '../hooks/useDevToolsGuard'
-import type { Email, Language } from '@/types'
+import type { Language } from '@/types'
 import type { FolderId } from '../store/mailStore'
 import MailSidebar from '../components/MailSidebar'
 import MailList from '../components/MailList'
@@ -61,9 +62,34 @@ function InboxContent() {
   useDevToolsGuard(sessionId)
 
   // ── メールデータ ────────────────────────────────────────────────────────────
-  const [emails] = useState<Email[]>(() =>
-    getEmailSet(uiLang as Language, l1Lang as Language)
-  )
+  // セッションの email_set_id（割当JSON）を取得し、参加者固有の順序に展開する。
+  // 保存済み seed から再構築するため、リロードしても同じ並びが再現される。
+  const [emails, setEmails]   = useState<AssignedEmail[]>([])
+  const [setLoaded, setSetLoaded] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    async function loadSet() {
+      let emailSetId: string | null = null
+      if (sessionId) {
+        const { data } = await supabase
+          .from('sessions')
+          .select('email_set_id')
+          .eq('id', sessionId)
+          .single()
+        emailSetId = (data?.email_set_id as string | undefined) ?? null
+      }
+      if (cancelled) return
+      setEmails(getAssignedEmailsFromSetId(uiLang as Language, l1Lang as Language, emailSetId))
+      setSetLoaded(true)
+    }
+    loadSet()
+    return () => { cancelled = true }
+  }, [sessionId, uiLang, l1Lang])
+
+  // 日付トークン／ヘッダ相対日付の基準日（＝参加者のセッション開始日）。
+  // マウント時に一度だけ確定させ、再レンダーでぶれないようにする。
+  const [baseDate] = useState(() => new Date())
 
   // メールごとの処理状態
   const [statusMap, setStatusMap]           = useState<Record<string, MailStatus>>({})
@@ -100,13 +126,13 @@ function InboxContent() {
       folderEmails.map((e) => ({
         id:            e.id,
         fromName:      e.from.display,
-        subject:       e.subject,
-        preview:       extractPreview(e.bodyHtml),
-        dateLabel:     e.date,
+        subject:       renderDateTokens(e.subject, uiLang as Language, baseDate),
+        preview:       extractPreview(renderDateTokens(e.bodyHtml, uiLang as Language, baseDate)),
+        dateLabel:     formatRelativeDate(e.dateOffsetDays, uiLang as Language, baseDate),
         isRead:        (statusMap[e.id] ?? 'unread') !== 'unread',
         hasAttachment: (e.attachments?.length ?? 0) > 0,
       })),
-    [folderEmails, statusMap]
+    [folderEmails, statusMap, uiLang, baseDate]
   )
 
   // MailList/MailListItem に渡す表示用マップ
@@ -155,7 +181,7 @@ function InboxContent() {
           const s = prev[next.id] ?? 'unread'
           return s === 'unread' ? { ...prev, [next.id]: 'read' } : prev
         })
-        tracker.onEmailOpen(next.id, next.lang)
+        tracker.onEmailOpen(next.id, next.lang, next.slotIndex, next.exposureIndex)
       } else {
         setSelectedId(null)
       }
@@ -173,7 +199,7 @@ function InboxContent() {
         const s = prev[id] ?? 'unread'
         return s === 'unread' ? { ...prev, [id]: 'read' } : prev
       })
-      tracker.onEmailOpen(email.id, email.lang)
+      tracker.onEmailOpen(email.id, email.lang, email.slotIndex, email.exposureIndex)
     },
     [emails, tracker]
   )
@@ -213,6 +239,15 @@ function InboxContent() {
   }, [router, sessionId, uiLang])
 
   // ── レンダリング ──────────────────────────────────────────────────────────────
+
+  // メールセットの確定前はスピナー（空配列のまま描画して「全完了」判定が出るのを防ぐ）
+  if (!setLoaded) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col h-full overflow-hidden select-none bg-white">
@@ -292,6 +327,7 @@ function InboxContent() {
         <MailBodyPane
           email={selectedEmail}
           lang={uiLang}
+          baseDate={baseDate}
           tracker={tracker}
           sessionId={sessionId}
           onReply={handleReply}

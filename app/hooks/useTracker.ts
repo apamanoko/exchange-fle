@@ -36,9 +36,11 @@ export function useTracker(sessionId: string, options?: UseTrackerOptions) {
   const onDebugEvent = options?.onDebugEvent
 
   // 現在開封中のメール情報
-  const currentEmailId   = useRef<string | null>(null)
-  const currentEmailLang = useRef<string>('ja')
-  const openedAt         = useRef<number | null>(null)
+  const currentEmailId    = useRef<string | null>(null)
+  const currentEmailLang  = useRef<string>('ja')
+  const currentSlotIndex  = useRef<number | null>(null)
+  const currentExposure   = useRef<number | null>(null)
+  const openedAt          = useRef<number | null>(null)
 
   // Page Visibility: タブ非アクティブ時間の累積
   const hiddenAt       = useRef<number | null>(null)
@@ -153,26 +155,35 @@ export function useTracker(sessionId: string, options?: UseTrackerOptions) {
     extra?: { duration_ms?: number | null; value?: string | null },
   ): ExperimentLogInsert {
     return {
-      session_id:  sessionId,
-      email_id:    currentEmailId.current ?? '',
-      email_lang:  currentEmailLang.current,
+      session_id:     sessionId,
+      email_id:       currentEmailId.current ?? '',
+      email_lang:     currentEmailLang.current,
       event_type,
-      duration_ms: extra?.duration_ms ?? null,
-      value:       extra?.value ?? null,
+      duration_ms:    extra?.duration_ms ?? null,
+      value:          extra?.value ?? null,
+      slot_index:     currentSlotIndex.current,
+      exposure_index: currentExposure.current,
     }
   }
 
   // ─── 公開インターフェース ─────────────────────────────────────────────────
 
-  const onEmailOpen = useCallback((emailId: string, emailLang: Language) => {
+  const onEmailOpen = useCallback((
+    emailId: string,
+    emailLang: Language,
+    slotIndex: number | null = null,
+    exposureIndex: number | null = null,
+  ) => {
     if (!sessionId || sessionId.trim() === '') return
     try {
       currentEmailId.current   = emailId
       currentEmailLang.current = emailLang
+      currentSlotIndex.current = slotIndex
+      currentExposure.current  = exposureIndex
       openedAt.current         = performance.now()
       totalHiddenMs.current    = 0
       hoverStartMap.current.clear()
-      enqueue({ session_id: sessionId, email_id: emailId, email_lang: emailLang, event_type: 'email_open', duration_ms: null, value: null })
+      enqueue(makeEntry('email_open'))
     } catch (e) { console.error('[tracker] onEmailOpen', e) }
   }, [sessionId, enqueue])
 

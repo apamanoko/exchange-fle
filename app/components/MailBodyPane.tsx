@@ -8,7 +8,8 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import DOMPurify from 'dompurify'
 import { Mail, Paperclip, MoreHorizontal, FileText } from 'lucide-react'
 import { getT, type Lang } from '../lib/i18n'
-import type { Email, Attachment, EventType } from '@/types'
+import type { Email, Attachment, EventType, Language } from '@/types'
+import { renderDateTokens, formatEmailHeaderDate } from '@/data/emailUtils'
 import ActionButtons from './ActionButtons'
 
 // ─── トラッカーハンドラ型 ─────────────────────────────────────────────────────
@@ -215,6 +216,8 @@ function BodyContent({
 type MailBodyPaneProps = {
   email: Email | null
   lang: Lang
+  /** 日付トークン展開の基準日（参加者のセッション開始日） */
+  baseDate: Date
   tracker?: TrackerHandlers
   sessionId?: string
   onReply: (emailId: string) => void
@@ -225,6 +228,7 @@ type MailBodyPaneProps = {
 export default function MailBodyPane({
   email,
   lang,
+  baseDate,
   tracker,
   sessionId,
   onReply,
@@ -308,9 +312,9 @@ export default function MailBodyPane({
       <div className="flex-1 overflow-y-auto">
         <div className="px-8 py-6 pb-10 max-w-3xl">
 
-          {/* 件名 */}
+          {/* 件名（日付トークンを展開） */}
           <h1 className="text-xl font-semibold text-gray-900 mb-5 leading-snug">
-            {email.subject}
+            {renderDateTokens(email.subject, lang as Language, baseDate)}
           </h1>
 
           {/* 差出人情報 */}
@@ -331,11 +335,14 @@ export default function MailBodyPane({
                   />
                 </div>
                 <span className="flex-shrink-0 text-xs text-gray-400 whitespace-nowrap">
-                  {email.date}
+                  {formatEmailHeaderDate(email, lang as Language, baseDate)}
                 </span>
               </div>
               <div className="text-xs text-gray-500 mt-0.5">
-                {t.to}：<span className="text-gray-700">{email.to}</span>
+                {t.to}：
+                <span className="text-gray-700">
+                  {email.to.display} &lt;{email.to.address}&gt;
+                </span>
               </div>
             </div>
           </div>
@@ -362,9 +369,9 @@ export default function MailBodyPane({
 
           <div className="border-t border-gray-100 mb-6" />
 
-          {/* 本文 */}
+          {/* 本文（日付トークンを展開） */}
           <BodyContent
-            rawHtml={email.bodyHtml}
+            rawHtml={renderDateTokens(email.bodyHtml, lang as Language, baseDate)}
             onLinkHover={handleLinkHover}
             onLinkHoverStart={handleLinkHoverStart}
             onLinkHoverEnd={handleLinkHoverEnd}

@@ -8,7 +8,6 @@ import {
 } from 'lucide-react'
 import { getT, type Lang } from './lib/i18n'
 import { getFormUrls, generateParticipantCode } from './lib/formUrls'
-import { supabase } from './lib/supabase'
 
 // ─── 定数：留学生の母語選択肢 ────────────────────────────────────────────────
 
@@ -32,7 +31,6 @@ const MOTHER_TONGUES: { code: MotherTongueLang; ja: string; native: string }[] =
 type SituationParams = {
   uiLang:    Lang
   l1Lang:    Lang
-  l2Lang:    'ja'
   condition: 'L1' | 'L2'
 }
 
@@ -84,7 +82,7 @@ function SituationSelector({ onConfirm }: { onConfirm: (p: SituationParams) => v
   function handleConfirm() {
     if (!canConfirm) return
     const lang = motherTongue as MotherTongueLang
-    onConfirm({ uiLang: lang, l1Lang: lang, l2Lang: 'ja', condition: 'L2' })
+    onConfirm({ uiLang: lang, l1Lang: lang, condition: 'L2' })
   }
 
   return (
@@ -169,16 +167,14 @@ function HomeContent() {
   const [situationConfirmed, setSituationConfirmed] = useState(false)
   const [uiLang,    setUiLang]    = useState<Lang>('ja')
   const [l1Lang,    setL1Lang]    = useState<Lang>('ja')
-  const [l2Lang,    setL2Lang]    = useState<'ja' | 'en'>('ja')
   const [condition, setCondition] = useState<'L1' | 'L2'>('L2')
 
   const t = getT(uiLang)
 
   const handleSituationConfirm = useCallback(
-    ({ uiLang: ul, l1Lang: l1, l2Lang: l2, condition: cond }: SituationParams) => {
+    ({ uiLang: ul, l1Lang: l1, condition: cond }: SituationParams) => {
       setUiLang(ul)
       setL1Lang(l1)
-      setL2Lang(l2)
       setCondition(cond)
       setSituationConfirmed(true)
     },
@@ -207,33 +203,28 @@ function HomeContent() {
     setIsLoading(true)
     setError(null)
     try {
-      // l2_lang カラムがないため email_set_id で L2言語を表現
-      const emailSetId = l2Lang === 'en' ? 'en-l2' : 'ja-l2'
-
-      const { data, error: dbError } = await supabase
-        .from('sessions')
-        .insert({
+      // セッション作成はサーバー側で行い、そこでシードを生成して
+      // 割当情報(JSON)を email_set_id に保存する。
+      const res = await fetch('/api/session', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
           participant_code: participantCode,
           ui_lang:          uiLang,
           l1_lang:          l1Lang,
           condition,
-          email_set_id:     emailSetId,
-        })
-        .select('id')
-        .single()
-
-      if (dbError) {
-        const msg = dbError.message
-          ? `DB error: ${dbError.message}${dbError.hint ? ` (hint: ${dbError.hint})` : ''}`
-          : JSON.stringify(dbError)
-        throw new Error(msg)
+        }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        throw new Error((json as { error?: string }).error ?? `HTTP ${res.status}`)
       }
-      router.push(`/inbox?session_id=${data.id}&ui_lang=${uiLang}&l1_lang=${l1Lang}`)
+      router.push(`/inbox?session_id=${json.id}&ui_lang=${uiLang}&l1_lang=${l1Lang}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
       setIsLoading(false)
     }
-  }, [uiLang, l1Lang, l2Lang, condition, participantCode, router])
+  }, [uiLang, l1Lang, condition, participantCode, router])
 
   // ── 状況未確定: セレクター表示 ────────────────────────────────────────────
   if (!situationConfirmed) {

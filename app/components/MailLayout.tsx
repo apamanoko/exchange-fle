@@ -104,6 +104,7 @@ export default function MailLayout({ lang = 'ja' }: MailLayoutProps) {
         <MailBodyPane
           email={selectedEmail}
           lang={lang}
+          baseDate={new Date()}
           onReply={handleReply}
           onIgnore={handleIgnore}
           onBlock={handleBlock}

@@ -73,14 +73,21 @@ export type Email = {
     /** メールアドレス（例: notice@meijo-u-portal.net） */
     address: string
   }
-  /** 宛先表示名（例: あなた） */
-  to: string
-  /** 件名 */
+  /** 宛先情報（表示名 + 実アドレス。表示は「表示名 <address>」） */
+  to: {
+    /** 表示名（例: あなた（TA）） */
+    display: string
+    /** 実アドレス（例: ta-guest@ccmailg.meijo-u.ac.jp） */
+    address: string
+  }
+  /** 件名（{{D+n}} / {{D-n}} 日付トークンを含められる） */
   subject: string
-  /** 本文HTML（クライアント側で DOMPurify によるサニタイズ・後処理される） */
+  /** 本文HTML（{{D+n}} / {{D-n}} トークン可。クライアント側で DOMPurify によるサニタイズ・後処理される） */
   bodyHtml: string
-  /** 表示用日時文字列（例: 2026年5月28日 11:47） */
-  date: string
+  /** ヘッダ受信日の相対オフセット（今日=0, 昨日=-1）。表示時に baseDate から展開する */
+  dateOffsetDays: number
+  /** ヘッダ受信時刻（例: '15:00'） */
+  dateTime: string
   /** 添付ファイル一覧（添付なしの場合は省略可） */
   attachments?: Attachment[]
 }
@@ -128,6 +135,10 @@ export type ExperimentLogInsert = {
   duration_ms?: number | null
   /** link_click のURL、text_copy のテキスト等。それ以外は null */
   value?: string | null
+  /** そのメールのスロット番号（1〜16）。提示順の特定に使用 */
+  slot_index?: number | null
+  /** 罠の提示回数（1回目=1 / 2回目=2）。通常メールは null */
+  exposure_index?: number | null
 }
 
 /**

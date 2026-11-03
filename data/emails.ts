@@ -16,9 +16,9 @@ export const emailsJa: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '田中 誠二 教授', address: 'tanaka.s@meijo-u.ac.jp' },
-    to: 'あなた（TA）',
+    to: { display: 'あなた（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '来週のゼミについて',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>お疲れ様です。田中です。</p><p>来週月曜のゼミですが、学内会議が入ってしまいました。申し訳ないのですが、火曜15時に変更させてください。場所は同じく512室です。</p><p>参加できそうか、今週中に一言もらえると助かります。よろしくお願いします。</p>`,
   },
   {
@@ -27,10 +27,10 @@ export const emailsJa: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '学務課', address: 'gakumu@meijo-u.ac.jp' },
-    to: 'あなた（TA）',
+    to: { display: 'あなた（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '前期履修登録の確認について',
-    date: '2026年5月20日 09:00',
-    bodyHtml: `<p>学生各位</p><p>前期の履修登録期間が5月25日（月）23:59に終了します。ポータルサイトより登録内容をご確認ください。</p><p>【確認事項】<br>・年間48単位の上限を超えていないか<br>・必修科目の登録漏れがないか</p><p>問い合わせ：学務課 内線1234</p>`,
+    dateOffsetDays: -2, dateTime: '09:00',
+    bodyHtml: `<p>学生各位</p><p>前期の履修登録期間が{{D+3}}23:59に終了します。ポータルサイトより登録内容をご確認ください。</p><p>【確認事項】<br>・年間48単位の上限を超えていないか<br>・必修科目の登録漏れがないか</p><p>問い合わせ：学務課 内線1234</p>`,
   },
   {
     id: 'normal-3-ja',
@@ -38,10 +38,10 @@ export const emailsJa: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '附属図書館', address: 'library@meijo-u.ac.jp' },
-    to: 'あなた（TA）',
+    to: { display: 'あなた（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '貸出資料の返却期限のお知らせ',
-    date: '2026年5月19日 10:00',
-    bodyHtml: `<p>返却期限：5月24日（日）</p><p>・サイバーセキュリティの基礎と実践<br>・認知心理学入門（第2版）</p><p>ポータルから延長申請ができます（1回のみ）。</p>`,
+    dateOffsetDays: -3, dateTime: '10:00',
+    bodyHtml: `<p>返却期限：{{D+2}}</p><p>・サイバーセキュリティの基礎と実践<br>・認知心理学入門（第2版）</p><p>ポータルから延長申請ができます（1回のみ）。</p>`,
   },
   {
     id: 'normal-4-ja',
@@ -49,9 +49,9 @@ export const emailsJa: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '佐藤 健太', address: 'sato.k.2023@meijo-u.ac.jp' },
-    to: 'あなた（TA）',
+    to: { display: 'あなた（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '来週の発表資料共有します',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>お疲れ様です、佐藤です。</p><p>来週の合同ゼミで使う発表資料、共有しておきます。事前に見ておいてもらえると助かります。</p><p><a href="https://drive.google.com/file/d/xxxxxxxxx" data-display-url="https://drive.google.com/file/d/xxxxxxxxx">Google Driveはこちら</a></p><p>何かあればLINEで連絡ください！</p>`,
   },
 
@@ -62,7 +62,7 @@ export const emailsJa: Email[] = [
   /**
    * trap-1-ja: 【BEC】ベンダーなりすまし
    * 罠: ドメイン偽装（oxf0rd）+ 拡張子偽装（.pdf.exe）
-   * 心理的圧力: 期限（5月31日以降は受付不可）
+   * 心理的圧力: 期限（{{D+9}}以降は受付不可）
    */
   {
     id: 'trap-1-ja',
@@ -73,10 +73,10 @@ export const emailsJa: Email[] = [
       display: 'Oxford Education Japan サポート',
       address: 'support@oxf0rd-edu-japan.com',
     },
-    to: 'あなた（TA）',
+    to: { display: 'あなた（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '【重要】留学生サポート費用の振込先変更のお願い',
-    date: '2026年5月22日 14:30',
-    bodyHtml: `<p>〇〇様</p><p>お世話になっております。Oxford Education Japan サポート担当の山田と申します。</p><p>このたびシステム更新に伴い、振込先口座が変更となりました。次回より新口座へのお振込みをお願いいたします。</p><p>変更後の口座情報は<strong>添付の確認書</strong>をご参照ください。ご不明点はお気軽にお問い合わせください。</p><p><strong>※ 旧口座への振込は5月31日以降は受け付けできません。</strong></p><p>Oxford Education Japan<br>山田 太郎<br>Tel: 03-XXXX-XXXX</p>`,
+    dateOffsetDays: 0, dateTime: '14:30',
+    bodyHtml: `<p>〇〇様</p><p>お世話になっております。Oxford Education Japan サポート担当の山田と申します。</p><p>このたびシステム更新に伴い、振込先口座が変更となりました。次回より新口座へのお振込みをお願いいたします。</p><p>変更後の口座情報は<strong>添付の確認書</strong>をご参照ください。ご不明点はお気軽にお問い合わせください。</p><p><strong>※ 旧口座への振込は{{D+9}}以降は受け付けできません。</strong></p><p>Oxford Education Japan<br>山田 太郎<br>Tel: 03-XXXX-XXXX</p>`,
     attachments: [{
       name: '振込先変更確認書.pdf.exe',
       displayName: '振込先変更確認書.pdf',
@@ -99,9 +99,9 @@ export const emailsJa: Email[] = [
       display: '吉川 研究科長',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: 'あなた（TA）',
+    to: { display: 'あなた（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '至急対応をお願いします',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>お疲れ様です。</p><p>現在ロンドンの学会に参加中で電話が難しい状況です。至急お願いしたいことがあってメールしています。</p><p>海外の大学との連携プロジェクトで、今日中に担当学生の情報を共有する必要があります。下記のフォームに入力して送信してください。</p><p><a href="javascript:void(0)" data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz" data-phished-url="/phished?type=link">こちらのフォームに入力してください</a></p><p>このプロジェクトはまだ公式発表前のため、他の方への共有はお控えください。</p><p>よろしくお願いします。<br>吉川</p>`,
   },
 
@@ -119,9 +119,9 @@ export const emailsJa: Email[] = [
       display: '李 明（情報工学研究科 M1）',
       address: 'li.ming.2024@gmail.com',
     },
-    to: 'あなた（TA）',
+    to: { display: 'あなた（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: 奨学金申請書類の不備について',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>お世話になっております。李です。</p><p>先日ご指摘いただいた不備を修正しました。お手数をおかけして大変申し訳ありません。</p><p>パスワード付きZIPで添付いたします。<br>解凍パスワード：<strong>2024</strong></p><p>よろしくお願いいたします。</p>`,
     attachments: [{
       name: '奨学金申請書_修正版.pdf.exe',
@@ -147,9 +147,9 @@ export const emailsJa: Email[] = [
       display: '名城大学 情報センター',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: 'あなた（TA）',
+    to: { display: 'あなた（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '【緊急】メールアカウントの確認が必要です',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>名城大学 情報センターからの重要なお知らせです。</p><p>お使いのメールアカウントで<strong>不審なログインが検出されました</strong>。アカウントの安全を確保するため、本日中に本人確認の手続きをお願いします。</p><p>▼ 本人確認はこちら<br><a href="javascript:void(0)" data-display-url="https://portal.meijo-u.ac.jp/auth/update" data-phished-url="/phished?type=link">https://portal.meijo-u.ac.jp/auth/update</a></p><p><strong>※ 本日23:59までに手続きが完了しない場合、アカウントが一時停止となります。</strong></p><p>名城大学 情報センター<br>ccmailg.meijo-u.ac.jp</p>`,
   },
 ]
@@ -170,9 +170,9 @@ export const emailsEn: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Prof. Michael Johnson', address: 'johnson.m@meijo-u.ac.jp' },
-    to: 'You (TA)',
+    to: { display: 'You (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Change of Schedule – Seminar Next Week',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>Hi,</p>
 <p>Hope you're doing well. I have a faculty meeting that's come up on Monday, so I'll need to move next week's seminar to Tuesday at 3 PM. Same room (512).</p>
 <p>Could you let me know if that works for you by end of this week? Sorry for the short notice.</p>
@@ -184,11 +184,11 @@ export const emailsEn: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Academic Affairs Office', address: 'academic@meijo-u.ac.jp' },
-    to: 'You (TA)',
-    subject: 'Course Registration Deadline – May 25',
-    date: '2026年5月20日 09:00',
+    to: { display: 'You (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Course Registration Deadline – {{D+3}}',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>Dear Students,</p>
-<p>This is a reminder that the course registration period ends on Monday, May 25 at 11:59 PM.</p>
+<p>This is a reminder that the course registration period ends on {{D+3}} at 11:59 PM.</p>
 <p>Please check the following before the deadline:<br>
 ・You have not exceeded the annual credit limit (48 credits)<br>
 ・All required courses are registered<br>
@@ -201,11 +201,11 @@ export const emailsEn: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'University Library', address: 'library@meijo-u.ac.jp' },
-    to: 'You (TA)',
+    to: { display: 'You (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Library Books Due Soon',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>Dear Library Member,</p>
-<p>Just a reminder that the following items are due on Sunday, May 24:</p>
+<p>Just a reminder that the following items are due on {{D+2}}:</p>
 <p>・Introduction to Cybersecurity (2nd ed.)<br>
 ・Cognitive Psychology: A Handbook</p>
 <p>You can renew online through the library portal (one renewal per item).</p>`,
@@ -216,9 +216,9 @@ export const emailsEn: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'James Carter', address: 'carter.j.2023@meijo-u.ac.jp' },
-    to: 'You (TA)',
+    to: { display: 'You (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Sharing slides for next week',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>Hey,</p>
 <p>Sharing my slides for the joint seminar next week. Feel free to take a look beforehand!</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -236,7 +236,7 @@ export const emailsEn: Email[] = [
   /**
    * trap-1-en: 【BEC】Vendor Impersonation
    * 罠: ドメイン偽装（spr1nger）+ 拡張子偽装（.pdf.exe）
-   * 心理的圧力: 期限（after May 31）
+   * 心理的圧力: 期限（after {{D+9}}）
    */
   {
     id: 'trap-1-en',
@@ -247,13 +247,13 @@ export const emailsEn: Email[] = [
       display: 'Springer Academic Support',
       address: 'billing@spr1nger-academic.com',
     },
-    to: 'You (TA)',
+    to: { display: 'You (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Important] Updated Bank Details for Journal Access',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>Dear Account Holder,</p>
 <p>My name is Sarah Thompson from Springer Academic Support.</p>
 <p>Due to our recent banking system migration, the payment account for your institution's journal access subscription has been updated. Please refer to the <strong>attached confirmation document</strong> for the new banking details and use them for your next payment.</p>
-<p><strong>※ Payments to the old account will not be accepted after May 31.</strong></p>
+<p><strong>※ Payments to the old account will not be accepted after {{D+9}}.</strong></p>
 <p>Springer Academic Support<br>Sarah Thompson<br>Tel: +44-XXXX-XXXX</p>`,
     attachments: [{
       name: 'bank_details_update.pdf.exe',
@@ -277,9 +277,9 @@ export const emailsEn: Email[] = [
       display: 'Prof. Michael Johnson (Dean)',
       address: 'johnson.meijo.univ@gmail.com',
     },
-    to: 'You (TA)',
+    to: { display: 'You (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Urgent – Need your help today',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>Hi,</p>
 <p>I'm currently at a conference in London and can't take calls. I need your help urgently.</p>
 <p>We have a partnership project with an overseas university and I need to share student information with them today. Could you fill in the details in the form below and submit it as soon as possible?</p>
@@ -306,9 +306,9 @@ export const emailsEn: Email[] = [
       display: 'Mohammed Al-Rashid (M1, Info. Engineering)',
       address: 'mohammed.alrashid.2024@gmail.com',
     },
-    to: 'You (TA)',
+    to: { display: 'You (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: Missing Documents for Scholarship Application',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>Hi,</p>
 <p>Thank you for pointing out the issues with my application. I've fixed everything you mentioned – really sorry for the trouble.</p>
 <p>I'm sending the corrected documents as a password-protected ZIP.<br>
@@ -337,9 +337,9 @@ Password: <strong>2024</strong></p>
       display: 'Meijo University IT Center',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: 'You (TA)',
+    to: { display: 'You (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Urgent] Action Required: Verify Your Account',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>This is an important notice from Meijo University IT Center.</p>
 <p><strong>Suspicious login activity has been detected on your account.</strong> To secure your account, please complete identity verification today.</p>
 <p>▼ Verify your account here<br>
@@ -353,211 +353,6 @@ Password: <strong>2024</strong></p>
 ccmailg.meijo-u.ac.jp</p>`,
   },
 ]
-
-/**
- * 英語版メール・ドイツ在住日本人向け（通常4通 + 罠4通）
- * 舞台：アウクスブルク大学（Universität Augsburg）の交換留学生
- * 正規ドメイン：@uni-augsburg.de
- * 偽装ドメイン：@uni-augsburg-de.com
- */
-export const emailsDe_en: Email[] = [
-
-  // ============================================================
-  // 通常メール × 4通
-  // ============================================================
-
-  {
-    id: 'normal-1-de_en',
-    lang: 'en',
-    isTrap: false,
-    traps: [],
-    from: { display: 'Prof. Dr. Klaus Müller', address: 'klaus.mueller@uni-augsburg.de' },
-    to: 'You (Exchange Student)',
-    subject: 'Seminar Rescheduled – Next Week',
-    date: '2026年5月21日 15:00',
-    bodyHtml: `<p>Dear students,</p>
-<p>I'm afraid I have a departmental meeting next Monday, so I'll need to move our seminar to Tuesday at 2 PM. Room 2103 (Building D) stays the same.</p>
-<p>Please let me know if you can make it by end of this week. Sorry for the inconvenience.</p>
-<p>Best regards,<br>Prof. Dr. Klaus Müller</p>`,
-  },
-  {
-    id: 'normal-2-de_en',
-    lang: 'en',
-    isTrap: false,
-    traps: [],
-    from: { display: 'International Office – Universität Augsburg', address: 'international@uni-augsburg.de' },
-    to: 'You (Exchange Student)',
-    subject: 'Course Registration Deadline – May 25',
-    date: '2026年5月20日 09:00',
-    bodyHtml: `<p>Dear Exchange Students,</p>
-<p>Just a reminder that course registration closes on Monday, May 25 at 11:59 PM via Digicampus.</p>
-<p>Please make sure:<br>
-・All required courses are registered<br>
-・You have not exceeded the credit limit (30 ECTS)<br>
-・No scheduling conflicts</p>
-<p>Visit the International Office (Room 1012, Building A) if you need help.</p>`,
-  },
-  {
-    id: 'normal-3-de_en',
-    lang: 'en',
-    isTrap: false,
-    traps: [],
-    from: { display: 'Universitätsbibliothek Augsburg', address: 'bibliothek@uni-augsburg.de' },
-    to: 'You (Exchange Student)',
-    subject: 'Library Books Due Sunday',
-    date: '2026年5月19日 10:00',
-    bodyHtml: `<p>Dear Library Member,</p>
-<p>Just a quick reminder that the following items are due on Sunday, May 24:</p>
-<p>・Cybersecurity: Principles and Practice (3rd ed.)<br>
-・Cognitive Psychology – An Introduction</p>
-<p>You can renew online via the library portal (one renewal per item).</p>`,
-  },
-  {
-    id: 'normal-4-de_en',
-    lang: 'en',
-    isTrap: false,
-    traps: [],
-    from: { display: 'Anna Schneider', address: 'anna.schneider.2023@uni-augsburg.de' },
-    to: 'You (Exchange Student)',
-    subject: "Slides for next week's seminar",
-    date: '2026年5月18日 18:30',
-    bodyHtml: `<p>Hey!</p>
-<p>Here are my slides for the seminar next week. Have a look whenever you get a chance!</p>
-<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
-      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
-  View slides on Google Drive
-</a></p>
-<p>Feel free to message me if you have questions. See you next week!</p>
-<p>Anna</p>`,
-  },
-
-  // ============================================================
-  // 罠メール × 4通
-  // ============================================================
-
-  /**
-   * trap-1-de_en: 【BEC】Vendor Impersonation
-   * 罠: ドメイン偽装（elsevier-academlc）+ 拡張子偽装（.pdf.exe）
-   * 心理的圧力: 期限（after May 31）
-   */
-  {
-    id: 'trap-1-de_en',
-    lang: 'en',
-    isTrap: true,
-    traps: ['domain', 'extension', 'urgency'],
-    from: {
-      display: 'Elsevier Academic Billing',
-      address: 'billing@elsevier-academlc.com',
-    },
-    to: 'You (Exchange Student)',
-    subject: '[Important] Updated Bank Details for Academic Access',
-    date: '2026年5月22日 14:30',
-    bodyHtml: `<p>Dear Account Holder,</p>
-<p>My name is David Walsh from Elsevier Academic Billing.</p>
-<p>Due to our recent banking system migration, the payment account for your institution's academic resource subscription has been updated. Please refer to the <strong>attached confirmation document</strong> for the new banking details.</p>
-<p><strong>※ Payments to the old account will not be accepted after May 31.</strong></p>
-<p>Elsevier Academic Billing<br>David Walsh<br>Tel: +44-XXXX-XXXX</p>`,
-    attachments: [{
-      name: 'bank_details_confirmation.pdf.exe',
-      displayName: 'bank_details_confirmation.pdf',
-      mimeType: 'application/pdf',
-      isTrapped: true,
-    }],
-  },
-
-  /**
-   * trap-2-de_en: 【BEC】Authority Impersonation (CEO Fraud)
-   * 罠: フリーメール偽装（gmail）+ リンク偽装 + 緊急性 + 権威
-   * 心理的圧力: conference・today・confidential
-   */
-  {
-    id: 'trap-2-de_en',
-    lang: 'en',
-    isTrap: true,
-    traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: 'Prof. Dr. Thomas Weber (Dean)',
-      address: 'weber.augsburg.dean@gmail.com',
-    },
-    to: 'You (Exchange Student)',
-    subject: 'Urgent – Need your help today',
-    date: '2026年5月20日 11:45',
-    bodyHtml: `<p>Hi,</p>
-<p>I'm at a conference in Berlin right now and can't take calls. I need your help with something urgent.</p>
-<p>We have a partner university review due today and I need student information submitted through the link below as soon as possible.</p>
-<p><a href="javascript:void(0)"
-      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/3bWx"
-      data-phished-url="/phished?type=link">
-  Click here to access the submission form
-</a></p>
-<p>Please keep this between us for now – it hasn't been officially announced yet.</p>
-<p>Thanks,<br>Prof. Dr. Weber</p>`,
-  },
-
-  /**
-   * trap-3-de_en: 【Spear Phishing】Thread Hijacking
-   * 罠: 拡張子偽装（.pdf.exe）+ 信頼関係の悪用
-   * 心理的圧力: 謝罪・過去のやり取りの継続
-   */
-  {
-    id: 'trap-3-de_en',
-    lang: 'en',
-    isTrap: true,
-    traps: ['extension', 'authority'],
-    from: {
-      display: 'Laura Becker (German Course Tutor)',
-      address: 'laura.becker.tutor2024@gmail.com',
-    },
-    to: 'You (Exchange Student)',
-    subject: 'Re: Missing Pages in Your Assignment',
-    date: '2026年5月18日 16:30',
-    bodyHtml: `<p>Hi,</p>
-<p>Thanks for getting back to me! I've corrected all the missing pages you mentioned. Really sorry about that.</p>
-<p>Sending the full assignment again as a password-protected ZIP.<br>
-Password: <strong>2024</strong></p>
-<p>Let me know if everything looks good this time!</p>
-<p>Laura</p>`,
-    attachments: [{
-      name: 'assignment_revised.pdf.exe',
-      displayName: 'assignment_revised.pdf',
-      mimeType: 'application/pdf',
-      isTrapped: true,
-    }],
-  },
-
-  /**
-   * trap-4-de_en: 【Phishing】Infrastructure Fake Notification
-   * 罠: ドメイン偽装（uni-augsburg-de.com）+ リンク偽装 + 緊急性
-   * 心理的圧力: 不審ログイン・本日中・アカウント停止
-   * 正規: @uni-augsburg.de
-   * 偽装: @uni-augsburg-de.com
-   */
-  {
-    id: 'trap-4-de_en',
-    lang: 'en',
-    isTrap: true,
-    traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: 'Universität Augsburg – IT Services',
-      address: 'it-support@uni-augsburg-de.com',
-    },
-    to: 'You (Exchange Student)',
-    subject: '[Urgent] Action Required: Verify Your Digicampus Account',
-    date: '2026年5月17日 09:00',
-    bodyHtml: `<p>This is an important notice from Universität Augsburg IT Services.</p>
-<p><strong>Suspicious login activity has been detected on your Digicampus account.</strong> To secure your account, please complete identity verification today.</p>
-<p>▼ Verify your account here<br>
-<a href="javascript:void(0)"
-   data-display-url="https://digicampus.uni-augsburg.de/auth/update"
-   data-phished-url="/phished?type=link">
-  https://digicampus.uni-augsburg.de/auth/update
-</a></p>
-<p><strong>※ If verification is not completed by 11:59 PM today, your Digicampus access will be suspended, preventing access to course materials and exam registration.</strong></p>
-<p>Universität Augsburg IT Services<br>
-uni-augsburg.de</p>`,
-  },
-]
-
 /**
  * 韓国語版メール（通常4通 + 罠4通）
  * 日本在住の韓国語母語話者向け。日本語版と攻撃タイプは等価。
@@ -575,9 +370,9 @@ export const emailsKo: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '김 민준 교수', address: 'kim.m@meijo-u.ac.jp' },
-    to: '당신 (TA)',
+    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '다음 주 세미나 일정 변경 안내',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>안녕하세요.</p>
 <p>다음 주 월요일에 교내 회의가 생겨서 세미나 일정을 변경해야 할 것 같습니다. 화요일 오후 3시로 변경 부탁드려도 될까요? 장소는 동일하게 512호실입니다.</p>
 <p>참석 가능 여부를 이번 주 중으로 알려주시면 감사하겠습니다. 갑작스럽게 변경하게 되어 죄송합니다.</p>
@@ -589,11 +384,11 @@ export const emailsKo: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '학무과', address: 'gakumu@meijo-u.ac.jp' },
-    to: '당신 (TA)',
+    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '전기 수강 신청 마감 안내',
-    date: '2026年5月20日 09:00',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>재학생 여러분께</p>
-<p>전기 수강 신청 기간이 5월 25일(월) 23:59에 마감됩니다. 포털 사이트에서 신청 내용을 반드시 확인해 주세요.</p>
+<p>전기 수강 신청 기간이 {{D+3}} 23:59에 마감됩니다. 포털 사이트에서 신청 내용을 반드시 확인해 주세요.</p>
 <p>【확인 사항】<br>
 ・연간 이수 학점 상한(48학점)을 초과하지 않았는지<br>
 ・필수 과목 신청 누락이 없는지<br>
@@ -606,11 +401,11 @@ export const emailsKo: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '부속 도서관', address: 'library@meijo-u.ac.jp' },
-    to: '당신 (TA)',
+    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '대출 도서 반납 기한 안내',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>안녕하세요.</p>
-<p>아래 도서의 반납 기한이 5월 24일(일)로 다가왔습니다.</p>
+<p>아래 도서의 반납 기한이 {{D+2}}로 다가왔습니다.</p>
 <p>・사이버 보안의 기초와 실천<br>
 ・인지심리학 입문 (제2판)</p>
 <p>포털 사이트 '도서관 서비스'에서 연장 신청이 가능합니다(1회 한정).</p>`,
@@ -621,9 +416,9 @@ export const emailsKo: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '이 지현', address: 'lee.jihyun.2023@meijo-u.ac.jp' },
-    to: '당신 (TA)',
+    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '다음 주 발표 자료 공유드립니다',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>안녕하세요!</p>
 <p>다음 주 합동 세미나에서 사용할 발표 자료를 미리 공유드립니다. 시간 되실 때 한번 봐주시면 감사하겠습니다.</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -641,7 +436,7 @@ export const emailsKo: Email[] = [
   /**
    * trap-1-ko: 【BEC】해외 벤더 사칭
    * 罠: 도메인 위장（oxf0rd）+ 이중 확장자（.pdf.exe）
-   * 심리적 압박: 기한（5월 31일 이후 수납 불가）
+   * 심리적 압박: 기한（{{D+9}} 이후 수납 불가）
    */
   {
     id: 'trap-1-ko',
@@ -652,13 +447,13 @@ export const emailsKo: Email[] = [
       display: 'Oxford Education Korea 지원팀',
       address: 'support@oxf0rd-edu-korea.com',
     },
-    to: '당신 (TA)',
+    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '【중요】유학생 지원비 납입 계좌 변경 안내',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>안녕하세요.</p>
 <p>Oxford Education Korea 지원팀 김영수입니다.</p>
 <p>이번 시스템 업그레이드로 인해 유학생 지원비 납입 계좌가 변경되었습니다. 다음 번 납입 시에는 <strong>첨부된 확인서</strong>에 기재된 새 계좌를 이용해 주시기 바랍니다.</p>
-<p><strong>※ 5월 31일 이후에는 기존 계좌로의 입금을 받지 않습니다.</strong></p>
+<p><strong>※ {{D+9}} 이후에는 기존 계좌로의 입금을 받지 않습니다.</strong></p>
 <p>Oxford Education Korea<br>김 영수<br>Tel: 02-XXXX-XXXX</p>`,
     attachments: [{
       name: '계좌변경확인서.pdf.exe',
@@ -682,9 +477,9 @@ export const emailsKo: Email[] = [
       display: '요시카와 연구과장',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: '당신 (TA)',
+    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '긴급 부탁드립니다',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>안녕하세요.</p>
 <p>지금 런던 학회에 참석 중이라 전화를 받기 어려운 상황입니다. 긴급하게 부탁드릴 일이 있어 메일 드립니다.</p>
 <p>해외 대학과의 연계 프로젝트 관련하여 오늘 중으로 담당 학생 정보를 공유해야 합니다. 아래 링크의 양식에 입력 후 제출해 주시겠어요?</p>
@@ -711,9 +506,9 @@ export const emailsKo: Email[] = [
       display: '박 지수（정보공학연구과 M1）',
       address: 'park.jisu.2024@gmail.com',
     },
-    to: '당신 (TA)',
+    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: 장학금 신청 서류 미비 사항에 대하여',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>안녕하세요.</p>
 <p>지적해 주신 서류 미비 사항을 모두 수정했습니다. 불편을 드려서 정말 죄송합니다.</p>
 <p>수정한 파일을 비밀번호 설정 ZIP으로 다시 보내드립니다.<br>
@@ -742,9 +537,9 @@ export const emailsKo: Email[] = [
       display: '메이조대학 정보센터',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: '당신 (TA)',
+    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '【긴급】계정 확인이 필요합니다',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>메이조대학 정보센터에서 중요한 안내를 드립니다.</p>
 <p><strong>귀하의 메일 계정에서 의심스러운 로그인이 감지되었습니다.</strong> 계정 보호를 위해 오늘 중으로 본인 확인 절차를 완료해 주시기 바랍니다.</p>
 <p>▼ 본인 확인은 여기서<br>
@@ -776,9 +571,9 @@ export const emailsZh: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '陈 明远 教授', address: 'chen.m@meijo-u.ac.jp' },
-    to: '您（TA）',
+    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '下周研讨会时间变更通知',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>您好，</p>
 <p>下周一临时有教务会议，研讨会需要调整时间，麻烦改到周二下午3点可以吗？地点不变，还是512室。</p>
 <p>请这周内告知是否方便参加，给您带来不便深感抱歉。</p>
@@ -790,11 +585,11 @@ export const emailsZh: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '教务处', address: 'gakumu@meijo-u.ac.jp' },
-    to: '您（TA）',
+    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '前期选课截止通知',
-    date: '2026年5月20日 09:00',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>各位同学：</p>
-<p>前期选课截止时间为5月25日（周一）23:59，请通过门户网站确认选课内容。</p>
+<p>前期选课截止时间为{{D+3}}23:59，请通过门户网站确认选课内容。</p>
 <p>【请确认以下事项】<br>
 ・年度学分上限（48学分）是否超出<br>
 ・必修课是否有遗漏<br>
@@ -807,11 +602,11 @@ export const emailsZh: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '附属图书馆', address: 'library@meijo-u.ac.jp' },
-    to: '您（TA）',
+    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '借阅图书还书期限提醒',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>您好，</p>
-<p>以下图书的还书期限为5月24日（周日），请及时归还。</p>
+<p>以下图书的还书期限为{{D+2}}，请及时归还。</p>
 <p>・《网络安全基础与实践》<br>
 ・《认知心理学入门》（第2版）</p>
 <p>如需续借，请通过门户网站"图书馆服务"申请（限续借一次）。</p>`,
@@ -822,9 +617,9 @@ export const emailsZh: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: '王 芳', address: 'wang.fang.2023@meijo-u.ac.jp' },
-    to: '您（TA）',
+    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '下周发表资料共享',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>你好！</p>
 <p>把下周联合研讨会用的发表资料提前分享给你，有时间的话先看一下吧。</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -842,7 +637,7 @@ export const emailsZh: Email[] = [
   /**
    * trap-1-zh: 【BEC】海外供应商冒充
    * 罠: 域名伪装（oxf0rd）+ 双重扩展名（.pdf.exe）
-   * 心理压力: 截止日期（5月31日后不受理）
+   * 心理压力: 截止日期（{{D+9}}后不受理）
    */
   {
     id: 'trap-1-zh',
@@ -853,13 +648,13 @@ export const emailsZh: Email[] = [
       display: 'Oxford Education China 支持团队',
       address: 'support@oxf0rd-edu-china.com',
     },
-    to: '您（TA）',
+    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '【重要】留学生支援费用收款账户变更通知',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>您好，</p>
 <p>我是Oxford Education China支持团队的李建国。</p>
 <p>由于系统升级，留学生支援费用的收款账户已发生变更。下次付款时，请参考<strong>附件中的确认函</strong>使用新账户信息。</p>
-<p><strong>※ 5月31日之后将不再接受旧账户的汇款。</strong></p>
+<p><strong>※ {{D+9}}之后将不再接受旧账户的汇款。</strong></p>
 <p>Oxford Education China<br>李 建国<br>Tel: 010-XXXX-XXXX</p>`,
     attachments: [{
       name: '账户变更确认函.pdf.exe',
@@ -883,9 +678,9 @@ export const emailsZh: Email[] = [
       display: '吉川 研究科长',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: '您（TA）',
+    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '紧急请求帮助',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>您好，</p>
 <p>我现在在伦敦参加学会，不方便接听电话。有件紧急的事想请您帮忙。</p>
 <p>与海外大学的合作项目需要今天之内共享负责学生的信息。能请您填写下面表格并提交吗？</p>
@@ -912,9 +707,9 @@ export const emailsZh: Email[] = [
       display: '刘 晓明（信息工学研究科 M1）',
       address: 'liu.xiaoming.2024@gmail.com',
     },
-    to: '您（TA）',
+    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: 关于奖学金申请材料不完整的问题',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>您好，</p>
 <p>您指出的材料不完整问题我已全部修改完毕，给您添麻烦了，非常抱歉。</p>
 <p>修改后的文件以加密ZIP格式重新发送。<br>
@@ -943,9 +738,9 @@ export const emailsZh: Email[] = [
       display: '名城大学 信息中心',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: '您（TA）',
+    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '【紧急】需要确认您的账户',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>这是名城大学信息中心发出的重要通知。</p>
 <p><strong>检测到您的邮件账户存在可疑登录行为。</strong>为保护您的账户安全，请于今天之内完成本人验证手续。</p>
 <p>▼ 本人验证请点击此处<br>
@@ -977,9 +772,9 @@ export const emailsIt: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Prof. Marco Rossi', address: 'rossi.m@meijo-u.ac.jp' },
-    to: 'Tu (TA)',
+    to: { display: 'Tu (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Cambio orario seminario – settimana prossima',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>Ciao,</p>
 <p>Purtroppo lunedì prossimo ho una riunione di facoltà, quindi dovrei spostare il seminario a martedì alle 15:00. La sala rimane la stessa (512).</p>
 <p>Potresti farmi sapere entro questa settimana se riesci a venire? Scusa per il disagio.</p>
@@ -991,11 +786,11 @@ export const emailsIt: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Ufficio Didattica', address: 'gakumu@meijo-u.ac.jp' },
-    to: 'Tu (TA)',
-    subject: 'Scadenza iscrizione corsi – 25 maggio',
-    date: '2026年5月20日 09:00',
+    to: { display: 'Tu (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Scadenza iscrizione corsi – {{D+3}}',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>Gentili studenti,</p>
-<p>Vi ricordiamo che il periodo di iscrizione ai corsi del primo semestre termina lunedì 25 maggio alle ore 23:59. Vi preghiamo di verificare la vostra situazione sul portale.</p>
+<p>Vi ricordiamo che il periodo di iscrizione ai corsi del primo semestre termina {{D+3}} alle ore 23:59. Vi preghiamo di verificare la vostra situazione sul portale.</p>
 <p>【Da verificare】<br>
 ・Non aver superato il limite annuale di crediti (48 CFU)<br>
 ・Nessun corso obbligatorio mancante<br>
@@ -1008,11 +803,11 @@ export const emailsIt: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Biblioteca Universitaria', address: 'library@meijo-u.ac.jp' },
-    to: 'Tu (TA)',
+    to: { display: 'Tu (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Promemoria restituzione libri',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>Gentile utente,</p>
-<p>Ti ricordiamo che i seguenti libri devono essere restituiti entro domenica 24 maggio:</p>
+<p>Ti ricordiamo che i seguenti libri devono essere restituiti entro {{D+2}}:</p>
 <p>・Fondamenti di Cybersicurezza (2ª ed.)<br>
 ・Introduzione alla Psicologia Cognitiva</p>
 <p>È possibile rinnovare il prestito dal portale (rinnovo consentito una sola volta).</p>`,
@@ -1023,9 +818,9 @@ export const emailsIt: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Giulia Ferrari', address: 'ferrari.giulia.2023@meijo-u.ac.jp' },
-    to: 'Tu (TA)',
+    to: { display: 'Tu (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Slides per il seminario della settimana prossima',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>Ciao!</p>
 <p>Ti mando le mie slide per il seminario della settimana prossima. Dagli un'occhiata quando hai un momento!</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -1043,7 +838,7 @@ export const emailsIt: Email[] = [
   /**
    * trap-1-it: 【BEC】Impersonificazione fornitore estero
    * 罠: domain偽装（oxf0rd）+ 二重拡張子（.pdf.exe）
-   * 心理的圧力: 期限（dopo il 31 maggio non accettato）
+   * 心理的圧力: 期限（dopo il {{D+9}} non accettato）
    */
   {
     id: 'trap-1-it',
@@ -1054,13 +849,13 @@ export const emailsIt: Email[] = [
       display: 'Oxford Education Italy – Supporto',
       address: 'support@oxf0rd-edu-italy.com',
     },
-    to: 'Tu (TA)',
+    to: { display: 'Tu (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Importante] Modifica coordinate bancarie – Supporto studenti internazionali',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>Gentile utente,</p>
 <p>Sono Marco Bianchi del team di supporto di Oxford Education Italy.</p>
 <p>A seguito di un aggiornamento del nostro sistema bancario, le coordinate per il pagamento del supporto agli studenti internazionali sono state modificate. Per il prossimo pagamento, ti preghiamo di fare riferimento al <strong>documento di conferma allegato</strong>.</p>
-<p><strong>※ I pagamenti sul vecchio conto non saranno accettati dopo il 31 maggio.</strong></p>
+<p><strong>※ I pagamenti sul vecchio conto non saranno accettati dopo il {{D+9}}.</strong></p>
 <p>Oxford Education Italy<br>Marco Bianchi<br>Tel: 02-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Conferma_Coordinate_Bancarie.pdf.exe',
@@ -1084,9 +879,9 @@ export const emailsIt: Email[] = [
       display: 'Prof. Yoshikawa (Preside)',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: 'Tu (TA)',
+    to: { display: 'Tu (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Urgente – Ho bisogno del tuo aiuto oggi',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>Ciao,</p>
 <p>Sono a una conferenza a Londra e non riesco a rispondere al telefono. Ho bisogno urgentemente del tuo aiuto.</p>
 <p>Per un progetto di collaborazione con un'università straniera, devo condividere le informazioni degli studenti responsabili entro oggi. Potresti compilare il modulo al link qui sotto e inviarlo il prima possibile?</p>
@@ -1113,9 +908,9 @@ export const emailsIt: Email[] = [
       display: 'Lorenzo Bianchi（Studente M1, Ing. Informatica）',
       address: 'lorenzo.bianchi.2024@gmail.com',
     },
-    to: 'Tu (TA)',
+    to: { display: 'Tu (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: Documenti mancanti per la domanda di borsa di studio',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>Ciao,</p>
 <p>Ho corretto tutti i problemi che mi hai segnalato. Scusa tantissimo per il disturbo!</p>
 <p>Ti rimando i documenti corretti in un archivio ZIP protetto da password.<br>
@@ -1144,9 +939,9 @@ Password: <strong>2024</strong></p>
       display: 'Centro Informatico – Università Meijo',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: 'Tu (TA)',
+    to: { display: 'Tu (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Urgente] Verifica del tuo account richiesta',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>Questo è un avviso importante dal Centro Informatico dell'Università Meijo.</p>
 <p><strong>È stato rilevato un accesso sospetto al tuo account email.</strong> Per proteggere il tuo account, ti chiediamo di completare la verifica dell'identità entro oggi.</p>
 <p>▼ Verifica il tuo account qui<br>
@@ -1178,9 +973,9 @@ export const emailsVi: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'GS. Nguyễn Minh Tuấn', address: 'nguyen.m@meijo-u.ac.jp' },
-    to: 'Bạn (TA)',
+    to: { display: 'Bạn (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Thay đổi lịch seminar tuần tới',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>Xin chào,</p>
 <p>Tuần tới thứ Hai tôi có cuộc họp đột xuất nên cần thay đổi lịch seminar. Bạn có thể chuyển sang thứ Ba lúc 3 giờ chiều không? Phòng vẫn là 512.</p>
 <p>Bạn cho tôi biết trước cuối tuần này nhé. Xin lỗi vì sự bất tiện này.</p>
@@ -1192,11 +987,11 @@ export const emailsVi: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Phòng Đào tạo', address: 'gakumu@meijo-u.ac.jp' },
-    to: 'Bạn (TA)',
-    subject: 'Thông báo hạn chót đăng ký môn học – 25/5',
-    date: '2026年5月20日 09:00',
+    to: { display: 'Bạn (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Thông báo hạn chót đăng ký môn học – {{D+3}}',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>Kính gửi các sinh viên,</p>
-<p>Thời hạn đăng ký môn học học kỳ I sẽ kết thúc vào thứ Hai, 25/5 lúc 23:59. Vui lòng kiểm tra lại trên cổng thông tin.</p>
+<p>Thời hạn đăng ký môn học học kỳ I sẽ kết thúc vào {{D+3}} lúc 23:59. Vui lòng kiểm tra lại trên cổng thông tin.</p>
 <p>【Các điểm cần kiểm tra】<br>
 ・Số tín chỉ không vượt quá giới hạn hàng năm (48 tín chỉ)<br>
 ・Không bỏ sót môn học bắt buộc<br>
@@ -1209,11 +1004,11 @@ export const emailsVi: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Thư viện Đại học', address: 'library@meijo-u.ac.jp' },
-    to: 'Bạn (TA)',
+    to: { display: 'Bạn (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Nhắc nhở: Hạn trả sách sắp đến',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>Kính gửi bạn đọc,</p>
-<p>Các tài liệu sau đây sẽ đến hạn trả vào Chủ nhật, 24/5:</p>
+<p>Các tài liệu sau đây sẽ đến hạn trả vào {{D+2}}:</p>
 <p>・Cơ sở An ninh mạng (tái bản lần 2)<br>
 ・Nhập môn Tâm lý học Nhận thức</p>
 <p>Bạn có thể gia hạn trực tuyến qua cổng thông tin thư viện (chỉ gia hạn được một lần).</p>`,
@@ -1224,9 +1019,9 @@ export const emailsVi: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Nguyễn Thị Lan', address: 'nguyen.lan.2023@meijo-u.ac.jp' },
-    to: 'Bạn (TA)',
+    to: { display: 'Bạn (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Chia sẻ tài liệu thuyết trình tuần tới',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>Chào bạn!</p>
 <p>Mình chia sẻ trước tài liệu thuyết trình cho seminar chung tuần tới. Bạn xem qua khi có thời gian nhé!</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -1244,7 +1039,7 @@ export const emailsVi: Email[] = [
   /**
    * trap-1-vi: 【BEC】Mạo danh nhà cung cấp nước ngoài
    * 罠: domain偽装（oxf0rd）+ 二重拡張子（.pdf.exe）
-   * 心理的圧力: 期限（sau ngày 31/5 không nhận）
+   * 心理的圧力: 期限（sau ngày {{D+9}} không nhận）
    */
   {
     id: 'trap-1-vi',
@@ -1255,13 +1050,13 @@ export const emailsVi: Email[] = [
       display: 'Oxford Education Vietnam – Hỗ trợ',
       address: 'support@oxf0rd-edu-vietnam.com',
     },
-    to: 'Bạn (TA)',
+    to: { display: 'Bạn (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '【Quan trọng】Thông báo thay đổi tài khoản ngân hàng nhận học phí hỗ trợ du học sinh',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>Xin chào,</p>
 <p>Tôi là Trần Văn Hùng từ bộ phận hỗ trợ của Oxford Education Vietnam.</p>
 <p>Do nâng cấp hệ thống ngân hàng, tài khoản nhận thanh toán học phí hỗ trợ du học sinh đã thay đổi. Vui lòng tham khảo <strong>tài liệu xác nhận đính kèm</strong> để biết thông tin tài khoản mới cho lần thanh toán tiếp theo.</p>
-<p><strong>※ Sau ngày 31/5, chúng tôi sẽ không nhận thanh toán vào tài khoản cũ.</strong></p>
+<p><strong>※ Sau ngày {{D+9}}, chúng tôi sẽ không nhận thanh toán vào tài khoản cũ.</strong></p>
 <p>Oxford Education Vietnam<br>Trần Văn Hùng<br>Tel: 028-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Xac_nhan_tai_khoan_moi.pdf.exe',
@@ -1285,9 +1080,9 @@ export const emailsVi: Email[] = [
       display: 'GS. Yoshikawa (Trưởng khoa)',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: 'Bạn (TA)',
+    to: { display: 'Bạn (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Khẩn – Cần bạn giúp hôm nay',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>Xin chào,</p>
 <p>Tôi đang tham dự hội nghị ở London và không thể nghe điện thoại. Có việc khẩn cần nhờ bạn giúp.</p>
 <p>Liên quan đến dự án hợp tác với trường đại học nước ngoài, tôi cần chia sẻ thông tin sinh viên phụ trách trong hôm nay. Bạn có thể điền vào biểu mẫu dưới đây và gửi càng sớm càng tốt không?</p>
@@ -1314,9 +1109,9 @@ export const emailsVi: Email[] = [
       display: 'Trần Thị Mai（Sinh viên M1, Công nghệ Thông tin）',
       address: 'tran.mai.2024@gmail.com',
     },
-    to: 'Bạn (TA)',
+    to: { display: 'Bạn (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: Hồ sơ xin học bổng còn thiếu tài liệu',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>Xin chào,</p>
 <p>Em đã sửa tất cả những điểm thầy/cô chỉ ra rồi ạ. Xin lỗi đã gây phiền phức!</p>
 <p>Em gửi lại tài liệu đã sửa dưới dạng file ZIP có mật khẩu bảo vệ.<br>
@@ -1345,9 +1140,9 @@ Mật khẩu giải nén: <strong>2024</strong></p>
       display: 'Trung tâm Thông tin – ĐH Meijo',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: 'Bạn (TA)',
+    to: { display: 'Bạn (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '【Khẩn】Cần xác minh tài khoản của bạn',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>Đây là thông báo quan trọng từ Trung tâm Thông tin Đại học Meijo.</p>
 <p><strong>Đã phát hiện hoạt động đăng nhập đáng ngờ trên tài khoản email của bạn.</strong> Để bảo vệ tài khoản, vui lòng hoàn tất xác minh danh tính trong hôm nay.</p>
 <p>▼ Xác minh tài khoản tại đây<br>
@@ -1379,9 +1174,9 @@ export const emailsEs: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Prof. Carlos García', address: 'garcia.c@meijo-u.ac.jp' },
-    to: 'Tú (TA)',
+    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Cambio de horario – Seminario de la semana que viene',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>Hola,</p>
 <p>El lunes que viene tengo una reunión de facultad, así que necesito cambiar el seminario al martes a las 15:00. La sala sigue siendo la misma (512).</p>
 <p>¿Podrías decirme antes de que acabe la semana si puedes venir? Siento las molestias.</p>
@@ -1393,11 +1188,11 @@ export const emailsEs: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Oficina de Asuntos Académicos', address: 'gakumu@meijo-u.ac.jp' },
-    to: 'Tú (TA)',
-    subject: 'Plazo de matrícula – 25 de mayo',
-    date: '2026年5月20日 09:00',
+    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Plazo de matrícula – {{D+3}}',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>Estimados estudiantes,</p>
-<p>Os recordamos que el plazo de matrícula del primer semestre finaliza el lunes 25 de mayo a las 23:59. Por favor, comprobad vuestra situación en el portal.</p>
+<p>Os recordamos que el plazo de matrícula del primer semestre finaliza el {{D+3}} a las 23:59. Por favor, comprobad vuestra situación en el portal.</p>
 <p>【Puntos a verificar】<br>
 ・No haber superado el límite anual de créditos (48 créditos)<br>
 ・No faltar ninguna asignatura obligatoria<br>
@@ -1410,11 +1205,11 @@ export const emailsEs: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Biblioteca Universitaria', address: 'library@meijo-u.ac.jp' },
-    to: 'Tú (TA)',
+    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Recordatorio: fecha de devolución de libros',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>Estimado/a usuario/a,</p>
-<p>Te recordamos que los siguientes libros deben devolverse antes del domingo 24 de mayo:</p>
+<p>Te recordamos que los siguientes libros deben devolverse antes del {{D+2}}:</p>
 <p>・Fundamentos de Ciberseguridad (2.ª ed.)<br>
 ・Introducción a la Psicología Cognitiva</p>
 <p>Puedes renovar el préstamo desde el portal de la biblioteca (renovación permitida una sola vez).</p>`,
@@ -1425,9 +1220,9 @@ export const emailsEs: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'María López', address: 'lopez.maria.2023@meijo-u.ac.jp' },
-    to: 'Tú (TA)',
+    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Comparto las diapositivas para el seminario de la semana que viene',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>¡Hola!</p>
 <p>Te mando mis diapositivas para el seminario conjunto de la semana que viene. ¡Échales un vistazo cuando puedas!</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -1445,7 +1240,7 @@ export const emailsEs: Email[] = [
   /**
    * trap-1-es: 【BEC】Suplantación de proveedor extranjero
    * 罠: domain偽装（oxf0rd）+ 二重拡張子（.pdf.exe）
-   * 心理的圧力: 期限（después del 31 de mayo no se acepta）
+   * 心理的圧力: 期限（después del {{D+9}} no se acepta）
    */
   {
     id: 'trap-1-es',
@@ -1456,13 +1251,13 @@ export const emailsEs: Email[] = [
       display: 'Oxford Education Spain – Soporte',
       address: 'support@oxf0rd-edu-spain.com',
     },
-    to: 'Tú (TA)',
+    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Importante] Cambio de datos bancarios – Apoyo a estudiantes internacionales',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>Estimado/a usuario/a,</p>
 <p>Mi nombre es Carlos Martínez, del equipo de soporte de Oxford Education Spain.</p>
 <p>Debido a una actualización de nuestro sistema bancario, los datos de pago para el apoyo a estudiantes internacionales han cambiado. Para el próximo pago, consulta el <strong>documento de confirmación adjunto</strong> para obtener los nuevos datos bancarios.</p>
-<p><strong>※ Los pagos a la cuenta antigua no se aceptarán después del 31 de mayo.</strong></p>
+<p><strong>※ Los pagos a la cuenta antigua no se aceptarán después del {{D+9}}.</strong></p>
 <p>Oxford Education Spain<br>Carlos Martínez<br>Tel: 91-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Confirmacion_Datos_Bancarios.pdf.exe',
@@ -1486,9 +1281,9 @@ export const emailsEs: Email[] = [
       display: 'Prof. Yoshikawa (Decano)',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: 'Tú (TA)',
+    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Urgente – Necesito tu ayuda hoy',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>Hola,</p>
 <p>Estoy en una conferencia en Londres y no puedo atender llamadas. Necesito pedirte algo urgente.</p>
 <p>Para un proyecto de colaboración con una universidad extranjera, necesito compartir hoy mismo la información de los estudiantes responsables. ¿Podrías rellenar el formulario del siguiente enlace y enviarlo lo antes posible?</p>
@@ -1515,9 +1310,9 @@ export const emailsEs: Email[] = [
       display: 'Miguel Fernández（Estudiante M1, Ing. Informática）',
       address: 'miguel.fernandez.2024@gmail.com',
     },
-    to: 'Tú (TA)',
+    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: Documentación incompleta en la solicitud de beca',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>Hola,</p>
 <p>Ya he corregido todo lo que me indicaste. ¡Perdona las molestias!</p>
 <p>Te reenvío los documentos corregidos en un archivo ZIP protegido con contraseña.<br>
@@ -1546,9 +1341,9 @@ Contraseña: <strong>2024</strong></p>
       display: 'Centro de Informática – Universidad Meijo',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: 'Tú (TA)',
+    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Urgente] Se requiere verificar tu cuenta',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>Este es un aviso importante del Centro de Informática de la Universidad Meijo.</p>
 <p><strong>Se ha detectado un acceso sospechoso en tu cuenta de correo.</strong> Para proteger tu cuenta, te pedimos que completes la verificación de identidad hoy mismo.</p>
 <p>▼ Verifica tu cuenta aquí<br>
@@ -1580,9 +1375,9 @@ export const emailsPl: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Prof. Tomasz Kowalski', address: 'kowalski.t@meijo-u.ac.jp' },
-    to: 'Ty (TA)',
+    to: { display: 'Ty (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Zmiana terminu seminarium – przyszły tydzień',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>Cześć,</p>
 <p>W przyszły poniedziałek mam nagłe zebranie wydziałowe, więc muszę przesunąć seminarium na wtorek o 15:00. Sala pozostaje ta sama (512).</p>
 <p>Daj mi znać przed końcem tygodnia, czy możesz przyjść. Przepraszam za niedogodności.</p>
@@ -1594,11 +1389,11 @@ export const emailsPl: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Dziekanat', address: 'gakumu@meijo-u.ac.jp' },
-    to: 'Ty (TA)',
-    subject: 'Termin rejestracji na zajęcia – 25 maja',
-    date: '2026年5月20日 09:00',
+    to: { display: 'Ty (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Termin rejestracji na zajęcia – {{D+3}}',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>Szanowni Studenci,</p>
-<p>Przypominamy, że rejestracja na zajęcia pierwszego semestru kończy się w poniedziałek 25 maja o godz. 23:59. Prosimy o sprawdzenie swojej sytuacji w portalu.</p>
+<p>Przypominamy, że rejestracja na zajęcia pierwszego semestru kończy się w {{D+3}} o godz. 23:59. Prosimy o sprawdzenie swojej sytuacji w portalu.</p>
 <p>【Do sprawdzenia】<br>
 ・Czy nie przekroczono rocznego limitu punktów (48 punktów)<br>
 ・Czy zarejestrowano wszystkie obowiązkowe przedmioty<br>
@@ -1611,11 +1406,11 @@ export const emailsPl: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Biblioteka Uniwersytecka', address: 'library@meijo-u.ac.jp' },
-    to: 'Ty (TA)',
+    to: { display: 'Ty (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Przypomnienie: termin zwrotu książek',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>Szanowny Czytelniku,</p>
-<p>Przypominamy, że poniższe pozycje należy zwrócić do niedzieli 24 maja:</p>
+<p>Przypominamy, że poniższe pozycje należy zwrócić do {{D+2}}:</p>
 <p>・Podstawy cyberbezpieczeństwa (wyd. 2)<br>
 ・Wprowadzenie do psychologii poznawczej</p>
 <p>Możesz przedłużyć wypożyczenie przez portal biblioteczny (tylko jedno przedłużenie).</p>`,
@@ -1626,9 +1421,9 @@ export const emailsPl: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Marta Wiśniewska', address: 'wisniewska.m.2023@meijo-u.ac.jp' },
-    to: 'Ty (TA)',
+    to: { display: 'Ty (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Udostępniam slajdy na przyszły tydzień',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>Cześć!</p>
 <p>Udostępniam moje slajdy na wspólne seminarium w przyszłym tygodniu. Rzuć okiem, kiedy masz chwilę!</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -1646,7 +1441,7 @@ export const emailsPl: Email[] = [
   /**
    * trap-1-pl: 【BEC】Podszywanie się pod dostawcę zagranicznego
    * 罠: fałszywa domena（oxf0rd）+ podwójne rozszerzenie（.pdf.exe）
-   * Presja psychologiczna: termin（po 31 maja nie przyjmujemy）
+   * Presja psychologiczna: termin（po {{D+9}} nie przyjmujemy）
    */
   {
     id: 'trap-1-pl',
@@ -1657,13 +1452,13 @@ export const emailsPl: Email[] = [
       display: 'Oxford Education Poland – Wsparcie',
       address: 'support@oxf0rd-edu-poland.com',
     },
-    to: 'Ty (TA)',
+    to: { display: 'Ty (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Ważne] Zmiana danych bankowych – wsparcie dla studentów zagranicznych',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>Szanowny Użytkowniku,</p>
 <p>Nazywam się Piotr Nowak z działu wsparcia Oxford Education Poland.</p>
 <p>W związku z aktualizacją naszego systemu bankowego zmieniliśmy numer rachunku do wpłat za wsparcie studentów zagranicznych. Przy następnej wpłacie prosimy skorzystać z nowych danych zawartych w <strong>załączonym dokumencie potwierdzającym</strong>.</p>
-<p><strong>※ Po 31 maja płatności na stare konto nie będą przyjmowane.</strong></p>
+<p><strong>※ Po {{D+9}} płatności na stare konto nie będą przyjmowane.</strong></p>
 <p>Oxford Education Poland<br>Piotr Nowak<br>Tel: 22-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Potwierdzenie_Danych_Bankowych.pdf.exe',
@@ -1687,9 +1482,9 @@ export const emailsPl: Email[] = [
       display: 'Prof. Yoshikawa (Dziekan)',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: 'Ty (TA)',
+    to: { display: 'Ty (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Pilne – Potrzebuję Twojej pomocy dzisiaj',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>Cześć,</p>
 <p>Jestem teraz na konferencji w Londynie i nie mogę odbierać telefonów. Mam do Ciebie pilną prośbę.</p>
 <p>W związku z projektem współpracy z zagraniczną uczelnią muszę dzisiaj udostępnić informacje o odpowiedzialnych studentach. Czy mógłbyś/mogłabyś wypełnić formularz pod poniższym linkiem i wysłać go jak najszybciej?</p>
@@ -1716,9 +1511,9 @@ export const emailsPl: Email[] = [
       display: 'Aleksander Wójcik（Student M1, Informatyka）',
       address: 'wojcik.aleksander.2024@gmail.com',
     },
-    to: 'Ty (TA)',
+    to: { display: 'Ty (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: Brakujące dokumenty w podaniu o stypendium',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>Cześć,</p>
 <p>Poprawiłem wszystko, co mi wskazałeś/wskazałaś. Przepraszam za kłopot!</p>
 <p>Wysyłam poprawione dokumenty jako archiwum ZIP zabezpieczone hasłem.<br>
@@ -1747,9 +1542,9 @@ Hasło: <strong>2024</strong></p>
       display: 'Centrum Informatyczne – Uniwersytet Meijo',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: 'Ty (TA)',
+    to: { display: 'Ty (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Pilne] Wymagana weryfikacja konta',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>To ważne powiadomienie od Centrum Informatycznego Uniwersytetu Meijo.</p>
 <p><strong>Na Twoim koncie e-mail wykryto podejrzane logowanie.</strong> Aby zabezpieczyć konto, prosimy o weryfikację tożsamości jeszcze dziś.</p>
 <p>▼ Zweryfikuj swoje konto tutaj<br>
@@ -1781,9 +1576,9 @@ export const emailsNo: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Prof. Erik Andersen', address: 'andersen.e@meijo-u.ac.jp' },
-    to: 'Deg (TA)',
+    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Endring av seminartid – neste uke',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>Hei,</p>
 <p>Neste mandag har jeg et uforutsett fakultetsmøte, så jeg må flytte seminaret til tirsdag kl. 15:00. Rommet er det samme (512).</p>
 <p>Kan du gi meg beskjed innen slutten av denne uken om du kan komme? Beklager ulempen.</p>
@@ -1795,11 +1590,11 @@ export const emailsNo: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Studiekontoret', address: 'gakumu@meijo-u.ac.jp' },
-    to: 'Deg (TA)',
-    subject: 'Frist for kursregistrering – 25. mai',
-    date: '2026年5月20日 09:00',
+    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Frist for kursregistrering – {{D+3}}',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>Kjære studenter,</p>
-<p>Vi minner om at kursregistreringen for første semester avsluttes mandag 25. mai kl. 23:59. Vennligst sjekk din situasjon på portalen.</p>
+<p>Vi minner om at kursregistreringen for første semester avsluttes {{D+3}} kl. 23:59. Vennligst sjekk din situasjon på portalen.</p>
 <p>【Sjekk følgende】<br>
 ・At du ikke har overskredet den årlige studiepoenggrensen (48 studiepoeng)<br>
 ・At alle obligatoriske emner er registrert<br>
@@ -1812,11 +1607,11 @@ export const emailsNo: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Universitetsbiblioteket', address: 'library@meijo-u.ac.jp' },
-    to: 'Deg (TA)',
+    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Påminnelse: innleveringsfrist for bøker',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>Kjære låner,</p>
-<p>Vi minner om at følgende bøker må leveres tilbake innen søndag 24. mai:</p>
+<p>Vi minner om at følgende bøker må leveres tilbake innen {{D+2}}:</p>
 <p>・Grunnleggende cybersikkerhet (2. utg.)<br>
 ・Introduksjon til kognitiv psykologi</p>
 <p>Du kan fornye lånet via bibliotekets portal (kun én fornyelse tillatt).</p>`,
@@ -1827,9 +1622,9 @@ export const emailsNo: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Ingrid Larsen', address: 'larsen.ingrid.2023@meijo-u.ac.jp' },
-    to: 'Deg (TA)',
+    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Deler lysbildene til neste ukes seminar',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>Hei!</p>
 <p>Sender deg lysbildene mine til det felles seminaret neste uke. Ta en titt når du har anledning!</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -1847,7 +1642,7 @@ export const emailsNo: Email[] = [
   /**
    * trap-1-no: 【BEC】Utgi seg for å være utenlandsk leverandør
    * 罠: falsk domene（oxf0rd）+ dobbel filtype（.pdf.exe）
-   * Psykologisk press: frist（etter 31. mai godtas ikke）
+   * Psykologisk press: frist（etter {{D+9}} godtas ikke）
    */
   {
     id: 'trap-1-no',
@@ -1858,13 +1653,13 @@ export const emailsNo: Email[] = [
       display: 'Oxford Education Norway – Support',
       address: 'support@oxf0rd-edu-norway.com',
     },
-    to: 'Deg (TA)',
+    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Viktig] Endring av bankdetaljer – støtte til internasjonale studenter',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>Kjære bruker,</p>
 <p>Jeg heter Lars Hansen og jobber i supportteamet til Oxford Education Norway.</p>
 <p>På grunn av en oppgradering av banksystemet vårt har kontonummeret for innbetaling av støtte til internasjonale studenter blitt endret. Ved neste betaling ber vi deg bruke de nye bankdetaljene som finnes i <strong>vedlagt bekreftelsesdokument</strong>.</p>
-<p><strong>※ Etter 31. mai vil ikke betalinger til den gamle kontoen bli godtatt.</strong></p>
+<p><strong>※ Etter {{D+9}} vil ikke betalinger til den gamle kontoen bli godtatt.</strong></p>
 <p>Oxford Education Norway<br>Lars Hansen<br>Tlf: 22-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Bekreftelse_Bankdetaljer.pdf.exe',
@@ -1888,9 +1683,9 @@ export const emailsNo: Email[] = [
       display: 'Prof. Yoshikawa (Dekan)',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: 'Deg (TA)',
+    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Haster – Trenger din hjelp i dag',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>Hei,</p>
 <p>Jeg er på konferanse i London og kan ikke ta telefoner. Jeg har en hastesak jeg trenger hjelp med.</p>
 <p>I forbindelse med et samarbeidsprosjekt med et utenlandsk universitet må jeg dele informasjon om ansvarlige studenter i dag. Kan du fylle ut skjemaet i lenken nedenfor og sende det så snart som mulig?</p>
@@ -1917,9 +1712,9 @@ export const emailsNo: Email[] = [
       display: 'Bjørn Olsen（M1-student, Informatikk）',
       address: 'olsen.bjorn.2024@gmail.com',
     },
-    to: 'Deg (TA)',
+    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: Manglende dokumenter i stipendsøknaden',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>Hei,</p>
 <p>Jeg har rettet alt du påpekte. Beklager bryderiet!</p>
 <p>Sender de rettede dokumentene som et passordbeskyttet ZIP-arkiv.<br>
@@ -1948,9 +1743,9 @@ Passord: <strong>2024</strong></p>
       display: 'IT-senteret – Meijo Universitet',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: 'Deg (TA)',
+    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Haster] Bekreftelse av konto kreves',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>Dette er en viktig melding fra IT-senteret ved Meijo Universitet.</p>
 <p><strong>Det er oppdaget mistenkelig påloggingsaktivitet på e-postkontoen din.</strong> For å sikre kontoen din ber vi deg fullføre identitetsbekreftelsen i dag.</p>
 <p>▼ Bekreft kontoen din her<br>
@@ -1982,9 +1777,9 @@ export const emailsFi: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Prof. Mikko Virtanen', address: 'virtanen.m@meijo-u.ac.jp' },
-    to: 'Sinä (TA)',
+    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Seminaarin aikataulumuutos – ensi viikko',
-    date: '2026年5月21日 15:00',
+    dateOffsetDays: -1, dateTime: '15:00',
     bodyHtml: `<p>Hei,</p>
 <p>Ensi maanantaina on yllättävä tiedekuntakokous, joten seminaari täytyy siirtää tiistaille klo 15:00. Huone pysyy samana (512).</p>
 <p>Voisitko ilmoittaa ennen viikonloppua, pääsetkö paikalle? Pahoittelen häiriötä.</p>
@@ -1996,11 +1791,11 @@ export const emailsFi: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Opintopalvelut', address: 'gakumu@meijo-u.ac.jp' },
-    to: 'Sinä (TA)',
-    subject: 'Kurssien ilmoittautumisen määräaika – 25. toukokuuta',
-    date: '2026年5月20日 09:00',
+    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Kurssien ilmoittautumisen määräaika – {{D+3}}',
+    dateOffsetDays: -2, dateTime: '09:00',
     bodyHtml: `<p>Hyvät opiskelijat,</p>
-<p>Muistutamme, että ensimmäisen lukukauden kurssien ilmoittautuminen päättyy maanantaina 25. toukokuuta klo 23:59. Tarkistakaa tilanteenne portaalista.</p>
+<p>Muistutamme, että ensimmäisen lukukauden kurssien ilmoittautuminen päättyy {{D+3}} klo 23:59. Tarkistakaa tilanteenne portaalista.</p>
 <p>【Tarkistettavaa】<br>
 ・Vuotuinen opintopisteraja (48 opintopistettä) ei ylity<br>
 ・Kaikki pakolliset kurssit on ilmoitettu<br>
@@ -2013,11 +1808,11 @@ export const emailsFi: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Yliopistokirjasto', address: 'library@meijo-u.ac.jp' },
-    to: 'Sinä (TA)',
+    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Muistutus: kirjojen palautuspäivä lähestyy',
-    date: '2026年5月19日 10:00',
+    dateOffsetDays: -3, dateTime: '10:00',
     bodyHtml: `<p>Hyvä lainaaja,</p>
-<p>Muistutamme, että seuraavat kirjat tulee palauttaa sunnuntaihin 24. toukokuuta mennessä:</p>
+<p>Muistutamme, että seuraavat kirjat tulee palauttaa {{D+2}} mennessä:</p>
 <p>・Kyberturvallisuuden perusteet (2. painos)<br>
 ・Johdatus kognitiiviseen psykologiaan</p>
 <p>Voit uusia lainan kirjaston portaalin kautta (yksi uusinta sallittu).</p>`,
@@ -2028,9 +1823,9 @@ export const emailsFi: Email[] = [
     isTrap: false,
     traps: [],
     from: { display: 'Aino Mäkinen', address: 'makinen.aino.2023@meijo-u.ac.jp' },
-    to: 'Sinä (TA)',
+    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Jaan diat ensi viikon seminaariin',
-    date: '2026年5月18日 18:30',
+    dateOffsetDays: -4, dateTime: '18:30',
     bodyHtml: `<p>Hei!</p>
 <p>Lähetän diani ensi viikon yhteisseminaaria varten etukäteen. Katso ne, kun sinulla on hetki aikaa!</p>
 <p><a href="https://drive.google.com/file/d/xxxxxxxxx"
@@ -2048,7 +1843,7 @@ export const emailsFi: Email[] = [
   /**
    * trap-1-fi: 【BEC】Ulkomaisen toimittajan tekeytyminen
    * 罠: väärennetty verkkotunnus（oxf0rd）+ kaksoisliite（.pdf.exe）
-   * Psykologinen paine: määräaika（31.5. jälkeen ei hyväksytä）
+   * Psykologinen paine: määräaika（{{D+9}} jälkeen ei hyväksytä）
    */
   {
     id: 'trap-1-fi',
@@ -2059,13 +1854,13 @@ export const emailsFi: Email[] = [
       display: 'Oxford Education Finland – Tuki',
       address: 'support@oxf0rd-edu-finland.com',
     },
-    to: 'Sinä (TA)',
+    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Tärkeää] Pankkitietojen muutos – kansainvälisten opiskelijoiden tuki',
-    date: '2026年5月22日 14:30',
+    dateOffsetDays: 0, dateTime: '14:30',
     bodyHtml: `<p>Hyvä käyttäjä,</p>
 <p>Nimeni on Juhani Korhonen Oxford Education Finlandin tukitiimistä.</p>
 <p>Pankkijärjestelmämme päivityksen vuoksi kansainvälisten opiskelijoiden tukimaksujen tilinumero on muuttunut. Pyydämme käyttämään seuraavassa maksussanne <strong>liitteenä olevassa vahvistusasiakirjassa</strong> olevia uusia pankkitietoja.</p>
-<p><strong>※ Vanhan tilin maksusuorituksia ei hyväksytä 31.5. jälkeen.</strong></p>
+<p><strong>※ Vanhan tilin maksusuorituksia ei hyväksytä {{D+9}} jälkeen.</strong></p>
 <p>Oxford Education Finland<br>Juhani Korhonen<br>Puh: 09-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Pankkitietojen_vahvistus.pdf.exe',
@@ -2089,9 +1884,9 @@ export const emailsFi: Email[] = [
       display: 'Prof. Yoshikawa (Dekaani)',
       address: 'yoshikawa.meijo.univ@gmail.com',
     },
-    to: 'Sinä (TA)',
+    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Kiireellinen – Tarvitsen apuasi tänään',
-    date: '2026年5月20日 11:45',
+    dateOffsetDays: -2, dateTime: '11:45',
     bodyHtml: `<p>Hei,</p>
 <p>Olen tällä hetkellä konferenssissa Lontoossa enkä pysty vastaamaan puheluihin. Minulla on kiireellinen asia, johon tarvitsen apuasi.</p>
 <p>Ulkomaisen yliopiston kanssa tehtävään yhteistyöprojektiin liittyen minun täytyy jakaa vastuuopiskelijoiden tiedot tänään. Voisitko täyttää alla olevan linkin lomakkeen ja lähettää sen mahdollisimman pian?</p>
@@ -2118,9 +1913,9 @@ export const emailsFi: Email[] = [
       display: 'Ville Heikkinen（M1-opiskelija, Tietotekniikka）',
       address: 'heikkinen.ville.2024@gmail.com',
     },
-    to: 'Sinä (TA)',
+    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: 'Re: Puuttuvat asiakirjat stipendihakemuksessa',
-    date: '2026年5月18日 16:30',
+    dateOffsetDays: -4, dateTime: '16:30',
     bodyHtml: `<p>Hei,</p>
 <p>Olen korjannut kaikki kohdat, jotka mainitsit. Pahoittelen vaivannäköä!</p>
 <p>Lähetän korjatut asiakirjat salasanasuojattuna ZIP-tiedostona.<br>
@@ -2149,9 +1944,9 @@ Salasana: <strong>2024</strong></p>
       display: 'IT-keskus – Meijo-yliopisto',
       address: 'admin@ccmallg.meijo-u.ac.jp',
     },
-    to: 'Sinä (TA)',
+    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '[Kiireellinen] Tilin vahvistus vaaditaan',
-    date: '2026年5月17日 09:00',
+    dateOffsetDays: -5, dateTime: '09:00',
     bodyHtml: `<p>Tämä on tärkeä ilmoitus Meijo-yliopiston IT-keskukselta.</p>
 <p><strong>Sähköpostitililläsi on havaittu epäilyttävää kirjautumisaktiviteettia.</strong> Tilisi suojaamiseksi pyydämme sinua suorittamaan henkilöllisyyden vahvistuksen tänään.</p>
 <p>▼ Vahvista tilisi täällä<br>

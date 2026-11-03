@@ -1,95 +1,22 @@
-以下の2つの修正を行ってください。
+data/emailUtils.ts の getEmailSet(uiLang, l1Lang) を、参加者ごとのシード付き乱数でカウンターバランスする設計に変更してください。メール数は変えません(通常8通+罠8通=16通/人)。
 
-# 1. /app/safe/page.tsx を新規作成
+【仕様】
+- 罠: 攻撃タイプ4つ(trap 1〜4)それぞれを、母語版と日本語版で1回ずつ表示(計8通)。
+- 各タイプについて「母語を先」か「日本語を先」かを参加者ごとにランダムに決める。ただし4タイプのうち必ず2つが母語先、2つが日本語先になるようにする(均等化)。
+- 同じタイプの2通は離す。1通目(各タイプの最初の提示)は前半8スロット、2通目は後半8スロットに置く。
+- 通常メール: 母語4通+日本語4通。前半・後半それぞれに母語2通・日本語2通を置く。通常メールの言語・シナリオは固定でよい。
+- スロットの罠/通常のパターンは固定(参加者によらず罠の位置は一定)。例:
+  前半 [N,T,N,N,T,T,N,T]、後半 [T,N,N,T,N,T,T,N]
+  このパターンは定数として定義し、あとで変更しやすくする。
+- 罠の4タイプが前半のどのTスロットに入るか(タイプの出現順)もシードでシャッフルする。後半も別のシャッフルにする。
+- 乱数は mulberry32 などのシード付きPRNGで実装する。Math.random は使わない。同じシードなら必ず同じ並びになること。
 
-通常メールのリンクをクリックした際に表示する「安全確認画面」。
-/phished/page.tsx と同じ構造だが、内容は以下の通り：
+【保存】
+- セッション作成時にサーバー側でシードを生成し、割当情報(seed、各タイプの先行言語、スロット順)を JSON 文字列にして sessions.email_set_id に保存する。リロードしても同じセットが再現されるよう、保存済みの seed から再構築する。
+- email_set_id の列型を確認し、text でなければ必要なALTER文を私に提示してください(Supabaseで私が実行します)。CHECK制約は壊さないこと。
+- experiment_logs の各ログから、メールごとの slot_index(1〜16)、exposure_index(そのタイプの1回目=1/2回目=2、通常メールはnull)、lang(そのメールの言語)が分かるようにする。列追加が必要なら、ALTER文を提示してください。
 
-URLパラメータ：
-/safe?type=link または /safe?type=attachment
-session_id と email_id もパラメータとして受け取る
-
-## 画面デザイン
-
-背景：緑系（安全を示す色）
-
-表示内容：
-【アイコン】：lucide-react の ShieldCheck（緑色）
-
-【タイトル】：
-「このリンクは安全です」（ja）
-"This link is safe." （en）
-他6言語も対応
-
-【説明文】：
-「あなたがクリックしたリンクは通常のリンクです。
- 実験中のため外部サイトへの遷移はブロックされました。
- メール画面に戻って次のメールを処理してください。」
-
-英語版：
-"The link you clicked appears to be a legitimate link.
- For the purposes of this experiment, navigation to
- external sites has been blocked.
- Please return to the mail screen and continue."
-
-他6言語（de/zh/ko/it/vi/es/pl/no/fi）も同内容で実装。
-
-【ボタン】：
-「このタブを閉じる」→ window.close()
-色：緑系（bg-green-600）
-アイコン：lucide-react の X
-
-## トラッキング
-通常メールのリンククリックはログに記録しない
-（正常行動であり研究データとして不要なため）
-
-## ui_langの取得
-URLパラメータから ui_lang を取得して表示言語を切り替える
-/lib/i18n.ts の getT(ui_lang) を使用
-
-# 2. メール本文レンダリング部分の修正
-
-通常リンク（data-phished-url なし）のクリック処理を以下に変更：
-
-const handleLinkClick = (e: MouseEvent) => {
-  e.preventDefault()
-  const target = e.currentTarget as HTMLAnchorElement
-  const phishedUrl = target.dataset.phishedUrl
-
-  if (phishedUrl) {
-    // 罠メールのリンク → /phished に遷移
-    tracker.onLinkClick(target.dataset.displayUrl ?? '')
-    window.open(
-      `${phishedUrl}&session_id=${sessionId}&email_id=${currentEmailId}&ui_lang=${uiLang}`,
-      '_blank'
-    )
-  } else {
-    // 通常メールのリンク → /safe に遷移
-    window.open(
-      `/safe?type=link&ui_lang=${uiLang}`,
-      '_blank'
-    )
-  }
-}
-
-# 3. /lib/i18n.ts に以下のキーを7言語で追加
-
-safeLinkTitle:
-  ja: 'このリンクは安全です'
-  en: 'This link is safe.'
-  de: 'Dieser Link ist sicher.'
-  zh: '此链接是安全的'
-  ko: '이 링크는 안전합니다'
-  it: 'Questo link è sicuro.'
-  vi: 'Liên kết này an toàn.'
-  es: 'Este enlace es seguro.'
-  pl: 'Ten link jest bezpieczny.'
-  no: 'Denne lenken er trygg.'
-  fi: 'Tämä linkki on turvallinen.'
-
-safeLinkBody:
-  ja: 'あなたがクリックしたリンクは通常のリンクです。実験中のため外部サイトへの遷移はブロックされました。メール画面に戻って次のメールを処理してください。'
-  en: 'The link you clicked appears to be a legitimate link. For the purposes of this experiment, navigation to external sites has been blocked. Please return to the mail screen and continue.'
-  （他言語も同内容で翻訳して実装）
-
-修正後に npx tsc --noEmit を実行してエラーがないことを確認してください。
+【検証】
+- seed を100個変えてテストし、(a) 母語先が常に2タイプ、(b) 同一タイプの2通が前半・後半に分かれる、(c) 全16通が重複なく並ぶ、(d) 同じseedで再現される、ことを確認するテストスクリプトを書いて実行してください。
+- 既存の validateEmailData が新構造でも通るようにする。
+- emailsDe_en は使わないので削除し、参照も外してください。

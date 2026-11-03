@@ -20,16 +20,46 @@ CREATE TABLE sessions (
 
 ```sql
 CREATE TABLE experiment_logs (
-  id           BIGSERIAL    PRIMARY KEY,
-  session_id   UUID         NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
-  email_id     TEXT         NOT NULL,
-  email_lang   TEXT         NOT NULL,
-  event_type   TEXT         NOT NULL,
-  duration_ms  INTEGER,
-  value        TEXT,
-  created_at   TIMESTAMPTZ  NOT NULL DEFAULT now()
+  id             BIGSERIAL    PRIMARY KEY,
+  session_id     UUID         NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+  email_id       TEXT         NOT NULL,
+  email_lang     TEXT         NOT NULL,   -- そのメールの言語（= lang）
+  event_type     TEXT         NOT NULL,
+  duration_ms    INTEGER,
+  value          TEXT,
+  slot_index     INTEGER,                 -- 提示スロット 1〜16
+  exposure_index INTEGER,                 -- 罠の提示回数 1/2（通常メールは NULL）
+  created_at     TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
 ```
+
+### 既存DBへの ALTER（カウンターバランス対応で追加）
+
+`email_set_id` は既に `TEXT` のため **変更不要**（割当JSONをそのまま保存できる。
+CHECK制約も付いていないため影響なし）。
+
+`experiment_logs` に以下2列を追加する（どちらも NULL 許容。`email_lang` が
+「そのメールの言語(lang)」を兼ねるため lang 列の追加は不要）：
+
+```sql
+ALTER TABLE experiment_logs ADD COLUMN IF NOT EXISTS slot_index     INTEGER;
+ALTER TABLE experiment_logs ADD COLUMN IF NOT EXISTS exposure_index INTEGER;
+```
+
+### sessions.email_set_id に保存する JSON 形式
+
+```json
+{
+  "v": 1,
+  "seed": 2863311530,
+  "trapFirstLang": { "1": "l1", "2": "ja", "3": "ja", "4": "l1" },
+  "frontTrapOrder": [3, 1, 4, 2],
+  "backTrapOrder":  [2, 4, 1, 3]
+}
+```
+
+`seed` が正であり、再構築（`buildAssignment(seed)`）で同一の割当が得られる。
+リロード時は保存済みの `seed` から再構築するため、常に同じ並びが再現される。
 
 ## 3. インデックス
 
