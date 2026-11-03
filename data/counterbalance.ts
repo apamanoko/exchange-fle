@@ -161,14 +161,15 @@ export function buildAssignmentV2(seed: number): EmailAssignment {
   // ↓ 通常メール用の乱数は必ず罠の乱数の後で引く（罠結果を変えないため）
   const normalFirstLang: TrapFirstLang = rng() < 0.5 ? 'l1' : 'ja'
   const front = shuffle([0, 1, 2, 3], rng)
-  const back = shuffle([0, 1, 2, 3], rng)
 
-  // slot7(前半Nの4番目) と slot10(後半Nの1番目) が同一シナリオだと差3になるため回避。
-  // セル index は front/back とも index→シナリオ番号(index+1) が一致するので index 比較で判定可。
-  if (front[3] === back[0]) {
-    const tmp = back[0]
-    back[0] = back[3]
-    back[3] = tmp
+  // slot7(前半Nの4番目=front[3]) と slot10(後半Nの1番目=back[0]) が同一シナリオだと
+  // スロット差3になる（唯一の近接ケース）。差≥4を保証するため back[0] !== front[3] を満たす
+  // 並びだけ採用する。条件付きスワップは分布を歪める（front と一致する並びを人工的に増やす）ため、
+  // 制約を満たすまで back を引き直すリジェクションサンプリングにする。これで採用される 18 通りの
+  // 並びは一様になる（front と一致する確率は制約下の理論値 1/18 ≒ 5.56%）。
+  let back = shuffle([0, 1, 2, 3], rng)
+  while (back[0] === front[3]) {
+    back = shuffle([0, 1, 2, 3], rng)
   }
 
   return {

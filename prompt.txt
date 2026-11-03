@@ -1,11 +1,4 @@
-lib/scoring.ts と集計・エクスポート処理を修正してください。
-
-1. fellForTrap の定義を変更: 罠メールに対する link_click または attachment_open が、同一セッション・同一 email_id で1件でもあれば true。reply は fell には含めず、別列 repliedToTrap として記録する。
-   - 注意: 1回のクリックにつき、トラッカーのログ(slot_index/exposure_index あり)と /phished が直接書き込むログ(それらが null)の2行が記録される。また同じメールを複数回クリックすることもある。したがって行数は数えず、メール単位の「有無」で判定すること。
-2. 正規メール(isTrap=false)に対する action_block(ブロック・報告)の回数を falseAlarmCount として集計する(偽陽性)。正規メール数(8)に対する falseAlarmRate も出す。
-3. trapResults の各要素に、lang、slotIndex、exposureIndex(1/2)、attackType(1〜4)を含める。slotIndex と exposureIndex は、同一 email_id のログのうち、値が null でない行から取る(link_click/attachment_open の行は null のことがあるため)。
-4. 結果エクスポート(CSV/JSON)にも上記列を追加する。出力は「1セッション×1メール=1行」にまとめた試行単位とし、列は session_id, attackType, lang, exposureIndex, slotIndex, isTrap, fell, repliedToTrap, suspected, ttaMs, hesitationCount とする。
-   通常メールの行も同じ形式で出力する(isTrap=0、fell は空、suspected = action_block があれば1)。
-5. lib/ai/geminiProvider.ts の meta.provider の文字列を、実際のモデル gemini-2.5-flash に合わせる。
-
-変更後に既存セッションのデータでも落ちないこと(新列が無い古いログでも動く)を確認し、先ほどのテストセッション(1回のクリックで2行できている実データ)でエクスポートして、1メール1行になっていること、fell がクリックしたメールだけ1になっていることを確認してください。
+getEmailSet のシードを1000個変えて、次の割合を数えて報告してください。
+(a) 罠の frontTrapOrder と backTrapOrder が完全に一致する割合
+(b) 通常メールの normalOrder.front と normalOrder.back が完全に一致する割合
+どちらも約4.2%(1/24)に近ければ問題なし。大きく上回る場合は、前半と後半のシャッフルが独立でない可能性があるので、原因を調べて直してください。
