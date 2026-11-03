@@ -12,6 +12,21 @@ export type LogRow = {
   duration_ms: number | null
   value: string | null
   created_at: string
+  /** 提示スロット（1〜16）。古いログや /phished 直書き行では null のことがある */
+  slot_index?: number | null
+  /** 罠の提示回数（1/2）。古いログや /phished 直書き行では null のことがある */
+  exposure_index?: number | null
+}
+
+// 罠にかかったと判定するイベント（クリック/添付実行）
+const FELL_EVENTS = new Set(['link_click', 'attachment_open'])
+// ホバー系（熟慮・ためらいの指標）
+const HOVER_EVENTS = new Set(['hover_sender', 'hover_link', 'hover_attachment'])
+
+/** 攻撃タイプ番号を email_id（trap-N-xxx）から取り出す（通常メールは null） */
+function attackTypeOf(emailId: string): number | null {
+  const m = emailId.match(/trap-(\d+)-/)
+  return m ? parseInt(m[1], 10) : null
 }
 
 // ─── 数値ユーティリティ ────────────────────────────────────────────────────────
@@ -54,10 +69,20 @@ export function computeScore(
   logs: LogRow[],
   uiLang: Language,
   l1Lang: Language,
-): { score: LiteracyScore; trapResults: TrapResult[] } {
+): {
+  score: LiteracyScore
+  trapResults: TrapResult[]
+  falseAlarmCount: number
+  falseAlarmRate: number
+} {
   const emails     = getEmailSet(uiLang, l1Lang)
   const trapEmails = emails.filter((e) => e.isTrap)
+  const normalEmails = emails.filter((e) => !e.isTrap)
   const trapIds    = new Set(trapEmails.map((e) => e.id))
+
+  // email_id ごとにログをまとめる（行数ではなく「有無」で判定するため）
+  const logsByEmail: Record<string, LogRow[]> = {}
+  for (const l of logs) (logsByEmail[l.email_id] ??= []).push(l)
 
   const domainTrapIds = new Set(
     trapEmails.filter((e) => e.traps.includes('domain')).map((e) => e.id)
@@ -150,6 +175,7 @@ export function computeScore(
 
   // ── trapResults ───────────────────────────────────────────────────────────
   const trapResults: TrapResult[] = trapEmails.map((email) => {
+    const el = logsByEmail[email.id] ?? []
     const finalActionLog = finalActionLogByEmail[email.id]
 
     const finalAction: 'replied' | 'ignored' | 'blocked' =
@@ -157,18 +183,112 @@ export function computeScore(
       finalActionLog?.event_type === 'action_ignore' ? 'ignored' :
       'replied'
 
-    const fellForTrap: boolean | null =
-      finalAction === 'replied' ? true :
-      finalAction === 'ignored' ? null :
-      false
+    // fell = クリック/添付実行が1件でもあれば true（行数ではなくメール単位の有無）
+    const fellForTrap   = el.some((l) => FELL_EVENTS.has(l.event_type))
+    const repliedToTrap = el.some((l) => l.event_type === 'action_reply')
+
+    // slot/exposure は null でない行から取る（/phished 直書き行は null のため）
+    const slotIndex     = el.find((l) => l.slot_index != null)?.slot_index ?? null
+    const exposureIndex = el.find((l) => l.exposure_index != null)?.exposure_index ?? null
 
     return {
-      trapId:      email.id,
+      trapId:        email.id,
+      attackType:    attackTypeOf(email.id) ?? 0,
+      lang:          email.lang,
+      slotIndex,
+      exposureIndex,
       finalAction,
-      ttaMs:       finalActionLog?.duration_ms ?? 0,
+      ttaMs:         finalActionLog?.duration_ms ?? 0,
       fellForTrap,
+      repliedToTrap,
     }
   })
 
-  return { score, trapResults }
+  // ── falseAlarm（偽陽性）: 正規メールに対する action_block ────────────────────
+  // メール単位の有無で数える（正規メールをブロック＝1件の誤報）
+  const falseAlarmCount = normalEmails.filter(
+    (e) => (logsByEmail[e.id] ?? []).some((l) => l.event_type === 'action_block'),
+  ).length
+  const falseAlarmRate = normalEmails.length > 0 ? falseAlarmCount / normalEmails.length : 0
+
+  return { score, trapResults, falseAlarmCount, falseAlarmRate }
+}
+
+// ─── 試行単位エクスポート（1セッション×1メール=1行）──────────────────────────
+
+/** エクスポート1行（1セッション×1メール） */
+export type TrialRow = {
+  session_id: string
+  attackType: number | null
+  lang: string
+  exposureIndex: number | null
+  slotIndex: number | null
+  isTrap: 0 | 1
+  /** 罠にかかった(1)/かからなかった(0)。通常メールは null（空欄） */
+  fell: 0 | 1 | null
+  /** 罠に返信した(1)/しない(0)。通常メールは null（空欄） */
+  repliedToTrap: 0 | 1 | null
+  /** 疑って action_block した(1)/しない(0)。通常メールでは偽陽性 */
+  suspected: 0 | 1
+  /** 最終アクションまでの TTA（ms） */
+  ttaMs: number | null
+  /** ホバー回数（熟慮・ためらいの指標） */
+  hesitationCount: number
+}
+
+/** 割当メール（emailUtils の AssignedEmail 互換の最小形） */
+type AssignedLike = {
+  id: string
+  lang: string
+  isTrap: boolean
+  slotIndex: number
+  exposureIndex: number | null
+}
+
+/**
+ * 1セッションの割当メール（16通）とログから、試行単位の行を生成する純粋関数。
+ * slot/exposure はログの非null行を優先し、無ければ割当（AssignedEmail）の値を使う。
+ * これにより新列の無い古いログでも落ちない。
+ */
+export function buildTrialRows(
+  sessionId: string,
+  assignedEmails: AssignedLike[],
+  logs: LogRow[],
+): TrialRow[] {
+  const logsByEmail: Record<string, LogRow[]> = {}
+  for (const l of logs) (logsByEmail[l.email_id] ??= []).push(l)
+
+  return assignedEmails.map((email) => {
+    const el = [...(logsByEmail[email.id] ?? [])].sort(
+      (a, b) => a.created_at.localeCompare(b.created_at),
+    )
+    const isTrap = email.isTrap
+
+    const clicked = el.some((l) => FELL_EVENTS.has(l.event_type))
+    const replied = el.some((l) => l.event_type === 'action_reply')
+    const blocked = el.some((l) => l.event_type === 'action_block')
+
+    const actionLogs = el.filter((l) => FINAL_ACTION_EVENTS.has(l.event_type))
+    const lastAction = actionLogs[actionLogs.length - 1]
+    const ttaMs = lastAction?.duration_ms ?? null
+
+    const hesitationCount = el.filter((l) => HOVER_EVENTS.has(l.event_type)).length
+
+    const slotIndex     = el.find((l) => l.slot_index != null)?.slot_index ?? email.slotIndex
+    const exposureIndex = el.find((l) => l.exposure_index != null)?.exposure_index ?? email.exposureIndex
+
+    return {
+      session_id:    sessionId,
+      attackType:    attackTypeOf(email.id),
+      lang:          email.lang,
+      exposureIndex,
+      slotIndex,
+      isTrap:        isTrap ? 1 : 0,
+      fell:          isTrap ? (clicked ? 1 : 0) : null,
+      repliedToTrap: isTrap ? (replied ? 1 : 0) : null,
+      suspected:     blocked ? 1 : 0,
+      ttaMs,
+      hesitationCount,
+    }
+  })
 }

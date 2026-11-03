@@ -2,7 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import type { Language } from '@/types'
 import { computeScore, type LogRow } from '@/lib/scoring'
-import { feedbackProvider } from '@/lib/ai'
+import { feedbackProvider, GEMINI_MODEL } from '@/lib/ai'
 
 function getAdminClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
       feedback,
       meta: {
         totalLogs: logs.length,
-        provider:  'gemini-2.5-flash',
+        provider:  GEMINI_MODEL,
         scoredAt:  new Date().toISOString(),
       },
     })

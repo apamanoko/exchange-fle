@@ -6,6 +6,7 @@ import {
   Globe, Database,
 } from 'lucide-react'
 import type { SessionWithCount } from './page'
+import type { TrialRow } from '@/lib/scoring'
 
 // ─── ユーティリティ ──────────────────────────────────────────────────────────
 
@@ -21,45 +22,45 @@ function pct(n: number, total: number): string {
   return `${Math.round((n / total) * 100)}%`
 }
 
-// ─── CSV エクスポート ─────────────────────────────────────────────────────────
+// ─── 試行単位エクスポート（1セッション×1メール=1行）────────────────────────────
 
-function buildCsv(sessions: SessionWithCount[]): string {
-  const header = [
-    'session_id',
-    'participant_code',
-    'ui_lang',
-    'l1_lang',
-    'condition',
-    'started_at',
-    'completed_at',
-    'log_count',
-    'is_complete',
-  ].join(',')
+// 出力列（研究の試行単位テーブル）
+const TRIAL_COLUMNS: (keyof TrialRow)[] = [
+  'session_id', 'attackType', 'lang', 'exposureIndex', 'slotIndex',
+  'isTrap', 'fell', 'repliedToTrap', 'suspected', 'ttaMs', 'hesitationCount',
+]
 
-  const rows = sessions.map((s) => [
-    s.id,
-    s.participant_code,
-    s.ui_lang,
-    s.l1_lang,
-    s.condition,
-    s.started_at,
-    s.completed_at ?? '',
-    s.logCount,
-    s.completed_at ? 'TRUE' : 'FALSE',
-  ].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(','))
-
-  return [header, ...rows].join('\r\n')
+/** null / undefined は空欄にする（fell は通常メールで空欄など） */
+function cell(v: unknown): string {
+  return v === null || v === undefined ? '' : String(v)
 }
 
-function downloadCsv(sessions: SessionWithCount[]): void {
-  const csv  = buildCsv(sessions)
-  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
+function buildTrialCsv(rows: TrialRow[]): string {
+  const header = TRIAL_COLUMNS.join(',')
+  const body = rows.map((r) =>
+    TRIAL_COLUMNS.map((c) => `"${cell(r[c]).replace(/"/g, '""')}"`).join(','),
+  )
+  return [header, ...body].join('\r\n')
+}
+
+function triggerDownload(content: string, mime: string, filename: string): void {
+  const blob = new Blob([content], { type: mime })
   const url  = URL.createObjectURL(blob)
   const a    = document.createElement('a')
   a.href     = url
-  a.download = `fle_sessions_${new Date().toISOString().slice(0, 10)}.csv`
+  a.download = filename
   a.click()
   URL.revokeObjectURL(url)
+}
+
+function downloadTrialCsv(rows: TrialRow[]): void {
+  const date = new Date().toISOString().slice(0, 10)
+  triggerDownload('﻿' + buildTrialCsv(rows), 'text/csv;charset=utf-8;', `fle_trials_${date}.csv`)
+}
+
+function downloadTrialJson(rows: TrialRow[]): void {
+  const date = new Date().toISOString().slice(0, 10)
+  triggerDownload(JSON.stringify(rows, null, 2), 'application/json;charset=utf-8;', `fle_trials_${date}.json`)
 }
 
 // ─── サマリーカード ───────────────────────────────────────────────────────────
@@ -232,9 +233,11 @@ function SessionTable({ sessions }: { sessions: SessionWithCount[] }) {
 
 export default function AdminDashboard({
   sessions,
+  trialRows,
   adminKey,
 }: {
   sessions: SessionWithCount[]
+  trialRows: TrialRow[]
   adminKey: string
 }) {
   const totalSessions   = sessions.length
@@ -255,13 +258,22 @@ export default function AdminDashboard({
             </h1>
             <p className="text-xs text-gray-400 font-mono mt-0.5">FLE Phishing Experiment</p>
           </div>
-          <button
-            onClick={() => downloadCsv(sessions)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-700 transition-colors"
-          >
-            <Download className="w-4 h-4" />
-            CSVをダウンロード
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => downloadTrialCsv(trialRows)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              試行CSV（{trialRows.length}行）
+            </button>
+            <button
+              onClick={() => downloadTrialJson(trialRows)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Download className="w-4 h-4" />
+              試行JSON
+            </button>
+          </div>
         </div>
 
         {/* ── サマリーカード ────────────────────────────────────────────────── */}

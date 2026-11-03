@@ -47,7 +47,7 @@ export const TRAP_TYPES = [1, 2, 3, 4] as const
 
 /** 参加者ごとの割当情報。seed から完全に再構築可能。 */
 export type EmailAssignment = {
-  /** スキーマバージョン */
+  /** スキーマバージョン（1=通常メール固定配置 / 2=組A/組B分離＋シャッフル） */
   v: number
   /** 乱数シード（32bit 符号なし） */
   seed: number
@@ -57,6 +57,16 @@ export type EmailAssignment = {
   frontTrapOrder: number[]
   /** 後半Tスロットに入る罠タイプの出現順（[1,2,3,4] の並べ替え） */
   backTrapOrder: number[]
+  /**
+   * v2 のみ: 前半における組A{normal-1,2}の言語。
+   * 'l1' なら前半=組A母語・組B日本語、後半はその逆（各シナリオの2版が前半/後半に分かれる）。
+   */
+  normalFirstLang?: TrapFirstLang
+  /**
+   * v2 のみ: 各半分の通常Nスロット(4つ)へセルを割り当てる並び順。
+   * front/back とも [0,1,2,3] の並べ替え（セル定義は planSlots を参照）。
+   */
+  normalOrder?: { front: number[]; back: number[] }
 }
 
 /** 1スロットの配置計画（メールデータに依存しない記述） */
@@ -106,34 +116,117 @@ function shuffle<T>(arr: readonly T[], rng: () => number): T[] {
 // ─── 割当の構築 ────────────────────────────────────────────────────────────
 
 /**
- * seed から割当情報を決定論的に構築する。
- * - 先行言語: ['l1','l1','ja','ja'] をシャッフルしてタイプ1〜4へ割当 → 必ず母語先2・日本語先2。
- * - 前半/後半それぞれの罠タイプ出現順を別々にシャッフル。
+ * 罠の割当に必要な乱数を引く（先行言語→前半順→後半順の順で rng を消費）。
+ * この順序・回数は v1/v2 で共通であり、通常メール用の乱数は必ずこの後で引く。
+ * そのため通常メールの割当を変えても罠の割当結果は一切変わらない。
  */
-export function buildAssignment(seed: number): EmailAssignment {
-  const rng = mulberry32(seed)
-
+function drawTrapAssignment(rng: () => number): {
+  trapFirstLang: Record<string, TrapFirstLang>
+  frontTrapOrder: number[]
+  backTrapOrder: number[]
+} {
   const langPattern = shuffle<TrapFirstLang>(['l1', 'l1', 'ja', 'ja'], rng)
   const trapFirstLang: Record<string, TrapFirstLang> = {}
   for (let i = 0; i < TRAP_TYPES.length; i++) {
     trapFirstLang[String(TRAP_TYPES[i])] = langPattern[i]
   }
-
   const frontTrapOrder = shuffle([...TRAP_TYPES], rng)
   const backTrapOrder = shuffle([...TRAP_TYPES], rng)
+  return { trapFirstLang, frontTrapOrder, backTrapOrder }
+}
 
-  return { v: 1, seed: seed >>> 0, trapFirstLang, frontTrapOrder, backTrapOrder }
+/**
+ * v1 の割当（通常メールは FRONT_NORMAL_PLAN / BACK_NORMAL_PLAN の固定配置）。
+ * 保存済み v:1 セッションの再構築に使用する（従来どおりの並び）。
+ */
+export function buildAssignmentV1(seed: number): EmailAssignment {
+  const rng = mulberry32(seed)
+  const trap = drawTrapAssignment(rng)
+  return { v: 1, seed: seed >>> 0, ...trap }
+}
+
+/**
+ * v2 の割当。罠の割当は v1 と同一（drawTrapAssignment を先に消費）。
+ * その後に通常メール用の乱数を引く:
+ *   1) normalFirstLang: 組A{1,2}を前半で母語にするか日本語にするか
+ *   2) 前半Nスロットの並び順シャッフル
+ *   3) 後半Nスロットの並び順シャッフル
+ * さらに、前半最終Nスロット(slot7)と後半先頭Nスロット(slot10)に同一シナリオが
+ * 来る（スロット差3）唯一の近接ケースを避けるため、必要なら後半の端どうしを入替える。
+ */
+export function buildAssignmentV2(seed: number): EmailAssignment {
+  const rng = mulberry32(seed)
+  const trap = drawTrapAssignment(rng)
+
+  // ↓ 通常メール用の乱数は必ず罠の乱数の後で引く（罠結果を変えないため）
+  const normalFirstLang: TrapFirstLang = rng() < 0.5 ? 'l1' : 'ja'
+  const front = shuffle([0, 1, 2, 3], rng)
+  const back = shuffle([0, 1, 2, 3], rng)
+
+  // slot7(前半Nの4番目) と slot10(後半Nの1番目) が同一シナリオだと差3になるため回避。
+  // セル index は front/back とも index→シナリオ番号(index+1) が一致するので index 比較で判定可。
+  if (front[3] === back[0]) {
+    const tmp = back[0]
+    back[0] = back[3]
+    back[3] = tmp
+  }
+
+  return {
+    v: 2,
+    seed: seed >>> 0,
+    ...trap,
+    normalFirstLang,
+    normalOrder: { front, back },
+  }
+}
+
+/** 新規セッション用の割当（現行は v2）。 */
+export function buildAssignment(seed: number): EmailAssignment {
+  return buildAssignmentV2(seed)
 }
 
 // ─── スロット配置の算出 ────────────────────────────────────────────────────
 
 const otherLang = (l: TrapFirstLang): TrapFirstLang => (l === 'l1' ? 'ja' : 'l1')
 
+type NormalCell = { lang: TrapFirstLang; normalIndex: number }
+
+/**
+ * v2 の通常メール配置計画を返す。
+ * 組A={normal-1,2}, 組B={normal-3,4}。前半は「組A=firstLang・組B=反対」、後半はその逆。
+ * これにより各シナリオの母語版/日本語版は必ず前半と後半に分かれる。
+ * 各半分の4セルは normalOrder.front / normalOrder.back の並び順でNスロットへ割り当てる。
+ * cell index は front/back とも index→シナリオ番号(index+1) が一致する。
+ */
+function normalCellsV2(firstLang: TrapFirstLang): { front: NormalCell[]; back: NormalCell[] } {
+  const other = otherLang(firstLang)
+  return {
+    front: [
+      { normalIndex: 1, lang: firstLang }, // 組A
+      { normalIndex: 2, lang: firstLang }, // 組A
+      { normalIndex: 3, lang: other },     // 組B
+      { normalIndex: 4, lang: other },     // 組B
+    ],
+    back: [
+      { normalIndex: 1, lang: other },     // 組A（前半の逆）
+      { normalIndex: 2, lang: other },     // 組A
+      { normalIndex: 3, lang: firstLang }, // 組B
+      { normalIndex: 4, lang: firstLang }, // 組B
+    ],
+  }
+}
+
 /**
  * 割当情報から16スロットの配置計画を算出する純粋関数。
  * 前半Tスロット = 各タイプの1回目（先行言語）、後半Tスロット = 2回目（反対の言語）。
+ * 通常メールは v2 では組A/組B分離＋シャッフル、v1 では従来の固定配置。
  */
 export function planSlots(assignment: EmailAssignment): SlotPlan[] {
+  const isV2 = assignment.v === 2 && !!assignment.normalFirstLang && !!assignment.normalOrder
+  const cells = isV2 ? normalCellsV2(assignment.normalFirstLang as TrapFirstLang) : null
+  const frontOrder = assignment.normalOrder?.front ?? [0, 1, 2, 3]
+  const backOrder = assignment.normalOrder?.back ?? [0, 1, 2, 3]
+
   const plans: SlotPlan[] = []
 
   // 前半（スロット1〜8）: 罠は exposure=1（先行言語）
@@ -148,8 +241,12 @@ export function planSlots(assignment: EmailAssignment): SlotPlan[] {
         lang: assignment.trapFirstLang[String(trapType)], exposureIndex: 1,
       })
     } else {
-      const { lang, normalIndex } = FRONT_NORMAL_PLAN[fn++]
-      plans.push({ slotIndex, kind: 'normal', trapType: null, normalIndex, lang, exposureIndex: null })
+      const cell = cells ? cells.front[frontOrder[fn]] : FRONT_NORMAL_PLAN[fn]
+      fn++
+      plans.push({
+        slotIndex, kind: 'normal', trapType: null,
+        normalIndex: cell.normalIndex, lang: cell.lang, exposureIndex: null,
+      })
     }
   })
 
@@ -165,8 +262,12 @@ export function planSlots(assignment: EmailAssignment): SlotPlan[] {
         lang: otherLang(assignment.trapFirstLang[String(trapType)]), exposureIndex: 2,
       })
     } else {
-      const { lang, normalIndex } = BACK_NORMAL_PLAN[bn++]
-      plans.push({ slotIndex, kind: 'normal', trapType: null, normalIndex, lang, exposureIndex: null })
+      const cell = cells ? cells.back[backOrder[bn]] : BACK_NORMAL_PLAN[bn]
+      bn++
+      plans.push({
+        slotIndex, kind: 'normal', trapType: null,
+        normalIndex: cell.normalIndex, lang: cell.lang, exposureIndex: null,
+      })
     }
   })
 
@@ -181,9 +282,11 @@ export function planSlots(assignment: EmailAssignment): SlotPlan[] {
 export function parseAssignment(raw: string | null | undefined): EmailAssignment | null {
   if (!raw) return null
   try {
-    const obj = JSON.parse(raw) as { seed?: unknown }
+    const obj = JSON.parse(raw) as { seed?: unknown; v?: unknown }
     if (typeof obj.seed === 'number' && Number.isFinite(obj.seed)) {
-      return buildAssignment(obj.seed)
+      // 保存済みバージョンに合わせて再構築する:
+      //   v:1（従来の通常メール固定配置）はそのまま v1 で、それ以外は v2 で再構築。
+      return obj.v === 1 ? buildAssignmentV1(obj.seed) : buildAssignmentV2(obj.seed)
     }
   } catch {
     // JSON でない（レガシー）→ null

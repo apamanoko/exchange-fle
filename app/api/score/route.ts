@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     }
 
     const logs = (logsRaw ?? []) as LogRow[]
-    const { score, trapResults } = computeScore(
+    const { score, trapResults, falseAlarmCount, falseAlarmRate } = computeScore(
       logs,
       session.ui_lang as Language,
       session.l1_lang as Language,
@@ -51,6 +51,8 @@ export async function POST(req: NextRequest) {
       session_id,
       score,
       trapResults,
+      falseAlarmCount,
+      falseAlarmRate,
       meta: {
         totalLogs:      logs.length,
         trapEmailCount: trapResults.length,

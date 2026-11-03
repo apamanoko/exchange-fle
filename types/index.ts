@@ -167,10 +167,20 @@ export type LiteracyScore = {
 export type TrapResult = {
   /** 罠メールの ID（例: trap-1-ja） */
   trapId: string
-  /** 最終的に選択したアクション（replied=騙された / ignored=判断保留 / blocked=正しく排除） */
+  /** 攻撃タイプ（1〜4） */
+  attackType: number
+  /** そのメールの言語（例: 'ja', 'en'） */
+  lang: string
+  /** 提示スロット（1〜16）。同一 email_id のログの非null行から取得 */
+  slotIndex: number | null
+  /** 罠の提示回数（1回目=1 / 2回目=2）。非null行から取得 */
+  exposureIndex: number | null
+  /** 最終的に選択したアクション（replied=返信 / ignored=判断保留 / blocked=正しく排除） */
   finalAction: 'replied' | 'ignored' | 'blocked'
   /** 最終アクションまでの TTA（ms） */
   ttaMs: number
-  /** 騙されたか（replied=true, ignored=null=判断保留, blocked=false） */
-  fellForTrap: boolean | null
+  /** 罠にかかったか = 同一メールに link_click または attachment_open が1件でもあれば true */
+  fellForTrap: boolean
+  /** 罠に返信したか（reply）。fell とは別に記録する */
+  repliedToTrap: boolean
 }

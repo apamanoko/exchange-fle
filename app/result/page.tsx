@@ -248,8 +248,8 @@ function ResultContent() {
   if (!feedback || !feedback.headline) {
     console.warn('[result] feedback is missing or incomplete', feedback)
   }
-  // block（正解）以外は学びの機会として表示する（replied: 騙された / ignored: 判断保留）
-  const missed = trapResults.filter((tr) => tr.fellForTrap !== false)
+  // block（正解）以外は学びの機会として表示する（replied: 返信 / ignored: 判断保留）
+  const missed = trapResults.filter((tr) => tr.finalAction !== 'blocked')
 
   const scoreItems: { key: keyof LiteracyScore; label: string }[] = [
     { key: 'domainVerification',  label: t.scoreDomain },
@@ -319,7 +319,7 @@ function ResultContent() {
             <div className="space-y-3">
               {missed.map((tr) => {
                 const info = getTrapInfo(tr.trapId, lang)
-                const isDeferred = tr.fellForTrap === null
+                const isDeferred = tr.finalAction === 'ignored'
                 return (
                   <div
                     key={tr.trapId}

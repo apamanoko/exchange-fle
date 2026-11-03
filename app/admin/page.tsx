@@ -1,6 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import { Lock } from 'lucide-react'
 import AdminDashboard from './AdminDashboard'
+import { buildTrialRows, type LogRow, type TrialRow } from '@/lib/scoring'
+import { getAssignedEmailsFromSetId } from '@/data/emailUtils'
+import type { Language } from '@/types'
 
 // ─── 型 ──────────────────────────────────────────────────────────────────────
 
@@ -66,24 +69,40 @@ export default async function AdminPage({
     )
   }
 
-  // ② ログ件数（全ログの session_id 列だけ取得してメモリでカウント）
-  const { data: logRows } = await db
+  // ② 全ログを取得（件数カウント + 試行単位エクスポートに使用）
+  //    select('*') は新列(slot_index/exposure_index)が無い古いDBでもエラーにならない
+  const { data: logRowsRaw } = await db
     .from('experiment_logs')
-    .select('session_id')
+    .select('*')
 
-  const logCountMap: Record<string, number> = {}
-  for (const row of logRows ?? []) {
-    logCountMap[row.session_id] = (logCountMap[row.session_id] ?? 0) + 1
-  }
+  const allLogs = (logRowsRaw ?? []) as LogRow[]
 
-  const sessionsWithCount: SessionWithCount[] = (sessions ?? []).map((s) => ({
-    ...(s as SessionRow),
-    logCount: logCountMap[s.id] ?? 0,
+  // セッションごとにログをまとめる
+  const logsBySession: Record<string, LogRow[]> = {}
+  for (const l of allLogs) (logsBySession[l.session_id] ??= []).push(l)
+
+  const sessionRows = (sessions ?? []) as SessionRow[]
+
+  const sessionsWithCount: SessionWithCount[] = sessionRows.map((s) => ({
+    ...s,
+    logCount: logsBySession[s.id]?.length ?? 0,
   }))
+
+  // ③ 試行単位の行（1セッション×1メール=1行）を生成
+  const trialRows: TrialRow[] = []
+  for (const s of sessionRows) {
+    const assigned = getAssignedEmailsFromSetId(
+      s.ui_lang as Language,
+      s.l1_lang as Language,
+      s.email_set_id,
+    )
+    trialRows.push(...buildTrialRows(s.id, assigned, logsBySession[s.id] ?? []))
+  }
 
   return (
     <AdminDashboard
       sessions={sessionsWithCount}
+      trialRows={trialRows}
       adminKey={provided}
     />
   )

@@ -3,6 +3,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import type { Language } from '@/types'
 import type { FeedbackInput, FeedbackOutput, FeedbackProvider } from './feedbackProvider'
 
+/** 実際に使用する Gemini モデル名。meta.provider はこの値に合わせる。 */
+export const GEMINI_MODEL = 'gemini-2.5-flash'
+
 // ─── 攻撃手法の説明（trapId の番号から判定）────────────────────────────────────
 
 function describeTrap(trapId: string): string {
@@ -207,7 +210,7 @@ export class GeminiProvider implements FeedbackProvider {
     try {
       const genAI = new GoogleGenerativeAI(this.apiKey)
       const model = genAI.getGenerativeModel({
-        model: 'gemini-2.5-flash',
+        model: GEMINI_MODEL,
         systemInstruction: SYSTEM_PROMPT,
       })
 
