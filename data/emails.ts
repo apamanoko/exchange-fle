@@ -1410,196 +1410,152 @@ ccmailg.meijo-u.ac.jp</p>`,
 export const emailsNo: Email[] = [
 
   // ============================================================
-  // 通常メール × 4通
+  // 通常メール × 4通（日本語版と1対1対応）
   // ============================================================
 
+  // normal 1: Tanaka 教授（個人的な依頼・返信が必要・正規PDF添付）
   {
     id: 'normal-1-no',
     lang: 'no',
     isTrap: false,
     traps: [],
-    from: { display: 'Prof. Erik Andersen', address: 'andersen.e@meijo-u.ac.jp' },
-    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Endring av seminartid – neste uke',
-    dateOffsetDays: -1, dateTime: '15:00',
-    bodyHtml: `<p>Hei,</p>
-<p>Neste mandag har jeg et uforutsett fakultetsmøte, så jeg må flytte seminaret til tirsdag kl. 15:00. Rommet er det samme (512).</p>
-<p>Kan du gi meg beskjed innen slutten av denne uken om du kan komme? Beklager ulempen.</p>
-<p>Med vennlig hilsen,<br>Prof. Erik Andersen</p>`,
+    from: { display: 'Seiji Tanaka', address: 'tanaka-seiji@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Endring i seminarplanen for neste uke',
+    dateOffsetDays: -1, dateTime: '16:40',
+    bodyHtml: `<p>Hei alle TA-er,</p>
+<p>Dette er Tanaka. På grunn av et arrangement på universitetet er seminaret i øvingsemnet jeg underviser i, som var planlagt til {{D+7}}, flyttet til {{D+8}}, tredje time.</p>
+<p>Jeg legger ved den oppdaterte planen. Gi meg beskjed innen {{D+3}} om du kan delta som TA. Hvis det ikke passer, finner vi en annen dag.</p>
+<p>Med vennlig hilsen</p>
+<p>Seiji Tanaka<br>Institutt for informasjonsteknologi</p>`,
+    attachments: [{ name: 'Seminarplan_Oppdatert.pdf', sizeKB: 118, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 2: Studieavdelingen（事務的・正規リンク・期限に余裕）
   {
     id: 'normal-2-no',
     lang: 'no',
     isTrap: false,
     traps: [],
-    from: { display: 'Studiekontoret', address: 'gakumu@meijo-u.ac.jp' },
-    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Frist for kursregistrering – {{D+3}}',
-    dateOffsetDays: -2, dateTime: '09:00',
-    bodyHtml: `<p>Kjære studenter,</p>
-<p>Vi minner om at kursregistreringen for første semester avsluttes {{D+3}} kl. 23:59. Vennligst sjekk din situasjon på portalen.</p>
-<p>【Sjekk følgende】<br>
-・At du ikke har overskredet den årlige studiepoenggrensen (48 studiepoeng)<br>
-・At alle obligatoriske emner er registrert<br>
-・At det ikke er timeplankollisjoner</p>
-<p>Kontakt: Studiekontoret, lokal 1234</p>`,
+    from: { display: 'Studieavdelingen', address: 'gakumu@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Slik leverer du TA-arbeidsrapporten',
+    dateOffsetDays: -2, dateTime: '10:05',
+    bodyHtml: `<p>Til alle TA-er,</p>
+<p>Dette er Studieavdelingen. Her er en veiledning for hvordan du leverer TA-arbeidsrapporten for denne måneden.</p>
+<p>Logg inn på universitetets portal via lenken nedenfor og fyll inn arbeidsdager og timer i rapportskjemaet.</p>
+<p><a href="javascript:void(0)" data-display-url="https://portal.meijo-u.ac.jp/ta/report">Skjema for TA-arbeidsrapport (universitetets portal)</a></p>
+<p>Fristen er {{D+7}}. Hvis du har spørsmål, kan du ta kontakt med skranken til Studieavdelingen.</p>
+<p>Studieavdelingen</p>`,
+    attachments: [],
   },
+
+  // normal 3: Internasjonalt senter（事務的・正規PDF添付）
   {
     id: 'normal-3-no',
     lang: 'no',
     isTrap: false,
     traps: [],
-    from: { display: 'Universitetsbiblioteket', address: 'library@meijo-u.ac.jp' },
-    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Påminnelse: innleveringsfrist for bøker',
-    dateOffsetDays: -3, dateTime: '10:00',
-    bodyHtml: `<p>Kjære låner,</p>
-<p>Vi minner om at følgende bøker må leveres tilbake innen {{D+2}}:</p>
-<p>・Grunnleggende cybersikkerhet (2. utg.)<br>
-・Introduksjon til kognitiv psykologi</p>
-<p>Du kan fornye lånet via bibliotekets portal (kun én fornyelse tillatt).</p>`,
+    from: { display: 'Internasjonalt senter', address: 'kokusai@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Informasjon om stenging i vinterferien',
+    dateOffsetDays: -3, dateTime: '13:20',
+    bodyHtml: `<p>Til internasjonale studenter og TA-er,</p>
+<p>Dette er Internasjonalt senter. Vi vil informere om hvordan kontoret vårt holder åpent i vinterferien.</p>
+<p>Se vedlagt PDF for detaljer. I ferieperioden kan svar på e-postforespørsler bli forsinket.</p>
+<p>Internasjonalt senter</p>`,
+    attachments: [{ name: 'Vinterferie_Informasjon.pdf', sizeKB: 312, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 4: Sato（TA仲間・個人的な依頼・正規Driveリンク）
   {
     id: 'normal-4-no',
     lang: 'no',
     isTrap: false,
     traps: [],
-    from: { display: 'Ingrid Larsen', address: 'larsen.ingrid.2023@meijo-u.ac.jp' },
-    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Deler lysbildene til neste ukes seminar',
-    dateOffsetDays: -4, dateTime: '18:30',
-    bodyHtml: `<p>Hei!</p>
-<p>Sender deg lysbildene mine til det felles seminaret neste uke. Ta en titt når du har anledning!</p>
-<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
-      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
-  Se lysbildene på Google Drive
-</a></p>
-<p>Ta gjerne kontakt hvis du har spørsmål. Vi sees!</p>
-<p>Ingrid</p>`,
+    from: { display: 'Kenta Sato', address: 'sato-kenta@ccmailg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Jeg har delt materialet fra TA-opplæringen',
+    dateOffsetDays: 0, dateTime: '08:55',
+    bodyHtml: `<p>Hei, dette er Sato, en annen TA.</p>
+<p>Jeg har samlet materialet fra TA-opplæringen forrige uke på Google Drive. Kan du sjekke om du får åpnet det?</p>
+<p><a href="javascript:void(0)" data-display-url="https://drive.google.com/drive/folders/1kTA2tr4in1ng0materials">Materiale fra TA-opplæringen (Google Drive)</a></p>
+<p>Gi meg beskjed hvis noe mangler.</p>
+<p>Sato</p>`,
+    attachments: [],
   },
 
   // ============================================================
-  // 罠メール × 4通
+  // 罠メール × 4通（日本語版と traps / アドレス / リンク / 添付が同一）
   // ============================================================
 
-  /**
-   * trap-1-no: 【BEC】Utgi seg for å være utenlandsk leverandør
-   * 罠: falsk domene（oxf0rd）+ dobbel filtype（.pdf.exe）
-   * Psykologisk press: frist（etter {{D+9}} godtas ikke）
-   */
+  // trap 1: Studentstøtteavdelingen を装う / domain・extension・urgency
   {
     id: 'trap-1-no',
     lang: 'no',
     isTrap: true,
     traps: ['domain', 'extension', 'urgency'],
-    from: {
-      display: 'Oxford Education Norway – Support',
-      address: 'support@oxf0rd-edu-norway.com',
-    },
-    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '[Viktig] Endring av bankdetaljer – støtte til internasjonale studenter',
-    dateOffsetDays: 0, dateTime: '14:30',
-    bodyHtml: `<p>Kjære bruker,</p>
-<p>Jeg heter Lars Hansen og jobber i supportteamet til Oxford Education Norway.</p>
-<p>På grunn av en oppgradering av banksystemet vårt har kontonummeret for innbetaling av støtte til internasjonale studenter blitt endret. Ved neste betaling ber vi deg bruke de nye bankdetaljene som finnes i <strong>vedlagt bekreftelsesdokument</strong>.</p>
-<p><strong>※ Etter {{D+9}} vil ikke betalinger til den gamle kontoen bli godtatt.</strong></p>
-<p>Oxford Education Norway<br>Lars Hansen<br>Tlf: 22-XXXX-XXXX</p>`,
-    attachments: [{
-      name: 'Bekreftelse_Bankdetaljer.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 312,
-      isTrapped: true,
-    }],
+    from: { display: 'Studentstøtteavdelingen – TA-godtgjørelse', address: 'ta-teate@ccmailg.meijo-u.co.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[Viktig] Bekreftelse av bankkonto for TA-godtgjørelse (i dag)',
+    dateOffsetDays: 0, dateTime: '09:12',
+    bodyHtml: `<p>Til alle TA-er,</p>
+<p>Dette er Studentstøtteavdelingen. For å kunne utbetale TA-godtgjørelsen for denne måneden har vi ikke fått bekreftet opplysningene om den registrerte bankkontoen.</p>
+<p>Fyll ut vedlagt skjema med kontoopplysningene og send det i retur <strong>innen kl. 17:00 i dag</strong>. Hvis fristen oversittes, utsettes utbetalingen for denne måneden til neste måned eller senere.</p>
+<p>Studentstøtteavdelingen – TA-godtgjørelse</p>`,
+    attachments: [{ name: 'TA_Godtgjorelse_Bekreftelse_Konto.pdf.exe', sizeKB: 287, mimeType: 'application/pdf', isTrapped: true }],
   },
 
-  /**
-   * trap-2-no: 【BEC】Utgi seg for å være autoritetsperson（CEO-svindel）
-   * 罠: gratis e-postdomene（gmail）+ falsk lenke + hastverk + autoritet
-   * Psykologisk press: på reise・i dag・konfidensielt
-   */
+  // trap 2: Dean Kubota を装う / domain・link・urgency・authority
   {
     id: 'trap-2-no',
     lang: 'no',
     isTrap: true,
     traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: 'Prof. Yoshikawa (Dekan)',
-      address: 'yoshikawa.meijo.univ@gmail.com',
-    },
-    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Haster – Trenger din hjelp i dag',
-    dateOffsetDays: -2, dateTime: '11:45',
+    from: { display: 'Takashi Kubota', address: 'kubota.takashi.meijo@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Haster: Ber om bekreftelse (vennligst hold dette konfidensielt)',
+    dateOffsetDays: -1, dateTime: '19:47',
     bodyHtml: `<p>Hei,</p>
-<p>Jeg er på konferanse i London og kan ikke ta telefoner. Jeg har en hastesak jeg trenger hjelp med.</p>
-<p>I forbindelse med et samarbeidsprosjekt med et utenlandsk universitet må jeg dele informasjon om ansvarlige studenter i dag. Kan du fylle ut skjemaet i lenken nedenfor og sende det så snart som mulig?</p>
-<p><a href="javascript:void(0)"
-      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz"
-      data-phished-url="/phished?type=link">
-  Klikk her for å fylle ut skjemaet
-</a></p>
-<p>Hold dette konfidensielt foreløpig – prosjektet er ikke offisielt annonsert ennå.</p>
-<p>Takk,<br>Prof. Yoshikawa</p>`,
+<p>Dette er Kubota. Jeg sitter i et møte og kan ikke ta telefonen. Det er noe jeg haster med å få bekreftet angående dokumenter knyttet til TA-arbeidet ditt.</p>
+<p>Se gjennom dokumentene og svar via skjemaet nedenfor. Siden dette gjelder personalsaker, ber jeg deg om ikke å nevne det for andre ansatte eller studenter.</p>
+<p><a href="javascript:void(0)" data-display-url="https://docs.google.com-edit.net/forms/d/e/1FAIpQLSf/viewform" data-phished-url="/phished?type=link">Skjema for bekreftelse av dokumenter</a></p>
+<p>Takashi Kubota<br>Dekan ved forskerskolen for naturvitenskap og teknologi</p>`,
   },
 
-  /**
-   * trap-3-no: 【Spear phishing】Kapring av e-posttråd
-   * 罠: dobbel filtype（.pdf.exe）+ utnyttelse av tillit
-   * Psykologisk press: unnskyldning・kontinuitet i arbeidet
-   */
+  // trap 3: TA仲間を装う / domain・extension
   {
     id: 'trap-3-no',
     lang: 'no',
     isTrap: true,
-    traps: ['extension', 'authority'],
-    from: {
-      display: 'Bjørn Olsen（M1-student, Informatikk）',
-      address: 'olsen.bjorn.2024@gmail.com',
-    },
-    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Re: Manglende dokumenter i stipendsøknaden',
-    dateOffsetDays: -4, dateTime: '16:30',
-    bodyHtml: `<p>Hei,</p>
-<p>Jeg har rettet alt du påpekte. Beklager bryderiet!</p>
-<p>Sender de rettede dokumentene som et passordbeskyttet ZIP-arkiv.<br>
-Passord: <strong>2024</strong></p>
-<p>Si ifra hvis alt ser greit ut denne gangen. Takk!</p>
-<p>Bjørn</p>`,
-    attachments: [{
-      name: 'Stipendsoknad_Rettet.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 158,
-      isTrapped: true,
-    }],
+    traps: ['domain', 'extension'],
+    from: { display: 'Li Ming', address: 'li.ming.0912@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'SV: Vurdering av rapport 5',
+    dateOffsetDays: -1, dateTime: '21:03',
+    bodyHtml: `<p>Hei, dette er Li, en annen TA.</p>
+<p>Jeg sender deg den reviderte versjonen av vurderingsnotatene for rapport 5 som jeg nevnte tidligere. Kan du sjekke om kriteriene ser riktige ut?</p>
+<p>Li</p>
+<hr>
+<p style="color:#666">&gt; Fra forrige e-post:<br>&gt; Jeg vil gjerne samkjøre vurderingskriteriene for rapport 5 på nytt. Kan du sende dem når du har revidert dem?</p>`,
+    attachments: [{ name: 'Rapport5_Vurderingsnotater_Revidert.docx.exe', sizeKB: 164, mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', isTrapped: true }],
   },
 
-  /**
-   * trap-4-no: 【Phishing】Falsk infrastrukturvarsel
-   * 罠: falsk domene（ccmallg vs ccmailg）+ falsk lenke + hastverk
-   * Psykologisk press: mistenkelig pålogging・i dag・konto suspendert
-   */
+  // trap 4: IT-senteret を装う / domain・link・urgency
   {
     id: 'trap-4-no',
     lang: 'no',
     isTrap: true,
-    traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: 'IT-senteret – Meijo Universitet',
-      address: 'admin@ccmallg.meijo-u.ac.jp',
-    },
-    to: { display: 'Deg (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '[Haster] Bekreftelse av konto kreves',
-    dateOffsetDays: -5, dateTime: '09:00',
-    bodyHtml: `<p>Dette er en viktig melding fra IT-senteret ved Meijo Universitet.</p>
-<p><strong>Det er oppdaget mistenkelig påloggingsaktivitet på e-postkontoen din.</strong> For å sikre kontoen din ber vi deg fullføre identitetsbekreftelsen i dag.</p>
-<p>▼ Bekreft kontoen din her<br>
-<a href="javascript:void(0)"
-   data-display-url="https://portal.meijo-u.ac.jp/auth/update"
-   data-phished-url="/phished?type=link">
-  https://portal.meijo-u.ac.jp/auth/update
-</a></p>
-<p><strong>※ Hvis bekreftelsen ikke er fullført innen kl. 23:59 i dag, vil kontoen din bli midlertidig suspendert.</strong></p>
-<p>IT-senteret – Meijo Universitet<br>
-ccmailg.meijo-u.ac.jp</p>`,
+    traps: ['domain', 'link', 'urgency'],
+    from: { display: 'IT-senteret – Sikkerhet', address: 'security@ccmallg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[IT-senteret] Forespørsel om bekreftelse av identiteten din',
+    dateOffsetDays: 0, dateTime: '07:30',
+    bodyHtml: `<p>Til alle TA-er,</p>
+<p>Dette er IT-senteret. Vi har oppdaget et uautorisert påloggingsforsøk på kontoen din.</p>
+<p>For sikkerhets skyld må du bekrefte identiteten din via lenken nedenfor <strong>innen 24 timer</strong>. Hvis vi ikke kan bekrefte identiteten din, vil kontoen bli midlertidig sperret.</p>
+<p><a href="javascript:void(0)" data-display-url="https://meijo-u-portal-support.com/account/verify" data-phished-url="/phished?type=link">https://portal.meijo-u.ac.jp/account/verify</a></p>
+<p>IT-senteret – Sikkerhet</p>`,
   },
 ]
 

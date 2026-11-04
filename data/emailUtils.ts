@@ -177,7 +177,7 @@ export function getTrapEmails(emails: Email[]): Email[] {
 // 差し替えが完了した言語セットだけを、日本語セット（基準）と構造比較する。
 // 旧構造のままの言語（ko, zh, it, vi, es, pl, no, fi）は、ここに追加するまで対象外。
 // 差し替えが済んだ言語から、この配列に足していく。
-const STRUCTURE_CHECKED_LANGS: Language[] = ['ja', 'en', 'ko', 'it', 'es']
+const STRUCTURE_CHECKED_LANGS: Language[] = ['ja', 'en', 'ko', 'it', 'es', 'no']
 
 /** メールID から言語サフィックス（-ja / -en …）を除いた共通キー（normal-1 など） */
 function emailKey(id: string): string {

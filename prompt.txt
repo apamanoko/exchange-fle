@@ -1,4 +1,4 @@
-data/emails.ts の emailsEs を、添付のファイル(emails_es_final.mjs)の emailsEsFinal の内容に差し替えてください。既存ファイルは丸ごと書き換えず、emailsEs の部分だけ差分で置き換えてください。他の言語は触らないでください。
-- フィールド名・traps の値・リンクの遷移先は、英語版・韓国語版・イタリア語版を差し替えたときと同じ方針にする。
-- validateEmailData の構造チェックの検査対象の言語リストに、es を追加し、通ることを確認する。
-- npm run build が通ること。getEmailSet が、母語がスペイン語のときに16通を返すこと。
+data/emails.ts の emailsNo を、添付のファイル(emails_no_final.mjs)の emailsNoFinal の内容に差し替えてください。既存ファイルは丸ごと書き換えず、emailsNo の部分だけ差分で置き換えてください。他の言語は触らないでください。
+- フィールド名・traps の値・リンクの遷移先は、これまで差し替えた言語と同じ方針にする。
+- validateEmailData の構造チェックの検査対象の言語リストに、no を追加し、通ることを確認する。
+- npm run build が通ること。getEmailSet が、母語がノルウェー語のときに16通を返すこと。
