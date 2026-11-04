@@ -1592,195 +1592,151 @@ export const emailsNo: Email[] = [
 export const emailsFi: Email[] = [
 
   // ============================================================
-  // 通常メール × 4通
+  // 通常メール × 4通（日本語版と1対1対応）
   // ============================================================
 
+  // normal 1: Tanaka 教授（個人的な依頼・返信が必要・正規PDF添付）
   {
     id: 'normal-1-fi',
     lang: 'fi',
     isTrap: false,
     traps: [],
-    from: { display: 'Prof. Mikko Virtanen', address: 'virtanen.m@meijo-u.ac.jp' },
-    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Seminaarin aikataulumuutos – ensi viikko',
-    dateOffsetDays: -1, dateTime: '15:00',
-    bodyHtml: `<p>Hei,</p>
-<p>Ensi maanantaina on yllättävä tiedekuntakokous, joten seminaari täytyy siirtää tiistaille klo 15:00. Huone pysyy samana (512).</p>
-<p>Voisitko ilmoittaa ennen viikonloppua, pääsetkö paikalle? Pahoittelen häiriötä.</p>
-<p>Ystävällisin terveisin,<br>Prof. Mikko Virtanen</p>`,
+    from: { display: 'Seiji Tanaka', address: 'tanaka-seiji@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Ensi viikon seminaarin aikataulumuutos',
+    dateOffsetDays: -1, dateTime: '16:40',
+    bodyHtml: `<p>Hyvät TA:t,</p>
+<p>Täällä Tanaka. Yliopiston tapahtuman vuoksi vastaamani harjoituskurssin seminaari, joka oli suunniteltu päivälle {{D+7}}, siirretään päivälle {{D+8}}, 3. oppitunnille.</p>
+<p>Päivitetty aikataulu on liitteenä. Vastatkaa viimeistään {{D+3}} ja kertokaa, voitteko osallistua TA:na. Jos ette voi, sovimme toisen päivän.</p>
+<p>Ystävällisin terveisin</p>
+<p>Seiji Tanaka<br>Tietotekniikan laitos</p>`,
+    attachments: [{ name: 'Seminaarin_Paivitetty_Aikataulu.pdf', sizeKB: 118, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 2: Opintotoimisto（事務的・正規リンク・期限に余裕）
   {
     id: 'normal-2-fi',
     lang: 'fi',
     isTrap: false,
     traps: [],
-    from: { display: 'Opintopalvelut', address: 'gakumu@meijo-u.ac.jp' },
-    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Kurssien ilmoittautumisen määräaika – {{D+3}}',
-    dateOffsetDays: -2, dateTime: '09:00',
-    bodyHtml: `<p>Hyvät opiskelijat,</p>
-<p>Muistutamme, että ensimmäisen lukukauden kurssien ilmoittautuminen päättyy {{D+3}} klo 23:59. Tarkistakaa tilanteenne portaalista.</p>
-<p>【Tarkistettavaa】<br>
-・Vuotuinen opintopisteraja (48 opintopistettä) ei ylity<br>
-・Kaikki pakolliset kurssit on ilmoitettu<br>
-・Ei aikataulukollisioita</p>
-<p>Yhteydenotot: Opintopalvelut, sisänumero 1234</p>`,
+    from: { display: 'Opintotoimisto', address: 'gakumu@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Ohje TA-työraportin palauttamiseen',
+    dateOffsetDays: -2, dateTime: '10:05',
+    bodyHtml: `<p>Hyvät TA:t,</p>
+<p>Täällä opintotoimisto. Kerromme, miten tämän kuun TA-työraportti palautetaan.</p>
+<p>Kirjautukaa yliopiston portaaliin alla olevan linkin kautta ja täyttäkää työpäivänne ja työtuntinne raporttilomakkeeseen.</p>
+<p><a href="javascript:void(0)" data-display-url="https://portal.meijo-u.ac.jp/ta/report">TA-työraporttilomake (yliopiston portaali)</a></p>
+<p>Palautuksen määräaika on {{D+7}}. Jos teillä on kysyttävää, ottakaa yhteyttä opintotoimiston asiakaspalveluun.</p>
+<p>Opintotoimisto</p>`,
+    attachments: [],
   },
+
+  // normal 3: Kansainvälinen keskus（事務的・正規PDF添付）
   {
     id: 'normal-3-fi',
     lang: 'fi',
     isTrap: false,
     traps: [],
-    from: { display: 'Yliopistokirjasto', address: 'library@meijo-u.ac.jp' },
-    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Muistutus: kirjojen palautuspäivä lähestyy',
-    dateOffsetDays: -3, dateTime: '10:00',
-    bodyHtml: `<p>Hyvä lainaaja,</p>
-<p>Muistutamme, että seuraavat kirjat tulee palauttaa {{D+2}} mennessä:</p>
-<p>・Kyberturvallisuuden perusteet (2. painos)<br>
-・Johdatus kognitiiviseen psykologiaan</p>
-<p>Voit uusia lainan kirjaston portaalin kautta (yksi uusinta sallittu).</p>`,
+    from: { display: 'Kansainvälinen keskus', address: 'kokusai@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Tiedote talvilomakauden sulkemisesta',
+    dateOffsetDays: -3, dateTime: '13:20',
+    bodyHtml: `<p>Hyvät kansainväliset opiskelijat ja TA:t,</p>
+<p>Täällä kansainvälinen keskus. Tiedotamme toimistomme aukioloista talvilomakaudella.</p>
+<p>Lisätiedot löytyvät liitteenä olevasta PDF-tiedostosta. Loman aikana sähköpostikyselyihin vastaaminen voi viivästyä.</p>
+<p>Kansainvälinen keskus</p>`,
+    attachments: [{ name: 'Talvilomatiedote.pdf', sizeKB: 312, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 4: Sato（TA仲間・個人的な依頼・正規Driveリンク）
   {
     id: 'normal-4-fi',
     lang: 'fi',
     isTrap: false,
     traps: [],
-    from: { display: 'Aino Mäkinen', address: 'makinen.aino.2023@meijo-u.ac.jp' },
-    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Jaan diat ensi viikon seminaariin',
-    dateOffsetDays: -4, dateTime: '18:30',
-    bodyHtml: `<p>Hei!</p>
-<p>Lähetän diani ensi viikon yhteisseminaaria varten etukäteen. Katso ne, kun sinulla on hetki aikaa!</p>
-<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
-      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
-  Katso diat Google Drivessa
-</a></p>
-<p>Ota yhteyttä, jos sinulla on kysyttävää. Nähdään!</p>
-<p>Aino</p>`,
+    from: { display: 'Kenta Sato', address: 'sato-kenta@ccmailg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Jaoin TA-koulutuksen materiaalit',
+    dateOffsetDays: 0, dateTime: '08:55',
+    bodyHtml: `<p>Hei, täällä Sato, toinen TA.</p>
+<p>Keräsin viime viikon TA-koulutuksen materiaalit Google Driveen. Voitko tarkistaa, aukeavatko ne?</p>
+<p><a href="javascript:void(0)" data-display-url="https://drive.google.com/drive/folders/1kTA2tr4in1ng0materials">TA-koulutuksen materiaalit (Google Drive)</a></p>
+<p>Kerro, jos jotain puuttuu.</p>
+<p>Sato</p>`,
+    attachments: [],
   },
 
   // ============================================================
-  // 罠メール × 4通
+  // 罠メール × 4通（日本語版と traps / アドレス / リンク / 添付が同一）
   // ============================================================
 
-  /**
-   * trap-1-fi: 【BEC】Ulkomaisen toimittajan tekeytyminen
-   * 罠: väärennetty verkkotunnus（oxf0rd）+ kaksoisliite（.pdf.exe）
-   * Psykologinen paine: määräaika（{{D+9}} jälkeen ei hyväksytä）
-   */
+  // trap 1: Opiskelijapalvelut を装う / domain・extension・urgency
   {
     id: 'trap-1-fi',
     lang: 'fi',
     isTrap: true,
     traps: ['domain', 'extension', 'urgency'],
-    from: {
-      display: 'Oxford Education Finland – Tuki',
-      address: 'support@oxf0rd-edu-finland.com',
-    },
-    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '[Tärkeää] Pankkitietojen muutos – kansainvälisten opiskelijoiden tuki',
-    dateOffsetDays: 0, dateTime: '14:30',
-    bodyHtml: `<p>Hyvä käyttäjä,</p>
-<p>Nimeni on Juhani Korhonen Oxford Education Finlandin tukitiimistä.</p>
-<p>Pankkijärjestelmämme päivityksen vuoksi kansainvälisten opiskelijoiden tukimaksujen tilinumero on muuttunut. Pyydämme käyttämään seuraavassa maksussanne <strong>liitteenä olevassa vahvistusasiakirjassa</strong> olevia uusia pankkitietoja.</p>
-<p><strong>※ Vanhan tilin maksusuorituksia ei hyväksytä {{D+9}} jälkeen.</strong></p>
-<p>Oxford Education Finland<br>Juhani Korhonen<br>Puh: 09-XXXX-XXXX</p>`,
-    attachments: [{
-      name: 'Pankkitietojen_vahvistus.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 312,
-      isTrapped: true,
-    }],
+    from: { display: 'Opiskelijapalvelut – TA-palkkio', address: 'ta-teate@ccmailg.meijo-u.co.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[Tärkeää] Pankkitilin vahvistaminen TA-palkkion maksua varten (tänään)',
+    dateOffsetDays: 0, dateTime: '09:12',
+    bodyHtml: `<p>Hyvät TA:t,</p>
+<p>Täällä opiskelijapalvelut. Tämän kuun TA-palkkion maksua varten emme ole pystyneet vahvistamaan rekisteröityjä pankkitilitietoja.</p>
+<p>Täyttäkää tilitietonne oheiseen lomakkeeseen ja palauttakaa se <strong>tänään klo 17.00 mennessä</strong>. Jos määräaika ylittyy, tämän kuun maksu siirtyy seuraavalle kuulle tai myöhemmäksi.</p>
+<p>Opiskelijapalvelut – TA-palkkio</p>`,
+    attachments: [{ name: 'Tilinvahvistuslomake_TA_Palkkio.pdf.exe', sizeKB: 287, mimeType: 'application/pdf', isTrapped: true }],
   },
 
-  /**
-   * trap-2-fi: 【BEC】Auktoriteettihenkilön tekeytyminen（toimitusjohtajahuijaus）
-   * 罠: ilmainen sähköpostitunnus（gmail）+ väärä linkki + kiireellisyys + auktoriteetti
-   * Psykologinen paine: matkalla・tänään・luottamuksellinen
-   */
+  // trap 2: Dean Kubota を装う / domain・link・urgency・authority
   {
     id: 'trap-2-fi',
     lang: 'fi',
     isTrap: true,
     traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: 'Prof. Yoshikawa (Dekaani)',
-      address: 'yoshikawa.meijo.univ@gmail.com',
-    },
-    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Kiireellinen – Tarvitsen apuasi tänään',
-    dateOffsetDays: -2, dateTime: '11:45',
+    from: { display: 'Takashi Kubota', address: 'kubota.takashi.meijo@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Kiireellinen: vahvistuspyyntö (pidettävä luottamuksellisena)',
+    dateOffsetDays: -1, dateTime: '19:47',
     bodyHtml: `<p>Hei,</p>
-<p>Olen tällä hetkellä konferenssissa Lontoossa enkä pysty vastaamaan puheluihin. Minulla on kiireellinen asia, johon tarvitsen apuasi.</p>
-<p>Ulkomaisen yliopiston kanssa tehtävään yhteistyöprojektiin liittyen minun täytyy jakaa vastuuopiskelijoiden tiedot tänään. Voisitko täyttää alla olevan linkin lomakkeen ja lähettää sen mahdollisimman pian?</p>
-<p><a href="javascript:void(0)"
-      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz"
-      data-phished-url="/phished?type=link">
-  Klikkaa tästä täyttääksesi lomakkeen
-</a></p>
-<p>Pidä tämä toistaiseksi luottamuksellisena – projektia ei ole vielä virallisesti julkistettu.</p>
-<p>Kiitos,<br>Prof. Yoshikawa</p>`,
+<p>Täällä Kubota. Olen kokouksessa enkä voi puhua puhelimessa. Tarvitsen sinulta kiireellisesti vahvistuksen TA-työhösi liittyvistä asiakirjoista.</p>
+<p>Tarkista asiakirjat ja vastaa alla olevalla lomakkeella. Koska kyse on henkilöstöasiasta, älä kerro siitä muille opettajille tai opiskelijoille.</p>
+<p><a href="javascript:void(0)" data-display-url="https://docs.google.com-edit.net/forms/d/e/1FAIpQLSf/viewform" data-phished-url="/phished?type=link">Asiakirjojen vahvistuslomake</a></p>
+<p>Takashi Kubota<br>Luonnontieteiden ja tekniikan tutkijakoulun johtaja</p>`,
   },
 
-  /**
-   * trap-3-fi: 【Spear phishing】Sähköpostiketjun kaappaus
-   * 罠: kaksoisliite（.pdf.exe）+ luottamuksen hyväksikäyttö
-   * Psykologinen paine: pahoittelu・työn jatkuvuus
-   */
+  // trap 3: TA仲間を装う / domain・extension
   {
     id: 'trap-3-fi',
     lang: 'fi',
     isTrap: true,
-    traps: ['extension', 'authority'],
-    from: {
-      display: 'Ville Heikkinen（M1-opiskelija, Tietotekniikka）',
-      address: 'heikkinen.ville.2024@gmail.com',
-    },
-    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Re: Puuttuvat asiakirjat stipendihakemuksessa',
-    dateOffsetDays: -4, dateTime: '16:30',
-    bodyHtml: `<p>Hei,</p>
-<p>Olen korjannut kaikki kohdat, jotka mainitsit. Pahoittelen vaivannäköä!</p>
-<p>Lähetän korjatut asiakirjat salasanasuojattuna ZIP-tiedostona.<br>
-Salasana: <strong>2024</strong></p>
-<p>Kerro, jos kaikki näyttää nyt hyvältä. Kiitos!</p>
-<p>Ville</p>`,
-    attachments: [{
-      name: 'Stipendihakemus_Korjattu.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 158,
-      isTrapped: true,
-    }],
+    traps: ['domain', 'extension'],
+    from: { display: 'Li Ming', address: 'li.ming.0912@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'VS: Raportin 5 arviointi',
+    dateOffsetDays: -1, dateTime: '21:03',
+    bodyHtml: `<p>Hei, täällä Li, toinen TA.</p>
+<p>Lähetän sinulle korjatun version raportin 5 arviointimuistiinpanoista, joista aiemmin puhuin. Voitko tarkistaa, ovatko kriteerit kunnossa?</p>
+<p>Li</p>
+<hr>
+<p style="color:#666">&gt; Edellisestä viestistä:<br>&gt; Haluaisin yhtenäistää raportin 5 arviointikriteerit vielä kerran. Lähetätkö ne minulle, kun olet korjannut ne?</p>`,
+    attachments: [{ name: 'Raportin5_Arviointimuistiinpanot_Korjattu.docx.exe', sizeKB: 164, mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', isTrapped: true }],
   },
 
-  /**
-   * trap-4-fi: 【Phishing】Väärä infrastruktuuriilmoitus
-   * 罠: väärennetty verkkotunnus（ccmallg vs ccmailg）+ väärä linkki + kiireellisyys
-   * Psykologinen paine: epäilyttävä kirjautuminen・tänään・tili jäädytetty
-   */
+  // trap 4: Tietohallintokeskus を装う / domain・link・urgency
   {
     id: 'trap-4-fi',
     lang: 'fi',
     isTrap: true,
-    traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: 'IT-keskus – Meijo-yliopisto',
-      address: 'admin@ccmallg.meijo-u.ac.jp',
-    },
-    to: { display: 'Sinä (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '[Kiireellinen] Tilin vahvistus vaaditaan',
-    dateOffsetDays: -5, dateTime: '09:00',
-    bodyHtml: `<p>Tämä on tärkeä ilmoitus Meijo-yliopiston IT-keskukselta.</p>
-<p><strong>Sähköpostitililläsi on havaittu epäilyttävää kirjautumisaktiviteettia.</strong> Tilisi suojaamiseksi pyydämme sinua suorittamaan henkilöllisyyden vahvistuksen tänään.</p>
-<p>▼ Vahvista tilisi täällä<br>
-<a href="javascript:void(0)"
-   data-display-url="https://portal.meijo-u.ac.jp/auth/update"
-   data-phished-url="/phished?type=link">
-  https://portal.meijo-u.ac.jp/auth/update
-</a></p>
-<p><strong>※ Jos vahvistusta ei suoriteta tänään klo 23:59 mennessä, tilisi jäädytetään väliaikaisesti.</strong></p>
-<p>IT-keskus – Meijo-yliopisto<br>
-ccmailg.meijo-u.ac.jp</p>`,
+    traps: ['domain', 'link', 'urgency'],
+    from: { display: 'Tietohallintokeskus – Tietoturva', address: 'security@ccmallg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[Tietohallintokeskus] Tilin henkilöllisyyden vahvistuspyyntö',
+    dateOffsetDays: 0, dateTime: '07:30',
+    bodyHtml: `<p>Hyvät TA:t,</p>
+<p>Täällä tietohallintokeskus. Olemme havainneet tilillenne luvattoman kirjautumisyrityksen.</p>
+<p>Turvallisuutenne vuoksi vahvistakaa henkilöllisyytenne alla olevan linkin kautta <strong>24 tunnin kuluessa</strong>. Jos emme pysty vahvistamaan henkilöllisyyttänne, tilinne suljetaan tilapäisesti.</p>
+<p><a href="javascript:void(0)" data-display-url="https://meijo-u-portal-support.com/account/verify" data-phished-url="/phished?type=link">https://portal.meijo-u.ac.jp/account/verify</a></p>
+<p>Tietohallintokeskus – Tietoturva</p>`,
   },
 ]
