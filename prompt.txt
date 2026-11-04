@@ -1,7 +1,7 @@
-添付のアイコンとサイズ、練習メールを調整してください。既存ファイルは丸ごと書き換えず、Edit で差分修正してください。
+data/emails.ts の emailsJa を、添付のファイル(emails_ja_final.mjs)の内容に差し替えてください。既存ファイルは丸ごと書き換えず、emailsJa の部分だけ差分で置き換えてください。
 
-1. アイコンの分岐を拡張する: mimeType が application/pdf → PDF風(赤)、application/vnd.openxmlformats-officedocument.wordprocessingml.document → Word風(青、「W」)、それ以外 → 汎用(Paperclip)。罠でも、見かけの種類のアイコンのままにする(実拡張子 .exe は、ファイル名の末尾でだけ分かる)。
-2. 練習メール(practiceEmail.ts)の内容を差し替える: 話題を「留学生交流会のお知らせ」(国際センター、@meijo-u.ac.jp)にし、添付名を「交流会のご案内.pdf」(UI言語ごとに実名ローカライズ、sizeKB は 186 のままでよい)にする。クリックは /safe に遷移し、記録なし(今のままでよい)。冬季休業に関する話題は、本番の通常メールで使うので、練習メールからは外す。
-3. 罠の添付(trap-1 と trap-3)の sizeKB を、243 固定ではなく、100〜400 の範囲でファイルごとに変える(言語版ごとの差は不要。タイプごとに1つの値でよい)。
-
-変更後、npm run build が通ることを確認してください。
+- フィールド名は、現在の Email / Attachment 型に合わせて読み替えてください(to は {display,address}、date は相対オフセット、attachments は name/sizeKB/mimeType/isTrapped など)。型に合わない項目があれば、私に報告してください。
+- traps の値は、既存の列挙・定数があれば、それに合わせてください(sender_domain_spoof などは仮の名前です)。
+- 罠のリンクは、既存の仕組みに合わせて、/phished?type=link に遷移すること。通常のリンクは /safe?type=link に遷移すること。
+- 通常メール4通のID(normal-1-ja〜normal-4-ja)と、罠メール4通のID(trap-1-ja〜trap-4-ja)は変えない。getEmailSet の割当ロジックと、validateEmailData が、そのまま通ること。
+- 母語版(emailsEn など)は、まだ触らないこと。日本語版だけを差し替えて、npm run build が通るところまで確認すること。
