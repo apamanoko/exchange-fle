@@ -336,196 +336,152 @@ export const emailsEn: Email[] = [
 export const emailsKo: Email[] = [
 
   // ============================================================
-  // 通常メール × 4通
+  // 通常メール × 4通（日本語版と1対1対応）
   // ============================================================
 
+  // normal 1: Tanaka 교수（개인적 의뢰・회신 필요・정규 PDF 첨부）
   {
     id: 'normal-1-ko',
     lang: 'ko',
     isTrap: false,
     traps: [],
-    from: { display: '김 민준 교수', address: 'kim.m@meijo-u.ac.jp' },
-    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    from: { display: '다나카 세이지', address: 'tanaka-seiji@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
     subject: '다음 주 세미나 일정 변경 안내',
-    dateOffsetDays: -1, dateTime: '15:00',
-    bodyHtml: `<p>안녕하세요.</p>
-<p>다음 주 월요일에 교내 회의가 생겨서 세미나 일정을 변경해야 할 것 같습니다. 화요일 오후 3시로 변경 부탁드려도 될까요? 장소는 동일하게 512호실입니다.</p>
-<p>참석 가능 여부를 이번 주 중으로 알려주시면 감사하겠습니다. 갑작스럽게 변경하게 되어 죄송합니다.</p>
-<p>김 민준 교수 드림</p>`,
+    dateOffsetDays: -1, dateTime: '16:40',
+    bodyHtml: `<p>TA 여러분께</p>
+<p>다나카입니다. 제가 담당하는 연습 과목의 세미나가 학내 행사로 인해, {{D+7}}에 예정되어 있던 일정에서 {{D+8}} 3교시로 변경되었습니다.</p>
+<p>변경된 일정표를 첨부합니다. TA로 참석 가능하신지 {{D+3}}까지 회신으로 알려 주세요. 어려운 경우에는 다른 날로 조정하겠습니다.</p>
+<p>잘 부탁드립니다.</p>
+<p>다나카 세이지<br>정보공학부 정보공학과</p>`,
+    attachments: [{ name: '세미나_일정_변경본.pdf', sizeKB: 118, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 2: 학무과（사무적・정규 링크・기한 여유）
   {
     id: 'normal-2-ko',
     lang: 'ko',
     isTrap: false,
     traps: [],
     from: { display: '학무과', address: 'gakumu@meijo-u.ac.jp' },
-    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '전기 수강 신청 마감 안내',
-    dateOffsetDays: -2, dateTime: '09:00',
-    bodyHtml: `<p>재학생 여러분께</p>
-<p>전기 수강 신청 기간이 {{D+3}} 23:59에 마감됩니다. 포털 사이트에서 신청 내용을 반드시 확인해 주세요.</p>
-<p>【확인 사항】<br>
-・연간 이수 학점 상한(48학점)을 초과하지 않았는지<br>
-・필수 과목 신청 누락이 없는지<br>
-・시간표 중복이 없는지</p>
-<p>문의: 학무과 내선 1234</p>`,
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'TA 근무 보고 제출 방법 안내',
+    dateOffsetDays: -2, dateTime: '10:05',
+    bodyHtml: `<p>TA 담당자 여러분께</p>
+<p>학무과입니다. 이번 달 TA 근무 보고서의 제출 방법을 안내드립니다.</p>
+<p>아래 링크에서 학내 포털의 근무 보고 양식에 로그인하여 근무일과 근무 시간을 입력해 주세요.</p>
+<p><a href="javascript:void(0)" data-display-url="https://portal.meijo-u.ac.jp/ta/report">TA 근무 보고 양식(학내 포털)</a></p>
+<p>제출 기한은 {{D+7}}입니다. 궁금한 점이 있으시면 학무과 창구로 문의해 주세요.</p>
+<p>학무과</p>`,
+    attachments: [],
   },
+
+  // normal 3: 국제센터（사무적・정규 PDF 첨부）
   {
     id: 'normal-3-ko',
     lang: 'ko',
     isTrap: false,
     traps: [],
-    from: { display: '부속 도서관', address: 'library@meijo-u.ac.jp' },
-    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '대출 도서 반납 기한 안내',
-    dateOffsetDays: -3, dateTime: '10:00',
-    bodyHtml: `<p>안녕하세요.</p>
-<p>아래 도서의 반납 기한이 {{D+2}}로 다가왔습니다.</p>
-<p>・사이버 보안의 기초와 실천<br>
-・인지심리학 입문 (제2판)</p>
-<p>포털 사이트 '도서관 서비스'에서 연장 신청이 가능합니다(1회 한정).</p>`,
+    from: { display: '국제센터', address: 'kokusai@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '동계 휴업 기간 안내',
+    dateOffsetDays: -3, dateTime: '13:20',
+    bodyHtml: `<p>유학생·TA 여러분께</p>
+<p>국제센터입니다. 동계 휴업 기간 중의 창구 운영에 대해 알려드립니다.</p>
+<p>자세한 내용은 첨부된 PDF를 확인해 주세요. 휴업 기간 중에는 이메일 문의에 대한 답변이 늦어질 수 있습니다.</p>
+<p>국제센터</p>`,
+    attachments: [{ name: '동계휴업_안내.pdf', sizeKB: 312, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 4: Sato（TA 동료・개인적 의뢰・정규 Drive 링크）
   {
     id: 'normal-4-ko',
     lang: 'ko',
     isTrap: false,
     traps: [],
-    from: { display: '이 지현', address: 'lee.jihyun.2023@meijo-u.ac.jp' },
-    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '다음 주 발표 자료 공유드립니다',
-    dateOffsetDays: -4, dateTime: '18:30',
-    bodyHtml: `<p>안녕하세요!</p>
-<p>다음 주 합동 세미나에서 사용할 발표 자료를 미리 공유드립니다. 시간 되실 때 한번 봐주시면 감사하겠습니다.</p>
-<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
-      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
-  Google Drive에서 자료 보기
-</a></p>
-<p>궁금한 점 있으시면 편하게 연락 주세요!</p>
-<p>이 지현 드림</p>`,
+    from: { display: '사토 겐타', address: 'sato-kenta@ccmailg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'TA 연수 자료 공유했어요',
+    dateOffsetDays: 0, dateTime: '08:55',
+    bodyHtml: `<p>수고 많으세요. 같은 TA인 사토예요.</p>
+<p>지난주 TA 연수 자료를 구글 드라이브에 정리해 두었어요. 열리는지 확인해 주실 수 있나요?</p>
+<p><a href="javascript:void(0)" data-display-url="https://drive.google.com/drive/folders/1kTA2tr4in1ng0materials">TA 연수 자료(구글 드라이브)</a></p>
+<p>부족한 자료가 있으면 알려 주세요.</p>
+<p>사토</p>`,
+    attachments: [],
   },
 
   // ============================================================
-  // 罠メール × 4通
+  // 罠メール × 4通（日本語版と traps / アドレス / リンク / 添付が同一）
   // ============================================================
 
-  /**
-   * trap-1-ko: 【BEC】해외 벤더 사칭
-   * 罠: 도메인 위장（oxf0rd）+ 이중 확장자（.pdf.exe）
-   * 심리적 압박: 기한（{{D+9}} 이후 수납 불가）
-   */
+  // trap 1: 학생지원과 사칭 / domain・extension・urgency
   {
     id: 'trap-1-ko',
     lang: 'ko',
     isTrap: true,
     traps: ['domain', 'extension', 'urgency'],
-    from: {
-      display: 'Oxford Education Korea 지원팀',
-      address: 'support@oxf0rd-edu-korea.com',
-    },
-    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '【중요】유학생 지원비 납입 계좌 변경 안내',
-    dateOffsetDays: 0, dateTime: '14:30',
-    bodyHtml: `<p>안녕하세요.</p>
-<p>Oxford Education Korea 지원팀 김영수입니다.</p>
-<p>이번 시스템 업그레이드로 인해 유학생 지원비 납입 계좌가 변경되었습니다. 다음 번 납입 시에는 <strong>첨부된 확인서</strong>에 기재된 새 계좌를 이용해 주시기 바랍니다.</p>
-<p><strong>※ {{D+9}} 이후에는 기존 계좌로의 입금을 받지 않습니다.</strong></p>
-<p>Oxford Education Korea<br>김 영수<br>Tel: 02-XXXX-XXXX</p>`,
-    attachments: [{
-      name: '계좌변경확인서.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 312,
-      isTrapped: true,
-    }],
+    from: { display: '학생지원과 TA 수당 담당', address: 'ta-teate@ccmailg.meijo-u.co.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[중요] TA 수당 입금 계좌 확인 요청(오늘 중)',
+    dateOffsetDays: 0, dateTime: '09:12',
+    bodyHtml: `<p>TA 담당자 여러분께</p>
+<p>학생지원과입니다. 이번 달 TA 수당을 입금하는 데 있어, 등록되어 있는 계좌 정보를 확인하지 못했습니다.</p>
+<p>첨부된 확인서에 계좌 정보를 기재하여 <strong>오늘 오후 5시까지</strong> 회신해 주세요. 기한이 지나면 이번 달 수당 입금은 다음 달 이후로 연기됩니다.</p>
+<p>학생지원과 TA 수당 담당</p>`,
+    attachments: [{ name: 'TA수당_계좌확인서.pdf.exe', sizeKB: 287, mimeType: 'application/pdf', isTrapped: true }],
   },
 
-  /**
-   * trap-2-ko: 【BEC】권위자 사칭（CEO 사기）
-   * 罠: 무료 메일 도메인（gmail）+ 링크 위장 + 긴급성 + 권위
-   * 심리적 압박: 해외 출장 중・오늘 중・기밀
-   */
+  // trap 2: Dean Kubota 사칭 / domain・link・urgency・authority
   {
     id: 'trap-2-ko',
     lang: 'ko',
     isTrap: true,
     traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: '요시카와 연구과장',
-      address: 'yoshikawa.meijo.univ@gmail.com',
-    },
-    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '긴급 부탁드립니다',
-    dateOffsetDays: -2, dateTime: '11:45',
-    bodyHtml: `<p>안녕하세요.</p>
-<p>지금 런던 학회에 참석 중이라 전화를 받기 어려운 상황입니다. 긴급하게 부탁드릴 일이 있어 메일 드립니다.</p>
-<p>해외 대학과의 연계 프로젝트 관련하여 오늘 중으로 담당 학생 정보를 공유해야 합니다. 아래 링크의 양식에 입력 후 제출해 주시겠어요?</p>
-<p><a href="javascript:void(0)"
-      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz"
-      data-phished-url="/phished?type=link">
-  여기를 클릭하여 양식에 입력해 주세요
-</a></p>
-<p>아직 공식 발표 전이므로 다른 분들께는 비밀로 해주세요.</p>
-<p>잘 부탁드립니다.<br>요시카와</p>`,
+    from: { display: '구보타 다카시', address: 'kubota.takashi.meijo@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '긴급: 확인 부탁드립니다(비밀로 해 주세요)',
+    dateOffsetDays: -1, dateTime: '19:47',
+    bodyHtml: `<p>TA 담당자께</p>
+<p>구보타입니다. 지금 회의 중이라 자리를 비울 수 없어 전화를 받지 못합니다. TA 업무와 관련된 서류에 대해 급히 확인해 주셨으면 하는 것이 있습니다.</p>
+<p>아래 양식에서 서류 내용을 확인하고 회신해 주세요. 인사와 관련된 내용이므로, 다른 교직원이나 학생에게는 말하지 말아 주세요.</p>
+<p><a href="javascript:void(0)" data-display-url="https://docs.google.com-edit.net/forms/d/e/1FAIpQLSf/viewform" data-phished-url="/phished?type=link">서류 확인 양식</a></p>
+<p>구보타 다카시<br>이공학연구과장</p>`,
   },
 
-  /**
-   * trap-3-ko: 【표적형】업무 연속 메일 탈취
-   * 罠: 이중 확장자（.pdf.exe）+ 신뢰 관계 악용
-   * 심리적 압박: 사과・이전 업무의 연속
-   */
+  // trap 3: TA 동료 사칭 / domain・extension
   {
     id: 'trap-3-ko',
     lang: 'ko',
     isTrap: true,
-    traps: ['extension', 'authority'],
-    from: {
-      display: '박 지수（정보공학연구과 M1）',
-      address: 'park.jisu.2024@gmail.com',
-    },
-    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Re: 장학금 신청 서류 미비 사항에 대하여',
-    dateOffsetDays: -4, dateTime: '16:30',
-    bodyHtml: `<p>안녕하세요.</p>
-<p>지적해 주신 서류 미비 사항을 모두 수정했습니다. 불편을 드려서 정말 죄송합니다.</p>
-<p>수정한 파일을 비밀번호 설정 ZIP으로 다시 보내드립니다.<br>
-압축 해제 비밀번호: <strong>2024</strong></p>
-<p>확인 후 문제없으시면 알려주세요. 감사합니다!</p>
-<p>박 지수 드림</p>`,
-    attachments: [{
-      name: '장학금신청서_수정본.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 158,
-      isTrapped: true,
-    }],
+    traps: ['domain', 'extension'],
+    from: { display: '리밍', address: 'li.ming.0912@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Re: 제5회 리포트 채점 건',
+    dateOffsetDays: -1, dateTime: '21:03',
+    bodyHtml: `<p>안녕하세요, 같은 TA인 리예요.</p>
+<p>전에 말했던 제5회 리포트 채점 메모를 수정한 버전으로 보내요. 기준이 이 정도면 맞는지 봐 주실 수 있나요?</p>
+<p>리</p>
+<hr>
+<p style="color:#666">&gt; 이전 메일에서<br>&gt; 제5회 리포트 채점 기준을 다시 한번 맞추고 싶어요. 수정하면 보내 주실 수 있나요?</p>`,
+    attachments: [{ name: '제5회_채점메모_수정본.docx.exe', sizeKB: 164, mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', isTrapped: true }],
   },
 
-  /**
-   * trap-4-ko: 【피싱】인프라 위장 통지
-   * 罠: 도메인 위장（ccmallg vs ccmailg）+ 링크 위장 + 긴급성
-   * 심리적 압박: 불심 로그인 감지・당일・계정 정지
-   */
+  // trap 4: 정보센터 사칭 / domain・link・urgency
   {
     id: 'trap-4-ko',
     lang: 'ko',
     isTrap: true,
-    traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: '메이조대학 정보센터',
-      address: 'admin@ccmallg.meijo-u.ac.jp',
-    },
-    to: { display: '당신 (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '【긴급】계정 확인이 필요합니다',
-    dateOffsetDays: -5, dateTime: '09:00',
-    bodyHtml: `<p>메이조대학 정보센터에서 중요한 안내를 드립니다.</p>
-<p><strong>귀하의 메일 계정에서 의심스러운 로그인이 감지되었습니다.</strong> 계정 보호를 위해 오늘 중으로 본인 확인 절차를 완료해 주시기 바랍니다.</p>
-<p>▼ 본인 확인은 여기서<br>
-<a href="javascript:void(0)"
-   data-display-url="https://portal.meijo-u.ac.jp/auth/update"
-   data-phished-url="/phished?type=link">
-  https://portal.meijo-u.ac.jp/auth/update
-</a></p>
-<p><strong>※ 오늘 23:59까지 절차가 완료되지 않으면 계정이 일시 정지됩니다.</strong></p>
-<p>메이조대학 정보센터<br>
-ccmailg.meijo-u.ac.jp</p>`,
+    traps: ['domain', 'link', 'urgency'],
+    from: { display: '정보센터 보안 담당', address: 'security@ccmallg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[정보센터] 계정 본인 확인 요청',
+    dateOffsetDays: 0, dateTime: '07:30',
+    bodyHtml: `<p>TA 담당자 여러분께</p>
+<p>정보센터입니다. 사용 중이신 계정에서 비정상적인 로그인 시도가 감지되었습니다.</p>
+<p>안전을 위해 <strong>24시간 이내</strong>에 아래 링크에서 본인 확인을 해 주세요. 확인이 되지 않으면 계정 이용이 일시 중지됩니다.</p>
+<p><a href="javascript:void(0)" data-display-url="https://meijo-u-portal-support.com/account/verify" data-phished-url="/phished?type=link">https://portal.meijo-u.ac.jp/account/verify</a></p>
+<p>정보센터 보안 담당</p>`,
   },
 ]
 

@@ -1,25 +1,4 @@
-data/emails.ts のメールデータを、添付のファイルの内容に差し替えてください。既存ファイルは丸ごと書き換えず、該当の配列の部分だけ差分で置き換えてください。
-
-【手順】
-1. emailsJa を、emails_ja_final.mjs の emailsJaFinal の内容に差し替える。
-2. emailsEn を、emails_en_final.mjs の emailsEnFinal の内容に差し替える。
-   (他の言語 emailsKo、emailsZh、emailsIt、emailsVi、emailsEs、emailsPl、emailsNo、emailsFi は、今回は触らない。emailsDe_en は削除してよい)
-
-【差し替えの規則】
-- フィールド名は、現在の Email / Attachment 型に合わせて読み替える。ファイル内のコメントにある想定は次のとおり:
-  to は { display, address }、date は { offsetDays, time }(相対オフセット)、attachments は { name, sizeKB, mimeType, isTrapped }。
-  型に合わない項目があれば、勝手に変えず、私に報告すること。
-- traps の値は、既存の列挙・定数があれば、それに合わせる(sender_domain_spoof などは仮の名前)。既存の採点ロジックが traps の値に依存している場合は、どこで使われているかを報告すること。
-- 罠のリンク(data-phished-url がある)は /phished?type=link に遷移すること。通常のリンク(data-display-url のみ)は /safe?type=link に遷移すること。
-- メールID(normal-1-ja 〜 normal-4-ja、trap-1-ja 〜 trap-4-ja、英語版は -en)の形式は、変えない。getEmailSet の割当ロジックが、そのまま通ること。
-
-【言語版の構造チェックを追加】
-- validateEmailData を拡張して、各言語セットが日本語セットと次の点で一致しているかを検査してください。
-  isTrap、traps タグ、from.address、to.address、date、リンクの href / data-display-url / data-phished-url、
-  日付トークン {{D±n}} の位置と値、添付の数・実拡張子(ファイル名の末尾の拡張子部分)・sizeKB・mimeType・isTrapped。
-- 差し替え前の言語(ko、zh、it、vi、es、pl、no、fi)は、旧構造のままなので検査に失敗する。それらは、検査の対象外にする設定(例: 検査対象の言語リストを定数化)にして、差し替えが済んだ言語から順に追加できるようにしてください。
-
-【検証】
-- npm run build が通ること。
-- emailsJa と emailsEn で、validateEmailData の拡張した検査が通ること(失敗する場合は、その内容を報告すること)。
-- 差し替えた言語で、getEmailSet が16通を返すこと。
+data/emails.ts の emailsKo を、添付のファイル(emails_ko_final.mjs)の emailsKoFinal の内容に差し替えてください。既存ファイルは丸ごと書き換えず、emailsKo の部分だけ差分で置き換えてください。他の言語は触らないでください。
+- フィールド名・traps の値・リンクの遷移先は、英語版を差し替えたときと同じ方針にする。
+- 先ほど追加した validateEmailData の構造チェック(日本語セットとの一致)の検査対象の言語リストに、ko を追加し、通ることを確認する。
+- npm run build が通ること。getEmailSet が、母語が韓国語のときに16通を返すこと。
