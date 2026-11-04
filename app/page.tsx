@@ -219,7 +219,8 @@ function HomeContent() {
       if (!res.ok) {
         throw new Error((json as { error?: string }).error ?? `HTTP ${res.status}`)
       }
-      router.push(`/inbox?session_id=${json.id}&ui_lang=${uiLang}&l1_lang=${l1Lang}`)
+      // 本番16通の前に、採点対象外の練習メール画面へ進む
+      router.push(`/practice?session_id=${json.id}&ui_lang=${uiLang}&l1_lang=${l1Lang}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
       setIsLoading(false)

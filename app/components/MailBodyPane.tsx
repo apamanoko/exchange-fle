@@ -220,6 +220,8 @@ type MailBodyPaneProps = {
   baseDate: Date
   tracker?: TrackerHandlers
   sessionId?: string
+  /** 練習モード: ツールバー非表示・リンク/添付クリックは無効（遷移もログもしない） */
+  practiceMode?: boolean
   onReply: (emailId: string) => void
   onIgnore: (emailId: string) => void
   onBlock: (emailId: string) => void
@@ -231,6 +233,7 @@ export default function MailBodyPane({
   baseDate,
   tracker,
   sessionId,
+  practiceMode = false,
   onReply,
   onIgnore,
   onBlock,
@@ -254,6 +257,7 @@ export default function MailBodyPane({
   //  ① 罠メールのリンク（isPhished）→ /phished を新しいタブで開き、link_click を記録
   //  ② 通常メールのリンク           → /safe を新しいタブで開く（ログは記録しない）
   const handleLinkClick = useCallback((displayUrl: string, isPhished: boolean) => {
+    if (practiceMode) return   // 練習: クリックしても何も起きない（遷移・記録なし）
     if (isPhished) {
       tracker?.onLinkClick(displayUrl)
       if (email && sessionId) {
@@ -265,10 +269,11 @@ export default function MailBodyPane({
     } else {
       window.open(`/safe?type=link&ui_lang=${encodeURIComponent(lang)}`, '_blank')
     }
-  }, [tracker, sessionId, email, lang])
+  }, [practiceMode, tracker, sessionId, email, lang])
 
   // 添付ファイルを開く: マルウェア実行を模した /phished ページを新しいタブで開く
   const handleAttachmentOpen = useCallback(() => {
+    if (practiceMode) return   // 練習: クリックしても何も起きない
     tracker?.onAttachmentOpen()
     if (email && sessionId) {
       window.open(
@@ -276,7 +281,7 @@ export default function MailBodyPane({
         '_blank'
       )
     }
-  }, [tracker, sessionId, email, lang])
+  }, [practiceMode, tracker, sessionId, email, lang])
 
   if (!email) {
     return (
@@ -293,20 +298,22 @@ export default function MailBodyPane({
   return (
     <div className="flex-1 flex flex-col overflow-hidden bg-white relative">
 
-      {/* ── ツールバー ── */}
-      <div className="flex-shrink-0 flex items-center gap-0.5 px-6 py-2.5 border-b border-gray-100">
-        <ActionButtons
-          onReply={() => onReply(email.id)}
-          onIgnore={() => onIgnore(email.id)}
-          onBlock={() => onBlock(email.id)}
-          t={t}
-        />
-        <div className="ml-auto">
-          <button className="p-1.5 rounded hover:bg-gray-100 text-gray-400 transition-colors">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
+      {/* ── ツールバー（練習モードでは非表示）── */}
+      {!practiceMode && (
+        <div className="flex-shrink-0 flex items-center gap-0.5 px-6 py-2.5 border-b border-gray-100">
+          <ActionButtons
+            onReply={() => onReply(email.id)}
+            onIgnore={() => onIgnore(email.id)}
+            onBlock={() => onBlock(email.id)}
+            t={t}
+          />
+          <div className="ml-auto">
+            <button className="p-1.5 rounded hover:bg-gray-100 text-gray-400 transition-colors">
+              <MoreHorizontal className="w-4 h-4" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── スクロール可能なコンテンツ領域 ── */}
       <div className="flex-1 overflow-y-auto">
