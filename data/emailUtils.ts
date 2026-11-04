@@ -172,6 +172,123 @@ export function getTrapEmails(emails: Email[]): Email[] {
   return emails.filter(e => e.isTrap)
 }
 
+// ─── 言語版の構造一致チェック（差し替え済みの言語だけを対象にする）─────────────
+//
+// 差し替えが完了した言語セットだけを、日本語セット（基準）と構造比較する。
+// 旧構造のままの言語（ko, zh, it, vi, es, pl, no, fi）は、ここに追加するまで対象外。
+// 差し替えが済んだ言語から、この配列に足していく。
+const STRUCTURE_CHECKED_LANGS: Language[] = ['ja', 'en']
+
+/** メールID から言語サフィックス（-ja / -en …）を除いた共通キー（normal-1 など） */
+function emailKey(id: string): string {
+  return id.replace(/-[a-z]{2}$/, '')
+}
+
+/** 本文HTMLから <a> を出現順に取り出し、URL系属性だけを抜き出す（翻訳で変わらない構造部分） */
+function extractLinks(html: string): { href: string; display: string; phished: string }[] {
+  const out: { href: string; display: string; phished: string }[] = []
+  const tagRe = /<a\b[^>]*>/gi
+  let m: RegExpExecArray | null
+  while ((m = tagRe.exec(html)) !== null) {
+    const tag = m[0]
+    const href    = tag.match(/\bhref\s*=\s*"([^"]*)"/i)?.[1] ?? ''
+    const display = tag.match(/\bdata-display-url\s*=\s*"([^"]*)"/i)?.[1] ?? ''
+    const phished = tag.match(/\bdata-phished-url\s*=\s*"([^"]*)"/i)?.[1] ?? ''
+    out.push({ href, display, phished })
+  }
+  return out
+}
+
+/** 日付トークン {{D±n}} を出現順に取り出す */
+function extractDateTokens(text: string): string[] {
+  return text.match(/\{\{D[+-]\d+\}\}/g) ?? []
+}
+
+/** ファイル名末尾の実拡張子（.pdf.exe → .exe、.pdf → .pdf） */
+function realExtension(name: string): string {
+  const i = name.lastIndexOf('.')
+  return i >= 0 ? name.slice(i).toLowerCase() : ''
+}
+
+/**
+ * 1通ぶんの構造を、基準（日本語）と比較して不一致を errors に積む。
+ * 翻訳で変わってよい項目（表示名・件名・本文テキスト・添付の名前本体）は比較しない。
+ */
+function compareEmailStructure(ref: Email, tgt: Email, errors: string[]): void {
+  const where = `${tgt.id} vs ${ref.id}`
+
+  if (ref.isTrap !== tgt.isTrap) {
+    errors.push(`${where}: isTrap mismatch (${ref.isTrap} vs ${tgt.isTrap})`)
+  }
+
+  const refTraps = [...ref.traps].sort().join(',')
+  const tgtTraps = [...tgt.traps].sort().join(',')
+  if (refTraps !== tgtTraps) {
+    errors.push(`${where}: traps mismatch ([${refTraps}] vs [${tgtTraps}])`)
+  }
+
+  if (ref.from.address !== tgt.from.address) {
+    errors.push(`${where}: from.address mismatch (${ref.from.address} vs ${tgt.from.address})`)
+  }
+  if (ref.to.address !== tgt.to.address) {
+    errors.push(`${where}: to.address mismatch (${ref.to.address} vs ${tgt.to.address})`)
+  }
+
+  if (ref.dateOffsetDays !== tgt.dateOffsetDays || ref.dateTime !== tgt.dateTime) {
+    errors.push(`${where}: date mismatch (${ref.dateOffsetDays}/${ref.dateTime} vs ${tgt.dateOffsetDays}/${tgt.dateTime})`)
+  }
+
+  // リンク（href / data-display-url / data-phished-url）を出現順に比較
+  const refLinks = extractLinks(ref.bodyHtml)
+  const tgtLinks = extractLinks(tgt.bodyHtml)
+  if (refLinks.length !== tgtLinks.length) {
+    errors.push(`${where}: link count mismatch (${refLinks.length} vs ${tgtLinks.length})`)
+  } else {
+    refLinks.forEach((rl, i) => {
+      const tl = tgtLinks[i]
+      if (rl.href !== tl.href || rl.display !== tl.display || rl.phished !== tl.phished) {
+        errors.push(`${where}: link[${i}] mismatch ` +
+          `(href ${rl.href}|${tl.href} / display ${rl.display}|${tl.display} / phished ${rl.phished}|${tl.phished})`)
+      }
+    })
+  }
+
+  // 日付トークンの位置（件名・本文それぞれの出現順）と値を比較
+  const refSubjTok = extractDateTokens(ref.subject)
+  const tgtSubjTok = extractDateTokens(tgt.subject)
+  if (refSubjTok.join(',') !== tgtSubjTok.join(',')) {
+    errors.push(`${where}: subject date-token mismatch ([${refSubjTok}] vs [${tgtSubjTok}])`)
+  }
+  const refBodyTok = extractDateTokens(ref.bodyHtml)
+  const tgtBodyTok = extractDateTokens(tgt.bodyHtml)
+  if (refBodyTok.join(',') !== tgtBodyTok.join(',')) {
+    errors.push(`${where}: body date-token mismatch ([${refBodyTok}] vs [${tgtBodyTok}])`)
+  }
+
+  // 添付：数・実拡張子・sizeKB・mimeType・isTrapped（名前本体は翻訳可）
+  const refAtt = ref.attachments ?? []
+  const tgtAtt = tgt.attachments ?? []
+  if (refAtt.length !== tgtAtt.length) {
+    errors.push(`${where}: attachment count mismatch (${refAtt.length} vs ${tgtAtt.length})`)
+  } else {
+    refAtt.forEach((ra, i) => {
+      const ta = tgtAtt[i]
+      if (realExtension(ra.name) !== realExtension(ta.name)) {
+        errors.push(`${where}: attachment[${i}] extension mismatch (${realExtension(ra.name)} vs ${realExtension(ta.name)})`)
+      }
+      if (ra.sizeKB !== ta.sizeKB) {
+        errors.push(`${where}: attachment[${i}] sizeKB mismatch (${ra.sizeKB} vs ${ta.sizeKB})`)
+      }
+      if (ra.mimeType !== ta.mimeType) {
+        errors.push(`${where}: attachment[${i}] mimeType mismatch (${ra.mimeType} vs ${ta.mimeType})`)
+      }
+      if (ra.isTrapped !== ta.isTrapped) {
+        errors.push(`${where}: attachment[${i}] isTrapped mismatch (${ra.isTrapped} vs ${ta.isTrapped})`)
+      }
+    })
+  }
+}
+
 /**
  * メールデータの整合性を検証する（開発時チェック用）
  */
@@ -225,6 +342,26 @@ export function validateEmailData(): { valid: boolean; errors: string[] } {
       if (!hasExe) {
         errors.push(`${trap.id}: missing .exe attachment in extension trap`)
       }
+    }
+  }
+
+  // ── 言語版の構造一致チェック（差し替え済み言語のみ）─────────────────────────
+  // 日本語セットを基準に、isTrap / traps / 送受信アドレス / 日付 /
+  // リンク(href・data-display-url・data-phished-url) / 日付トークンの位置と値 /
+  // 添付(数・実拡張子・sizeKB・mimeType・isTrapped) が一致しているかを検査する。
+  const refByKey = new Map<string, Email>()
+  for (const e of emailsJa) refByKey.set(emailKey(e.id), e)
+
+  const checkedSets = allSets.filter(s => STRUCTURE_CHECKED_LANGS.includes(s.data[0]?.lang))
+  for (const { name, data } of checkedSets) {
+    if (data === emailsJa) continue // 基準自身はスキップ
+    for (const email of data) {
+      const ref = refByKey.get(emailKey(email.id))
+      if (!ref) {
+        errors.push(`${name}: no Japanese counterpart for ${email.id}`)
+        continue
+      }
+      compareEmailStructure(ref, email, errors)
     }
   }
 

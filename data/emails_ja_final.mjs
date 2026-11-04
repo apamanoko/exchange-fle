@@ -63,7 +63,6 @@ export const emailsJaFinal = [
     bodyHtml: `<p>留学生・TAの皆さん</p>
 <p>国際センターです。冬季休業期間中の窓口の対応についてお知らせします。</p>
 <p>詳細は添付のPDFをご確認ください。休業期間中は、メールでの問い合わせへの返信が遅くなる場合があります。</p>
-<p>(English: The International Center will be closed during the winter break. Please see the attached PDF for details.)</p>
 <p>国際センター</p>`,
     attachments: [{ name: '冬季休業のご案内.pdf', sizeKB: 312, mimeType: 'application/pdf', isTrapped: false }],
   },
