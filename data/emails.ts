@@ -493,196 +493,152 @@ export const emailsKo: Email[] = [
 export const emailsZh: Email[] = [
 
   // ============================================================
-  // 通常メール × 4通
+  // 通常メール × 4通（日本語版と1対1対応）
   // ============================================================
 
+  // normal 1: Tanaka 教授（個人的な依頼・返信が必要・正規PDF添付）
   {
     id: 'normal-1-zh',
     lang: 'zh',
     isTrap: false,
     traps: [],
-    from: { display: '陈 明远 教授', address: 'chen.m@meijo-u.ac.jp' },
-    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '下周研讨会时间变更通知',
-    dateOffsetDays: -1, dateTime: '15:00',
-    bodyHtml: `<p>您好，</p>
-<p>下周一临时有教务会议，研讨会需要调整时间，麻烦改到周二下午3点可以吗？地点不变，还是512室。</p>
-<p>请这周内告知是否方便参加，给您带来不便深感抱歉。</p>
-<p>陈 明远 教授</p>`,
+    from: { display: '田中诚二', address: 'tanaka-seiji@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '关于下周研讨课日程变更的通知',
+    dateOffsetDays: -1, dateTime: '16:40',
+    bodyHtml: `<p>各位TA：</p>
+<p>我是田中。因校内活动，我负责的练习课程原定于{{D+7}}的研讨课，改至{{D+8}}第3节课。</p>
+<p>修改后的日程表见附件。请在{{D+3}}前回复告知您是否能以TA身份参加。如果不方便，我们再另行安排其他日期。</p>
+<p>谨上</p>
+<p>田中诚二<br>信息工学部 信息工学科</p>`,
+    attachments: [{ name: '研讨课日程_修改版.pdf', sizeKB: 118, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 2: 教务处（事務的・正規リンク・期限に余裕）
   {
     id: 'normal-2-zh',
     lang: 'zh',
     isTrap: false,
     traps: [],
     from: { display: '教务处', address: 'gakumu@meijo-u.ac.jp' },
-    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '前期选课截止通知',
-    dateOffsetDays: -2, dateTime: '09:00',
-    bodyHtml: `<p>各位同学：</p>
-<p>前期选课截止时间为{{D+3}}23:59，请通过门户网站确认选课内容。</p>
-<p>【请确认以下事项】<br>
-・年度学分上限（48学分）是否超出<br>
-・必修课是否有遗漏<br>
-・课程时间是否有冲突</p>
-<p>如有疑问请联系教务处（内线：1234）。</p>`,
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '关于提交TA工作报告的方法',
+    dateOffsetDays: -2, dateTime: '10:05',
+    bodyHtml: `<p>各位TA：</p>
+<p>我们是教务处。现将本月TA工作报告的提交方法通知如下。</p>
+<p>请通过下方链接登录校内门户网站，在工作报告表格中填写工作日期和工作时长。</p>
+<p><a href="javascript:void(0)" data-display-url="https://portal.meijo-u.ac.jp/ta/report">TA工作报告表格（校内门户）</a></p>
+<p>提交截止日期为{{D+7}}。如有疑问，请到教务处窗口咨询。</p>
+<p>教务处</p>`,
+    attachments: [],
   },
+
+  // normal 3: 国际交流中心（事務的・正規PDF添付）
   {
     id: 'normal-3-zh',
     lang: 'zh',
     isTrap: false,
     traps: [],
-    from: { display: '附属图书馆', address: 'library@meijo-u.ac.jp' },
-    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '借阅图书还书期限提醒',
-    dateOffsetDays: -3, dateTime: '10:00',
-    bodyHtml: `<p>您好，</p>
-<p>以下图书的还书期限为{{D+2}}，请及时归还。</p>
-<p>・《网络安全基础与实践》<br>
-・《认知心理学入门》（第2版）</p>
-<p>如需续借，请通过门户网站"图书馆服务"申请（限续借一次）。</p>`,
+    from: { display: '国际交流中心', address: 'kokusai@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '关于寒假休业期间的通知',
+    dateOffsetDays: -3, dateTime: '13:20',
+    bodyHtml: `<p>各位留学生及TA：</p>
+<p>我们是国际交流中心。现将寒假休业期间的窗口办公安排通知如下。</p>
+<p>详情请见附件PDF。休业期间，邮件咨询的回复可能会有所延迟。</p>
+<p>国际交流中心</p>`,
+    attachments: [{ name: '寒假休业通知.pdf', sizeKB: 312, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 4: Sato（TA仲間・個人的な依頼・正規Driveリンク）
   {
     id: 'normal-4-zh',
     lang: 'zh',
     isTrap: false,
     traps: [],
-    from: { display: '王 芳', address: 'wang.fang.2023@meijo-u.ac.jp' },
-    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '下周发表资料共享',
-    dateOffsetDays: -4, dateTime: '18:30',
-    bodyHtml: `<p>你好！</p>
-<p>把下周联合研讨会用的发表资料提前分享给你，有时间的话先看一下吧。</p>
-<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
-      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
-  点击查看 Google Drive 资料
-</a></p>
-<p>有什么问题随时联系我！</p>
-<p>王 芳</p>`,
+    from: { display: '佐藤健太', address: 'sato-kenta@ccmailg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'TA培训资料已共享',
+    dateOffsetDays: 0, dateTime: '08:55',
+    bodyHtml: `<p>你好，我是同为TA的佐藤。</p>
+<p>我把上周TA培训的资料整理到了Google Drive上。你能确认一下是否可以打开吗？</p>
+<p><a href="javascript:void(0)" data-display-url="https://drive.google.com/drive/folders/1kTA2tr4in1ng0materials">TA培训资料（Google Drive）</a></p>
+<p>如果缺少什么资料，请告诉我。</p>
+<p>佐藤</p>`,
+    attachments: [],
   },
 
   // ============================================================
-  // 罠メール × 4通
+  // 罠メール × 4通（日本語版と traps / アドレス / リンク / 添付が同一）
   // ============================================================
 
-  /**
-   * trap-1-zh: 【BEC】海外供应商冒充
-   * 罠: 域名伪装（oxf0rd）+ 双重扩展名（.pdf.exe）
-   * 心理压力: 截止日期（{{D+9}}后不受理）
-   */
+  // trap 1: 学生支援课 を装う / domain・extension・urgency
   {
     id: 'trap-1-zh',
     lang: 'zh',
     isTrap: true,
     traps: ['domain', 'extension', 'urgency'],
-    from: {
-      display: 'Oxford Education China 支持团队',
-      address: 'support@oxf0rd-edu-china.com',
-    },
-    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '【重要】留学生支援费用收款账户变更通知',
-    dateOffsetDays: 0, dateTime: '14:30',
-    bodyHtml: `<p>您好，</p>
-<p>我是Oxford Education China支持团队的李建国。</p>
-<p>由于系统升级，留学生支援费用的收款账户已发生变更。下次付款时，请参考<strong>附件中的确认函</strong>使用新账户信息。</p>
-<p><strong>※ {{D+9}}之后将不再接受旧账户的汇款。</strong></p>
-<p>Oxford Education China<br>李 建国<br>Tel: 010-XXXX-XXXX</p>`,
-    attachments: [{
-      name: '账户变更确认函.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 312,
-      isTrapped: true,
-    }],
+    from: { display: '学生支援课 TA津贴负责', address: 'ta-teate@ccmailg.meijo-u.co.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '【重要】关于确认TA津贴汇款账户（今日内）',
+    dateOffsetDays: 0, dateTime: '09:12',
+    bodyHtml: `<p>各位TA：</p>
+<p>我们是学生支援课。为发放本月TA津贴，我们尚未能确认已登记的银行账户信息。</p>
+<p>请在附件的确认表中填写账户信息，并于<strong>今天下午5点前</strong>回复。逾期的话，本月津贴将推迟到下个月或之后发放。</p>
+<p>学生支援课 TA津贴负责</p>`,
+    attachments: [{ name: 'TA津贴_账户确认表.pdf.exe', sizeKB: 287, mimeType: 'application/pdf', isTrapped: true }],
   },
 
-  /**
-   * trap-2-zh: 【BEC】权威人士冒充（CEO诈骗）
-   * 罠: 免费邮件域名（gmail）+ 链接伪装 + 紧迫性 + 权威
-   * 心理压力: 海外出差中・今日内・机密
-   */
+  // trap 2: Dean Kubota を装う / domain・link・urgency・authority
   {
     id: 'trap-2-zh',
     lang: 'zh',
     isTrap: true,
     traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: '吉川 研究科长',
-      address: 'yoshikawa.meijo.univ@gmail.com',
-    },
-    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '紧急请求帮助',
-    dateOffsetDays: -2, dateTime: '11:45',
-    bodyHtml: `<p>您好，</p>
-<p>我现在在伦敦参加学会，不方便接听电话。有件紧急的事想请您帮忙。</p>
-<p>与海外大学的合作项目需要今天之内共享负责学生的信息。能请您填写下面表格并提交吗？</p>
-<p><a href="javascript:void(0)"
-      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz"
-      data-phished-url="/phished?type=link">
-  点击此处填写表格
-</a></p>
-<p>这个项目还未正式公布，请暂时保密，不要告知其他人。</p>
-<p>拜托了。<br>吉川</p>`,
+    from: { display: '久保田隆', address: 'kubota.takashi.meijo@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '紧急：请求确认（请保密）',
+    dateOffsetDays: -1, dateTime: '19:47',
+    bodyHtml: `<p>您好：</p>
+<p>我是久保田。我正在开会，无法接电话。关于与您TA工作相关的文件，有一件事需要您紧急确认。</p>
+<p>请查看文件，并通过下方表格回复。由于涉及人事问题，请不要告知其他教职员工或学生。</p>
+<p><a href="javascript:void(0)" data-display-url="https://docs.google.com-edit.net/forms/d/e/1FAIpQLSf/viewform" data-phished-url="/phished?type=link">文件确认表格</a></p>
+<p>久保田隆<br>理工学研究科长</p>`,
   },
 
-  /**
-   * trap-3-zh: 【鱼叉式网络钓鱼】业务邮件劫持
-   * 罠: 双重扩展名（.pdf.exe）+ 信任关系利用
-   * 心理压力: 道歉・业务连续性
-   */
+  // trap 3: TA仲間を装う / domain・extension
   {
     id: 'trap-3-zh',
     lang: 'zh',
     isTrap: true,
-    traps: ['extension', 'authority'],
-    from: {
-      display: '刘 晓明（信息工学研究科 M1）',
-      address: 'liu.xiaoming.2024@gmail.com',
-    },
-    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Re: 关于奖学金申请材料不完整的问题',
-    dateOffsetDays: -4, dateTime: '16:30',
-    bodyHtml: `<p>您好，</p>
-<p>您指出的材料不完整问题我已全部修改完毕，给您添麻烦了，非常抱歉。</p>
-<p>修改后的文件以加密ZIP格式重新发送。<br>
-解压密码：<strong>2024</strong></p>
-<p>确认后如有问题请告知，谢谢！</p>
-<p>刘 晓明</p>`,
-    attachments: [{
-      name: '奖学金申请书_修改版.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 158,
-      isTrapped: true,
-    }],
+    traps: ['domain', 'extension'],
+    from: { display: '李明', address: 'li.ming.0912@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '回复：关于第5次报告评分',
+    dateOffsetDays: -1, dateTime: '21:03',
+    bodyHtml: `<p>你好，我是同为TA的李。</p>
+<p>把之前说过的第5次报告评分笔记的修改版发给你。你能帮我看看评分标准是否合适吗？</p>
+<p>李</p>
+<hr>
+<p style="color:#666">&gt; 来自上一封邮件：<br>&gt; 我想再统一一下第5次报告的评分标准。修改好之后，能发给我吗？</p>`,
+    attachments: [{ name: '第5次_评分笔记_修改版.docx.exe', sizeKB: 164, mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', isTrapped: true }],
   },
 
-  /**
-   * trap-4-zh: 【网络钓鱼】基础设施伪装通知
-   * 罠: 域名伪装（ccmallg vs ccmailg）+ 链接伪装 + 紧迫性
-   * 心理压力: 检测到可疑登录・当天・账户暂停
-   */
+  // trap 4: 信息中心 を装う / domain・link・urgency
   {
     id: 'trap-4-zh',
     lang: 'zh',
     isTrap: true,
-    traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: '名城大学 信息中心',
-      address: 'admin@ccmallg.meijo-u.ac.jp',
-    },
-    to: { display: '您（TA）', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '【紧急】需要确认您的账户',
-    dateOffsetDays: -5, dateTime: '09:00',
-    bodyHtml: `<p>这是名城大学信息中心发出的重要通知。</p>
-<p><strong>检测到您的邮件账户存在可疑登录行为。</strong>为保护您的账户安全，请于今天之内完成本人验证手续。</p>
-<p>▼ 本人验证请点击此处<br>
-<a href="javascript:void(0)"
-   data-display-url="https://portal.meijo-u.ac.jp/auth/update"
-   data-phished-url="/phished?type=link">
-  https://portal.meijo-u.ac.jp/auth/update
-</a></p>
-<p><strong>※ 今天23:59前未完成验证的账户将被暂时停用。</strong></p>
-<p>名城大学 信息中心<br>
-ccmailg.meijo-u.ac.jp</p>`,
+    traps: ['domain', 'link', 'urgency'],
+    from: { display: '信息中心 安全负责', address: 'security@ccmallg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '【信息中心】请求确认账户身份',
+    dateOffsetDays: 0, dateTime: '07:30',
+    bodyHtml: `<p>各位TA：</p>
+<p>我们是信息中心。我们检测到您的账户存在异常登录尝试。</p>
+<p>为了账户安全，请在<strong>24小时内</strong>通过下方链接确认身份。如果无法确认，您的账户将被暂时停用。</p>
+<p><a href="javascript:void(0)" data-display-url="https://meijo-u-portal-support.com/account/verify" data-phished-url="/phished?type=link">https://portal.meijo-u.ac.jp/account/verify</a></p>
+<p>信息中心 安全负责</p>`,
   },
 ]
 
