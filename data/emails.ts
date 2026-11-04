@@ -328,6 +328,163 @@ export const emailsEn: Email[] = [
 <p>Information Technology Center, Security</p>`,
   },
 ]
+
+/**
+ * ドイツ語版メール（通常4通 + 罠4通）
+ * 日本在籍の留学生TAとして自然なドイツ語シナリオ。日本語版と攻撃タイプ・構造は等価。
+ */
+export const emailsDe: Email[] = [
+
+  // ============================================================
+  // 通常メール × 4通（日本語版と1対1対応）
+  // ============================================================
+
+  // normal 1: Tanaka 教授（個人的な依頼・返信が必要・正規PDF添付）
+  {
+    id: 'normal-1-de',
+    lang: 'de',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Seiji Tanaka', address: 'tanaka-seiji@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Änderung des Seminartermins in der nächsten Woche',
+    dateOffsetDays: -1, dateTime: '16:40',
+    bodyHtml: `<p>Liebe TAs,</p>
+<p>hier ist Tanaka. Aufgrund einer Veranstaltung an der Universität wird das Seminar meiner Übung, das für den {{D+7}} geplant war, auf den {{D+8}}, 3. Stunde, verlegt.</p>
+<p>Den aktualisierten Terminplan finden Sie im Anhang. Bitte teilen Sie mir bis zum {{D+3}} per Antwort mit, ob Sie als TA teilnehmen können. Falls nicht, vereinbaren wir einen anderen Tag.</p>
+<p>Mit freundlichen Grüßen</p>
+<p>Seiji Tanaka<br>Fachbereich Informationstechnik</p>`,
+    attachments: [{ name: 'Seminarplan_Aktualisiert.pdf', sizeKB: 118, mimeType: 'application/pdf', isTrapped: false }],
+  },
+
+  // normal 2: Studienbüro（事務的・正規リンク・期限に余裕）
+  {
+    id: 'normal-2-de',
+    lang: 'de',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Studienbüro', address: 'gakumu@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'So reichen Sie den TA-Arbeitsbericht ein',
+    dateOffsetDays: -2, dateTime: '10:05',
+    bodyHtml: `<p>Sehr geehrte TAs,</p>
+<p>hier ist das Studienbüro. Wir erklären Ihnen, wie Sie den TA-Arbeitsbericht für diesen Monat einreichen.</p>
+<p>Melden Sie sich über den folgenden Link im Portal der Universität an und tragen Sie im Berichtsformular Ihre Arbeitstage und Arbeitsstunden ein.</p>
+<p><a href="javascript:void(0)" data-display-url="https://portal.meijo-u.ac.jp/ta/report">Formular für den TA-Arbeitsbericht (Universitätsportal)</a></p>
+<p>Die Einreichungsfrist ist der {{D+7}}. Bei Fragen wenden Sie sich bitte an den Schalter des Studienbüros.</p>
+<p>Studienbüro</p>`,
+    attachments: [],
+  },
+
+  // normal 3: Internationales Zentrum（事務的・正規PDF添付）
+  {
+    id: 'normal-3-de',
+    lang: 'de',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Internationales Zentrum', address: 'kokusai@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Hinweis zur Schließung in der Winterpause',
+    dateOffsetDays: -3, dateTime: '13:20',
+    bodyHtml: `<p>Sehr geehrte internationale Studierende und TAs,</p>
+<p>hier ist das Internationale Zentrum. Wir informieren Sie über den Betrieb unseres Büros während der Winterpause.</p>
+<p>Einzelheiten entnehmen Sie bitte dem angehängten PDF. In der Winterpause kann sich die Beantwortung von E-Mail-Anfragen verzögern.</p>
+<p>Internationales Zentrum</p>`,
+    attachments: [{ name: 'Hinweis_Winterpause.pdf', sizeKB: 312, mimeType: 'application/pdf', isTrapped: false }],
+  },
+
+  // normal 4: Sato（TA仲間・個人的な依頼・正規Driveリンク）
+  {
+    id: 'normal-4-de',
+    lang: 'de',
+    isTrap: false,
+    traps: [],
+    from: { display: 'Kenta Sato', address: 'sato-kenta@ccmailg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Ich habe die Unterlagen der TA-Schulung geteilt',
+    dateOffsetDays: 0, dateTime: '08:55',
+    bodyHtml: `<p>Hallo, hier ist Sato, ein anderer TA.</p>
+<p>Ich habe die Unterlagen der TA-Schulung von letzter Woche auf Google Drive zusammengestellt. Kannst du prüfen, ob du sie öffnen kannst?</p>
+<p><a href="javascript:void(0)" data-display-url="https://drive.google.com/drive/folders/1kTA2tr4in1ng0materials">Unterlagen der TA-Schulung (Google Drive)</a></p>
+<p>Sag mir Bescheid, falls etwas fehlt.</p>
+<p>Sato</p>`,
+    attachments: [],
+  },
+
+  // ============================================================
+  // 罠メール × 4通（日本語版と traps / アドレス / リンク / 添付が同一）
+  // ============================================================
+
+  // trap 1: Studierendenservice を装う / domain・extension・urgency
+  {
+    id: 'trap-1-de',
+    lang: 'de',
+    isTrap: true,
+    traps: ['domain', 'extension', 'urgency'],
+    from: { display: 'Studierendenservice – TA-Vergütung', address: 'ta-teate@ccmailg.meijo-u.co.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[Wichtig] Bestätigung Ihres Bankkontos für die TA-Vergütung (heute)',
+    dateOffsetDays: 0, dateTime: '09:12',
+    bodyHtml: `<p>Sehr geehrte TAs,</p>
+<p>hier ist der Studierendenservice. Für die Auszahlung der TA-Vergütung dieses Monats konnten wir die hinterlegten Bankdaten nicht bestätigen.</p>
+<p>Bitte tragen Sie Ihre Kontodaten in das angehängte Formular ein und senden Sie es <strong>heute bis 17:00 Uhr</strong> zurück. Bei Fristüberschreitung wird die Auszahlung für diesen Monat auf den nächsten Monat oder später verschoben.</p>
+<p>Studierendenservice – TA-Vergütung</p>`,
+    attachments: [{ name: 'Formular_Kontobestaetigung_TA_Verguetung.pdf.exe', sizeKB: 287, mimeType: 'application/pdf', isTrapped: true }],
+  },
+
+  // trap 2: Dean Kubota を装う / domain・link・urgency・authority
+  {
+    id: 'trap-2-de',
+    lang: 'de',
+    isTrap: true,
+    traps: ['domain', 'link', 'urgency', 'authority'],
+    from: { display: 'Takashi Kubota', address: 'kubota.takashi.meijo@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Dringend: Bitte um Bestätigung (bitte vertraulich behandeln)',
+    dateOffsetDays: -1, dateTime: '19:47',
+    bodyHtml: `<p>Guten Tag,</p>
+<p>hier ist Kubota. Ich befinde mich in einer Besprechung und kann nicht telefonieren. Es gibt etwas, das ich dringend von Ihnen bestätigt haben möchte, und zwar zu Unterlagen, die Ihre TA-Tätigkeit betreffen.</p>
+<p>Bitte prüfen Sie die Unterlagen und antworten Sie über das folgende Formular. Da es sich um Personalangelegenheiten handelt, bitte ich Sie, anderen Lehrenden oder Studierenden nichts davon zu sagen.</p>
+<p><a href="javascript:void(0)" data-display-url="https://docs.google.com-edit.net/forms/d/e/1FAIpQLSf/viewform" data-phished-url="/phished?type=link">Formular zur Bestätigung der Unterlagen</a></p>
+<p>Takashi Kubota<br>Leiter der Graduiertenschule für Naturwissenschaften und Technik</p>`,
+  },
+
+  // trap 3: TA仲間を装う / domain・extension
+  {
+    id: 'trap-3-de',
+    lang: 'de',
+    isTrap: true,
+    traps: ['domain', 'extension'],
+    from: { display: 'Li Ming', address: 'li.ming.0912@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'AW: Bewertung von Bericht 5',
+    dateOffsetDays: -1, dateTime: '21:03',
+    bodyHtml: `<p>Hallo, hier ist Li, ein anderer TA.</p>
+<p>Ich schicke dir die überarbeitete Fassung der Bewertungsnotizen zu Bericht 5, von denen ich vorher gesprochen hatte. Kannst du prüfen, ob die Kriterien passen?</p>
+<p>Li</p>
+<hr>
+<p style="color:#666">&gt; Aus der vorherigen E-Mail:<br>&gt; Ich möchte die Bewertungskriterien für Bericht 5 noch einmal abstimmen. Kannst du sie mir schicken, wenn du sie überarbeitet hast?</p>`,
+    attachments: [{ name: 'Bewertungsnotizen_Bericht5_Ueberarbeitet.docx.exe', sizeKB: 164, mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', isTrapped: true }],
+  },
+
+  // trap 4: IT-Zentrum を装う / domain・link・urgency
+  {
+    id: 'trap-4-de',
+    lang: 'de',
+    isTrap: true,
+    traps: ['domain', 'link', 'urgency'],
+    from: { display: 'IT-Zentrum – Sicherheit', address: 'security@ccmallg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[IT-Zentrum] Bitte um Bestätigung Ihrer Kontoidentität',
+    dateOffsetDays: 0, dateTime: '07:30',
+    bodyHtml: `<p>Sehr geehrte TAs,</p>
+<p>hier ist das IT-Zentrum. Wir haben einen unbefugten Anmeldeversuch bei Ihrem Konto festgestellt.</p>
+<p>Zu Ihrer Sicherheit bestätigen Sie bitte Ihre Identität über den folgenden Link <strong>innerhalb von 24 Stunden</strong>. Wenn wir Ihre Identität nicht bestätigen können, wird Ihr Konto vorübergehend gesperrt.</p>
+<p><a href="javascript:void(0)" data-display-url="https://meijo-u-portal-support.com/account/verify" data-phished-url="/phished?type=link">https://portal.meijo-u.ac.jp/account/verify</a></p>
+<p>IT-Zentrum – Sicherheit</p>`,
+  },
+]
+
 /**
  * 韓国語版メール（通常4通 + 罠4通）
  * 日本在住の韓国語母語話者向け。日本語版と攻撃タイプは等価。

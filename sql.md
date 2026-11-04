@@ -92,3 +92,12 @@ DROP POLICY IF EXISTS "anon_insert"       ON experiment_logs;
 ALTER TABLE sessions        DISABLE ROW LEVEL SECURITY;
 ALTER TABLE experiment_logs DISABLE ROW LEVEL SECURITY;
 ```
+
+## 2026-11-04 母語にドイツ語(de)を追加する際の、制約の確認(変更なし)
+
+目的: 母語としてドイツ語(コード 'de')を使えるか、sessions の CHECK 制約を確認した。
+結果: 変更は不要(すでに許可されていた)。
+
+確認時の制約:
+- sessions_l1_lang_check: l1_lang IN ('ja','en','de','zh','ko','it','vi','es','pl','no','fi')
+- sessions_ui_lang_check: ui_lang IN ('ja','en','de','zh','ko','it','vi','es','pl','no','fi')
