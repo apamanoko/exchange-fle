@@ -1052,196 +1052,152 @@ ccmailg.meijo-u.ac.jp</p>`,
 export const emailsEs: Email[] = [
 
   // ============================================================
-  // 通常メール × 4通
+  // 通常メール × 4通（日本語版と1対1対応）
   // ============================================================
 
+  // normal 1: Tanaka 教授（個人的な依頼・返信が必要・正規PDF添付）
   {
     id: 'normal-1-es',
     lang: 'es',
     isTrap: false,
     traps: [],
-    from: { display: 'Prof. Carlos García', address: 'garcia.c@meijo-u.ac.jp' },
-    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Cambio de horario – Seminario de la semana que viene',
-    dateOffsetDays: -1, dateTime: '15:00',
-    bodyHtml: `<p>Hola,</p>
-<p>El lunes que viene tengo una reunión de facultad, así que necesito cambiar el seminario al martes a las 15:00. La sala sigue siendo la misma (512).</p>
-<p>¿Podrías decirme antes de que acabe la semana si puedes venir? Siento las molestias.</p>
-<p>Un saludo,<br>Prof. Carlos García</p>`,
+    from: { display: 'Seiji Tanaka', address: 'tanaka-seiji@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Cambio en el programa del seminario de la próxima semana',
+    dateOffsetDays: -1, dateTime: '16:40',
+    bodyHtml: `<p>Estimados TA:</p>
+<p>Les escribe Tanaka. Debido a un evento de la universidad, el seminario del curso de ejercicios a mi cargo, previsto para el {{D+7}}, se traslada para el {{D+8}}, en la tercera hora.</p>
+<p>Adjunto el programa actualizado. Por favor, respondan a más tardar el {{D+3}} para indicarme si pueden participar como TA. Si no les resulta posible, coordinaremos otro día.</p>
+<p>Saludos cordiales,</p>
+<p>Seiji Tanaka<br>Departamento de Ingeniería de la Información</p>`,
+    attachments: [{ name: 'Programa_Seminario_Actualizado.pdf', sizeKB: 118, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 2: Oficina de Asuntos Académicos（事務的・正規リンク・期限に余裕）
   {
     id: 'normal-2-es',
     lang: 'es',
     isTrap: false,
     traps: [],
     from: { display: 'Oficina de Asuntos Académicos', address: 'gakumu@meijo-u.ac.jp' },
-    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Plazo de matrícula – {{D+3}}',
-    dateOffsetDays: -2, dateTime: '09:00',
-    bodyHtml: `<p>Estimados estudiantes,</p>
-<p>Os recordamos que el plazo de matrícula del primer semestre finaliza el {{D+3}} a las 23:59. Por favor, comprobad vuestra situación en el portal.</p>
-<p>【Puntos a verificar】<br>
-・No haber superado el límite anual de créditos (48 créditos)<br>
-・No faltar ninguna asignatura obligatoria<br>
-・No tener conflictos de horario</p>
-<p>Consultas: Oficina de Asuntos Académicos, ext. 1234</p>`,
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Cómo entregar el informe de trabajo de TA',
+    dateOffsetDays: -2, dateTime: '10:05',
+    bodyHtml: `<p>Estimados TA:</p>
+<p>Les escribe la Oficina de Asuntos Académicos. Les explicamos cómo entregar el informe de trabajo de TA de este mes.</p>
+<p>Inicien sesión en el portal de la universidad mediante el siguiente enlace e ingresen los días y las horas trabajadas en el formulario del informe.</p>
+<p><a href="javascript:void(0)" data-display-url="https://portal.meijo-u.ac.jp/ta/report">Formulario de informe de trabajo de TA (portal de la universidad)</a></p>
+<p>El plazo de entrega es el {{D+7}}. Si tienen alguna duda, consulten en la ventanilla de la Oficina de Asuntos Académicos.</p>
+<p>Oficina de Asuntos Académicos</p>`,
+    attachments: [],
   },
+
+  // normal 3: Centro Internacional（事務的・正規PDF添付）
   {
     id: 'normal-3-es',
     lang: 'es',
     isTrap: false,
     traps: [],
-    from: { display: 'Biblioteca Universitaria', address: 'library@meijo-u.ac.jp' },
-    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Recordatorio: fecha de devolución de libros',
-    dateOffsetDays: -3, dateTime: '10:00',
-    bodyHtml: `<p>Estimado/a usuario/a,</p>
-<p>Te recordamos que los siguientes libros deben devolverse antes del {{D+2}}:</p>
-<p>・Fundamentos de Ciberseguridad (2.ª ed.)<br>
-・Introducción a la Psicología Cognitiva</p>
-<p>Puedes renovar el préstamo desde el portal de la biblioteca (renovación permitida una sola vez).</p>`,
+    from: { display: 'Centro Internacional', address: 'kokusai@meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Aviso de cierre por las vacaciones de invierno',
+    dateOffsetDays: -3, dateTime: '13:20',
+    bodyHtml: `<p>Estimados estudiantes internacionales y TA:</p>
+<p>Les escribe el Centro Internacional. Les informamos sobre el funcionamiento de nuestra oficina durante las vacaciones de invierno.</p>
+<p>Consulten el PDF adjunto para más detalles. Durante el cierre, las respuestas a las consultas por correo electrónico podrían demorar.</p>
+<p>Centro Internacional</p>`,
+    attachments: [{ name: 'Aviso_Vacaciones_de_Invierno.pdf', sizeKB: 312, mimeType: 'application/pdf', isTrapped: false }],
   },
+
+  // normal 4: Sato（TA仲間・個人的な依頼・正規Driveリンク）
   {
     id: 'normal-4-es',
     lang: 'es',
     isTrap: false,
     traps: [],
-    from: { display: 'María López', address: 'lopez.maria.2023@meijo-u.ac.jp' },
-    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Comparto las diapositivas para el seminario de la semana que viene',
-    dateOffsetDays: -4, dateTime: '18:30',
-    bodyHtml: `<p>¡Hola!</p>
-<p>Te mando mis diapositivas para el seminario conjunto de la semana que viene. ¡Échales un vistazo cuando puedas!</p>
-<p><a href="https://drive.google.com/file/d/xxxxxxxxx"
-      data-display-url="https://drive.google.com/file/d/xxxxxxxxx">
-  Ver diapositivas en Google Drive
-</a></p>
-<p>Escríbeme si tienes alguna duda. ¡Hasta pronto!</p>
-<p>María</p>`,
+    from: { display: 'Kenta Sato', address: 'sato-kenta@ccmailg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'He compartido los materiales de la capacitación de TA',
+    dateOffsetDays: 0, dateTime: '08:55',
+    bodyHtml: `<p>Hola, soy Sato, otro TA.</p>
+<p>Reuní en Google Drive los materiales de la capacitación de TA de la semana pasada. ¿Puedes comprobar si puedes abrirlos?</p>
+<p><a href="javascript:void(0)" data-display-url="https://drive.google.com/drive/folders/1kTA2tr4in1ng0materials">Materiales de la capacitación de TA (Google Drive)</a></p>
+<p>Si falta algo, avísame.</p>
+<p>Sato</p>`,
+    attachments: [],
   },
 
   // ============================================================
-  // 罠メール × 4通
+  // 罠メール × 4通（日本語版と traps / アドレス / リンク / 添付が同一）
   // ============================================================
 
-  /**
-   * trap-1-es: 【BEC】Suplantación de proveedor extranjero
-   * 罠: domain偽装（oxf0rd）+ 二重拡張子（.pdf.exe）
-   * 心理的圧力: 期限（después del {{D+9}} no se acepta）
-   */
+  // trap 1: Oficina de Apoyo Estudiantil を装う / domain・extension・urgency
   {
     id: 'trap-1-es',
     lang: 'es',
     isTrap: true,
     traps: ['domain', 'extension', 'urgency'],
-    from: {
-      display: 'Oxford Education Spain – Soporte',
-      address: 'support@oxf0rd-edu-spain.com',
-    },
-    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '[Importante] Cambio de datos bancarios – Apoyo a estudiantes internacionales',
-    dateOffsetDays: 0, dateTime: '14:30',
-    bodyHtml: `<p>Estimado/a usuario/a,</p>
-<p>Mi nombre es Carlos Martínez, del equipo de soporte de Oxford Education Spain.</p>
-<p>Debido a una actualización de nuestro sistema bancario, los datos de pago para el apoyo a estudiantes internacionales han cambiado. Para el próximo pago, consulta el <strong>documento de confirmación adjunto</strong> para obtener los nuevos datos bancarios.</p>
-<p><strong>※ Los pagos a la cuenta antigua no se aceptarán después del {{D+9}}.</strong></p>
-<p>Oxford Education Spain<br>Carlos Martínez<br>Tel: 91-XXXX-XXXX</p>`,
-    attachments: [{
-      name: 'Confirmacion_Datos_Bancarios.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 312,
-      isTrapped: true,
-    }],
+    from: { display: 'Oficina de Apoyo Estudiantil – Asignación de TA', address: 'ta-teate@ccmailg.meijo-u.co.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[Importante] Confirmación de su cuenta bancaria para la asignación de TA (hoy)',
+    dateOffsetDays: 0, dateTime: '09:12',
+    bodyHtml: `<p>Estimados TA:</p>
+<p>Les escribe la Oficina de Apoyo Estudiantil. Para efectuar el pago de la asignación de TA de este mes, no hemos podido confirmar los datos de la cuenta bancaria registrada.</p>
+<p>Completen el formulario adjunto con los datos de su cuenta y devuélvanlo <strong>antes de las 17:00 de hoy</strong>. Si vence el plazo, el pago de este mes se aplazará al mes siguiente o más adelante.</p>
+<p>Oficina de Apoyo Estudiantil – Asignación de TA</p>`,
+    attachments: [{ name: 'Formulario_Verificacion_Cuenta_Asignacion_TA.pdf.exe', sizeKB: 287, mimeType: 'application/pdf', isTrapped: true }],
   },
 
-  /**
-   * trap-2-es: 【BEC】Suplantación de figura de autoridad（CEO fraud）
-   * 罠: free mailドメイン（gmail）+ リンク偽装 + 緊急性 + 権威
-   * 心理的圧力: de viaje・hoy・confidencial
-   */
+  // trap 2: Dean Kubota を装う / domain・link・urgency・authority
   {
     id: 'trap-2-es',
     lang: 'es',
     isTrap: true,
     traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: 'Prof. Yoshikawa (Decano)',
-      address: 'yoshikawa.meijo.univ@gmail.com',
-    },
-    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Urgente – Necesito tu ayuda hoy',
-    dateOffsetDays: -2, dateTime: '11:45',
-    bodyHtml: `<p>Hola,</p>
-<p>Estoy en una conferencia en Londres y no puedo atender llamadas. Necesito pedirte algo urgente.</p>
-<p>Para un proyecto de colaboración con una universidad extranjera, necesito compartir hoy mismo la información de los estudiantes responsables. ¿Podrías rellenar el formulario del siguiente enlace y enviarlo lo antes posible?</p>
-<p><a href="javascript:void(0)"
-      data-display-url="https://docs.google.com-edit.net/spreadsheets/d/1xYz"
-      data-phished-url="/phished?type=link">
-  Haz clic aquí para acceder al formulario
-</a></p>
-<p>Por ahora te pido que lo mantengas en secreto, ya que el proyecto no se ha anunciado oficialmente.</p>
-<p>Muchas gracias,<br>Prof. Yoshikawa</p>`,
+    from: { display: 'Takashi Kubota', address: 'kubota.takashi.meijo@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'Urgente: solicitud de confirmación (por favor, manténgalo en confidencialidad)',
+    dateOffsetDays: -1, dateTime: '19:47',
+    bodyHtml: `<p>Estimado TA:</p>
+<p>Le escribe Kubota. Estoy en una reunión y no puedo atender llamadas. Necesito que confirme con urgencia un asunto sobre documentos relacionados con su trabajo de TA.</p>
+<p>Revise los documentos y responda mediante el formulario de abajo. Como se trata de un asunto de personal, le pido que no lo comente con otros docentes ni estudiantes.</p>
+<p><a href="javascript:void(0)" data-display-url="https://docs.google.com-edit.net/forms/d/e/1FAIpQLSf/viewform" data-phished-url="/phished?type=link">Formulario de confirmación de documentos</a></p>
+<p>Takashi Kubota<br>Director de la Escuela de Posgrado de Ciencias y Tecnología</p>`,
   },
 
-  /**
-   * trap-3-es: 【Spear phishing】Secuestro de hilo de correo
-   * 罠: 二重拡張子（.pdf.exe）+ 信頼関係の悪用
-   * 心理的圧力: disculpa・continuidad del trabajo
-   */
+  // trap 3: TA仲間を装う / domain・extension
   {
     id: 'trap-3-es',
     lang: 'es',
     isTrap: true,
-    traps: ['extension', 'authority'],
-    from: {
-      display: 'Miguel Fernández（Estudiante M1, Ing. Informática）',
-      address: 'miguel.fernandez.2024@gmail.com',
-    },
-    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: 'Re: Documentación incompleta en la solicitud de beca',
-    dateOffsetDays: -4, dateTime: '16:30',
-    bodyHtml: `<p>Hola,</p>
-<p>Ya he corregido todo lo que me indicaste. ¡Perdona las molestias!</p>
-<p>Te reenvío los documentos corregidos en un archivo ZIP protegido con contraseña.<br>
-Contraseña: <strong>2024</strong></p>
-<p>Avísame si todo está bien esta vez. ¡Gracias!</p>
-<p>Miguel</p>`,
-    attachments: [{
-      name: 'Solicitud_Beca_Corregida.pdf.exe',
-      mimeType: 'application/pdf',
-      sizeKB: 158,
-      isTrapped: true,
-    }],
+    traps: ['domain', 'extension'],
+    from: { display: 'Li Ming', address: 'li.ming.0912@gmail.com' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: 'RE: Calificación del informe 5',
+    dateOffsetDays: -1, dateTime: '21:03',
+    bodyHtml: `<p>Hola, soy Li, otro TA.</p>
+<p>Te envío la versión corregida de las notas de calificación del informe 5 que mencioné antes. ¿Puedes revisar si los criterios te parecen correctos?</p>
+<p>Li</p>
+<hr>
+<p style="color:#666">&gt; Del correo anterior:<br>&gt; Me gustaría unificar de nuevo los criterios de calificación del informe 5. ¿Me los puedes enviar cuando los hayas revisado?</p>`,
+    attachments: [{ name: 'Notas_Calificacion_Informe5_Revisadas.docx.exe', sizeKB: 164, mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', isTrapped: true }],
   },
 
-  /**
-   * trap-4-es: 【Phishing】Notificación falsa de infraestructura
-   * 罠: ドメイン偽装（ccmallg vs ccmailg）+ リンク偽装 + 緊急性
-   * 心理的圧力: acceso sospechoso・hoy・cuenta suspendida
-   */
+  // trap 4: Centro de Informática を装う / domain・link・urgency
   {
     id: 'trap-4-es',
     lang: 'es',
     isTrap: true,
-    traps: ['domain', 'link', 'urgency', 'authority'],
-    from: {
-      display: 'Centro de Informática – Universidad Meijo',
-      address: 'admin@ccmallg.meijo-u.ac.jp',
-    },
-    to: { display: 'Tú (TA)', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
-    subject: '[Urgente] Se requiere verificar tu cuenta',
-    dateOffsetDays: -5, dateTime: '09:00',
-    bodyHtml: `<p>Este es un aviso importante del Centro de Informática de la Universidad Meijo.</p>
-<p><strong>Se ha detectado un acceso sospechoso en tu cuenta de correo.</strong> Para proteger tu cuenta, te pedimos que completes la verificación de identidad hoy mismo.</p>
-<p>▼ Verifica tu cuenta aquí<br>
-<a href="javascript:void(0)"
-   data-display-url="https://portal.meijo-u.ac.jp/auth/update"
-   data-phished-url="/phished?type=link">
-  https://portal.meijo-u.ac.jp/auth/update
-</a></p>
-<p><strong>※ Si la verificación no se completa antes de las 23:59 de hoy, tu cuenta quedará suspendida temporalmente.</strong></p>
-<p>Centro de Informática – Universidad Meijo<br>
-ccmailg.meijo-u.ac.jp</p>`,
+    traps: ['domain', 'link', 'urgency'],
+    from: { display: 'Centro de Informática – Seguridad', address: 'security@ccmallg.meijo-u.ac.jp' },
+    to: { display: 'TA', address: 'ta-guest@ccmailg.meijo-u.ac.jp' },
+    subject: '[Centro de Informática] Solicitud de verificación de identidad de su cuenta',
+    dateOffsetDays: 0, dateTime: '07:30',
+    bodyHtml: `<p>Estimados TA:</p>
+<p>Les escribe el Centro de Informática. Hemos detectado un intento de acceso no autorizado a su cuenta.</p>
+<p>Por su seguridad, verifiquen su identidad mediante el siguiente enlace <strong>dentro de las próximas 24 horas</strong>. Si no podemos confirmar su identidad, su cuenta se suspenderá temporalmente.</p>
+<p><a href="javascript:void(0)" data-display-url="https://meijo-u-portal-support.com/account/verify" data-phished-url="/phished?type=link">https://portal.meijo-u.ac.jp/account/verify</a></p>
+<p>Centro de Informática – Seguridad</p>`,
   },
 ]
 
