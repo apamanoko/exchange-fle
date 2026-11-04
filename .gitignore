@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 作業用の設計図ファイル（メール最終版の設計図・プロンプト。コミットしない）
+data/emails_*_final.mjs
+/prompt.txt
