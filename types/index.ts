@@ -44,11 +44,11 @@ export type EventType =
  * 添付ファイル
  */
 export type Attachment = {
-  /** ファイルの実際の名前（例: report_final.pdf.exe） */
+  /** ファイルの実際の名前（拡張子込み。例: report_final.pdf.exe）。これをそのまま表示する */
   name: string
-  /** UIに表示する名前（例: report_final.pdf）← 拡張子偽装に使用 */
-  displayName: string
-  /** MIMEタイプ（例: application/pdf）← アイコン偽装に使用 */
+  /** ファイルサイズ（KB）。表示に使用 */
+  sizeKB: number
+  /** MIMEタイプ（例: application/pdf）← アイコン選択に使用（二重拡張子でも見かけ上の種類のまま） */
   mimeType: string
   /** 罠として仕込まれた添付ファイルかどうか */
   isTrapped: boolean

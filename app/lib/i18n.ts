@@ -92,6 +92,9 @@ export type Translations = {
   // ── 安全確認画面（通常メールのリンク）────────────────────────────────────
   safeLinkTitle: string
   safeLinkBody: string
+  // ── 安全確認画面（通常メールの添付ファイル）──────────────────────────────
+  safeAttachmentTitle: string
+  safeAttachmentBody: string
   phishedExplainLink: string
   phishedExplainAttachment: string
   phishedRecordedNote: string
@@ -187,6 +190,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: '判断を保留しました',
     closeTab: 'このタブを閉じる',
     safeLinkTitle: 'このリンクは安全です',
+    safeAttachmentTitle: 'これは安全なファイルです',
+    safeAttachmentBody: 'これは実験用の無害なファイルです。ファイルはダウンロードされていません。受信箱に戻ってください。',
     safeLinkBody: 'あなたがクリックしたリンクは通常のリンクです。実験中のため外部サイトへの遷移はブロックされました。メール画面に戻って次のメールを処理してください。',
     phishedTitle: 'これはフィッシング詐欺シミュレーションです',
     phishedExplainLink: 'あなたがクリックしたリンクは、実際のフィッシング詐欺であれば攻撃者のサーバーに誘導される偽サイトでした。',
@@ -282,6 +287,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: 'Judgment deferred',
     closeTab: 'Close this tab',
     safeLinkTitle: 'This link is safe.',
+    safeAttachmentTitle: 'This file is safe.',
+    safeAttachmentBody: 'This is a harmless file used for the experiment. The file has not been downloaded. Please return to your inbox.',
     safeLinkBody: 'The link you clicked appears to be a legitimate link. For the purposes of this experiment, navigation to external sites has been blocked. Please return to the mail screen and continue.',
     phishedTitle: 'This is a phishing simulation',
     phishedExplainLink: 'The link you clicked would have led to a fake site controlled by an attacker in a real phishing attack.',
@@ -377,6 +384,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: 'Urteil zurückgestellt',
     closeTab: 'Diesen Tab schließen',
     safeLinkTitle: 'Dieser Link ist sicher.',
+    safeAttachmentTitle: 'Diese Datei ist sicher.',
+    safeAttachmentBody: 'Dies ist eine harmlose Datei für das Experiment. Die Datei wurde nicht heruntergeladen. Bitte kehren Sie zum Posteingang zurück.',
     safeLinkBody: 'Der von Ihnen angeklickte Link ist ein normaler Link. Da das Experiment läuft, wurde die Weiterleitung zu externen Websites blockiert. Bitte kehren Sie zum E-Mail-Bildschirm zurück und bearbeiten Sie die nächste E-Mail.',
     phishedTitle: 'Dies ist eine Phishing-Simulation',
     phishedExplainLink: 'Der Link, auf den Sie geklickt haben, hätte Sie bei einem echten Phishing-Angriff auf eine gefälschte, vom Angreifer kontrollierte Website geführt.',
@@ -472,6 +481,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: '已保留判断',
     closeTab: '关闭此标签页',
     safeLinkTitle: '此链接是安全的',
+    safeAttachmentTitle: '这是安全的文件',
+    safeAttachmentBody: '这是用于实验的无害文件。文件尚未下载。请返回收件箱。',
     safeLinkBody: '您点击的链接是一个正常链接。由于实验正在进行中，已阻止跳转到外部网站。请返回邮件界面并处理下一封邮件。',
     phishedTitle: '这是一次网络钓鱼模拟',
     phishedExplainLink: '如果这是真实的网络钓鱼攻击，您点击的链接将会把您带到攻击者控制的虚假网站。',
@@ -567,6 +578,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: '판단을 보류했습니다',
     closeTab: '이 탭 닫기',
     safeLinkTitle: '이 링크는 안전합니다',
+    safeAttachmentTitle: '이 파일은 안전합니다',
+    safeAttachmentBody: '이것은 실험용 무해한 파일입니다. 파일은 다운로드되지 않았습니다. 받은편지함으로 돌아가 주세요.',
     safeLinkBody: '클릭하신 링크는 정상적인 링크입니다. 실험 중이므로 외부 사이트로의 이동이 차단되었습니다. 메일 화면으로 돌아가 다음 메일을 처리해 주세요.',
     phishedTitle: '이것은 피싱 시뮬레이션입니다',
     phishedExplainLink: '실제 피싱 공격이었다면, 당신이 클릭한 링크는 공격자가 통제하는 가짜 사이트로 연결되었을 것입니다.',
@@ -662,6 +675,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: 'Giudizio sospeso',
     closeTab: 'Chiudi questa scheda',
     safeLinkTitle: 'Questo link è sicuro.',
+    safeAttachmentTitle: 'Questo file è sicuro.',
+    safeAttachmentBody: "Questo è un file innocuo usato per l'esperimento. Il file non è stato scaricato. Torna alla posta in arrivo.",
     safeLinkBody: "Il link su cui hai cliccato è un link legittimo. Poiché l'esperimento è in corso, la navigazione verso siti esterni è stata bloccata. Torna alla schermata della posta e passa all'email successiva.",
     phishedTitle: 'Questa è una simulazione di phishing',
     phishedExplainLink: 'Il link su cui hai cliccato, in un vero attacco di phishing, ti avrebbe portato a un sito falso controllato da un aggressore.',
@@ -757,6 +772,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: 'Đã hoãn phán đoán',
     closeTab: 'Đóng tab này',
     safeLinkTitle: 'Liên kết này an toàn.',
+    safeAttachmentTitle: 'Tệp này an toàn.',
+    safeAttachmentBody: 'Đây là tệp vô hại dùng cho thí nghiệm. Tệp chưa được tải xuống. Vui lòng quay lại hộp thư đến.',
     safeLinkBody: 'Liên kết bạn đã nhấp là một liên kết thông thường. Vì đang trong quá trình thí nghiệm, việc chuyển đến các trang web bên ngoài đã bị chặn. Vui lòng quay lại màn hình email và xử lý email tiếp theo.',
     phishedTitle: 'Đây là mô phỏng tấn công lừa đảo (phishing)',
     phishedExplainLink: 'Liên kết bạn đã nhấp vào, nếu là một cuộc tấn công lừa đảo thật sự, sẽ dẫn bạn đến một trang web giả do kẻ tấn công kiểm soát.',
@@ -852,6 +869,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: 'Juicio aplazado',
     closeTab: 'Cerrar esta pestaña',
     safeLinkTitle: 'Este enlace es seguro.',
+    safeAttachmentTitle: 'Este archivo es seguro.',
+    safeAttachmentBody: 'Este es un archivo inofensivo usado para el experimento. El archivo no se ha descargado. Vuelve a tu bandeja de entrada.',
     safeLinkBody: 'El enlace en el que hizo clic es un enlace legítimo. Como el experimento está en curso, se ha bloqueado la navegación a sitios externos. Vuelva a la pantalla de correo y continúe con el siguiente mensaje.',
     phishedTitle: 'Esto es una simulación de phishing',
     phishedExplainLink: 'El enlace en el que hiciste clic, en un ataque de phishing real, te habría llevado a un sitio falso controlado por un atacante.',
@@ -947,6 +966,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: 'Ocena odroczona',
     closeTab: 'Zamknij tę kartę',
     safeLinkTitle: 'Ten link jest bezpieczny.',
+    safeAttachmentTitle: 'Ten plik jest bezpieczny.',
+    safeAttachmentBody: 'To nieszkodliwy plik używany w eksperymencie. Plik nie został pobrany. Wróć do skrzynki odbiorczej.',
     safeLinkBody: 'Link, który kliknąłeś, jest zwykłym linkiem. Ponieważ trwa eksperyment, przejście do zewnętrznych witryn zostało zablokowane. Wróć do ekranu poczty i przejdź do następnej wiadomości.',
     phishedTitle: 'To jest symulacja phishingu',
     phishedExplainLink: 'Link, w który kliknąłeś/aś, w prawdziwym ataku phishingowym prowadziłby do fałszywej strony kontrolowanej przez atakującego.',
@@ -1042,6 +1063,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: 'Vurdering utsatt',
     closeTab: 'Lukk denne fanen',
     safeLinkTitle: 'Denne lenken er trygg.',
+    safeAttachmentTitle: 'Denne filen er trygg.',
+    safeAttachmentBody: 'Dette er en harmløs fil som brukes i eksperimentet. Filen er ikke lastet ned. Vennligst gå tilbake til innboksen.',
     safeLinkBody: 'Lenken du klikket på er en vanlig lenke. Siden eksperimentet pågår, er navigering til eksterne nettsteder blokkert. Gå tilbake til e-postskjermen og fortsett med neste e-post.',
     phishedTitle: 'Dette er en phishing-simulering',
     phishedExplainLink: 'Lenken du klikket på ville i et reelt phishing-angrep ha ført deg til et falskt nettsted kontrollert av en angriper.',
@@ -1137,6 +1160,8 @@ const translations: Record<Lang, Translations> = {
     judgmentDeferred: 'Arviointi lykätty',
     closeTab: 'Sulje tämä välilehti',
     safeLinkTitle: 'Tämä linkki on turvallinen.',
+    safeAttachmentTitle: 'Tämä tiedosto on turvallinen.',
+    safeAttachmentBody: 'Tämä on kokeessa käytetty vaaraton tiedosto. Tiedostoa ei ole ladattu. Palaa postilaatikkoosi.',
     safeLinkBody: 'Napsauttamasi linkki on tavallinen linkki. Koska koe on käynnissä, siirtyminen ulkoisille sivustoille on estetty. Palaa sähköpostinäkymään ja jatka seuraavaan viestiin.',
     phishedTitle: 'Tämä on tietojenkalastelusimulaatio',
     phishedExplainLink: 'Linkki, jota klikkasit, olisi todellisessa tietojenkalasteluhyökkäyksessä johtanut hyökkääjän hallitsemalle valesivustolle.',

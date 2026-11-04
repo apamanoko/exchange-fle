@@ -224,7 +224,9 @@ export type TrialRow = {
   exposureIndex: number | null
   slotIndex: number | null
   isTrap: 0 | 1
-  /** 罠にかかった(1)/かからなかった(0)。通常メールは null（空欄） */
+  /** link_click または attachment_open が1件でもあれば1（罠・通常問わず） */
+  clicked: 0 | 1
+  /** 罠にかかった(1)/かからなかった(0)。通常メールは null（空欄）。罠では clicked と同値 */
   fell: 0 | 1 | null
   /** 罠に返信した(1)/しない(0)。通常メールは null（空欄） */
   repliedToTrap: 0 | 1 | null
@@ -284,6 +286,7 @@ export function buildTrialRows(
       exposureIndex,
       slotIndex,
       isTrap:        isTrap ? 1 : 0,
+      clicked:       clicked ? 1 : 0,
       fell:          isTrap ? (clicked ? 1 : 0) : null,
       repliedToTrap: isTrap ? (replied ? 1 : 0) : null,
       suspected:     blocked ? 1 : 0,

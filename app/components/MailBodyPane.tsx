@@ -107,33 +107,66 @@ type AttachmentCardProps = {
   att: Attachment
   onHoverStart?: () => void
   onHoverEnd?: () => void
-  onAttachmentOpen?: () => void
+  onAttachmentOpen?: (isTrapped: boolean) => void
 }
 
+/** ファイルサイズの表示（KB / MB） */
+function formatFileSize(sizeKB: number): string {
+  return sizeKB >= 1024 ? `${(sizeKB / 1024).toFixed(1)} MB` : `${sizeKB} KB`
+}
+
+/**
+ * 長いファイル名は中ほどを「…」で省略する。末尾の拡張子は必ず残す。
+ * 例: verylongname.pdf.exe → verylon…me.pdf.exe（.exe は常に見える）
+ */
+function middleTruncate(name: string, max = 34): string {
+  if (name.length <= max) return name
+  const dot = name.lastIndexOf('.')
+  const ext = dot > 0 ? name.slice(dot) : ''
+  const base = dot > 0 ? name.slice(0, dot) : name
+  const keep = Math.max(8, max - ext.length - 1)
+  const head = Math.ceil(keep * 0.6)
+  const tail = Math.max(3, keep - head)
+  return `${base.slice(0, head)}…${base.slice(-tail)}${ext}`
+}
+
+const WORD_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
 function AttachmentCard({ att, onHoverStart, onHoverEnd, onAttachmentOpen }: AttachmentCardProps) {
-  // isTrapped かつ PDF mime type → PDFアイコンで偽装（T2）
-  const isPseudoPdf = att.isTrapped && att.mimeType === 'application/pdf'
+  // アイコンは「見かけ上の種類」= mimeType で選ぶ。二重拡張子（.pdf.exe）でも mimeType は
+  // 見かけ上の種類（例 application/pdf）のままなので、そのアイコンが維持され偽装が再現される。
+  // 実際の拡張子はファイル名の末尾でだけ分かる。
+  const kind: 'pdf' | 'word' | 'other' =
+    att.mimeType === 'application/pdf' ? 'pdf' :
+    att.mimeType === WORD_MIME         ? 'word' :
+    'other'
 
   return (
     <div
-      className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors max-w-xs"
+      className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors max-w-sm"
       onMouseEnter={onHoverStart}
       onMouseLeave={onHoverEnd}
-      onClick={onAttachmentOpen}
+      onClick={() => onAttachmentOpen?.(att.isTrapped)}
     >
-      {isPseudoPdf ? (
+      {kind === 'pdf' ? (
         <div className="flex-shrink-0 flex flex-col items-center justify-center w-7">
           <FileText className="w-5 h-5 text-red-500" />
           <span className="text-[8px] font-bold text-red-500 leading-none tracking-tight">PDF</span>
         </div>
+      ) : kind === 'word' ? (
+        <div className="flex-shrink-0 flex flex-col items-center justify-center w-7">
+          <FileText className="w-5 h-5 text-blue-600" />
+          <span className="text-[8px] font-bold text-blue-600 leading-none tracking-tight">W</span>
+        </div>
       ) : (
         <Paperclip className="w-4 h-4 text-gray-500 flex-shrink-0" />
       )}
-      <div className="min-w-0">
-        {/* displayName を表示（拡張子偽装）。isTrapped でない場合は name と同じ */}
-        <div className="text-sm text-gray-800 font-medium leading-tight break-all">
-          {att.displayName}
+      <div className="min-w-0 flex flex-col">
+        {/* 実ファイル名（拡張子込みすべて）を表示。中略しても末尾拡張子は残す */}
+        <div className="text-sm text-gray-800 font-medium leading-tight whitespace-nowrap" title={att.name}>
+          {middleTruncate(att.name)}
         </div>
+        <div className="text-xs text-gray-400 leading-tight mt-0.5">{formatFileSize(att.sizeKB)}</div>
       </div>
     </div>
   )
@@ -253,35 +286,36 @@ export default function MailBodyPane({
     tracker?.onHoverEnd(`link_${linkId}`, 'hover_link')
   }, [tracker])
 
-  // リンククリック:
-  //  ① 罠メールのリンク（isPhished）→ /phished を新しいタブで開き、link_click を記録
-  //  ② 通常メールのリンク           → /safe を新しいタブで開く（ログは記録しない）
-  const handleLinkClick = useCallback((displayUrl: string, isPhished: boolean) => {
-    if (practiceMode) return   // 練習: クリックしても何も起きない（遷移・記録なし）
-    if (isPhished) {
-      tracker?.onLinkClick(displayUrl)
-      if (email && sessionId) {
-        window.open(
-          `/phished?type=link&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}&ui_lang=${encodeURIComponent(lang)}`,
-          '_blank'
-        )
-      }
-    } else {
-      window.open(`/safe?type=link&ui_lang=${encodeURIComponent(lang)}`, '_blank')
-    }
-  }, [practiceMode, tracker, sessionId, email, lang])
+  // 共通: /phished・/safe へ渡すクエリ
+  const navQuery = useCallback((type: 'link' | 'attachment') =>
+    `type=${type}&session_id=${encodeURIComponent(sessionId ?? '')}&email_id=${encodeURIComponent(email?.id ?? '')}&ui_lang=${encodeURIComponent(lang)}`,
+  [sessionId, email, lang])
 
-  // 添付ファイルを開く: マルウェア実行を模した /phished ページを新しいタブで開く
-  const handleAttachmentOpen = useCallback(() => {
-    if (practiceMode) return   // 練習: クリックしても何も起きない
-    tracker?.onAttachmentOpen()
-    if (email && sessionId) {
-      window.open(
-        `/phished?type=attachment&session_id=${encodeURIComponent(sessionId)}&email_id=${encodeURIComponent(email.id)}&ui_lang=${encodeURIComponent(lang)}`,
-        '_blank'
-      )
+  // リンククリック:
+  //  ① 罠メールのリンク（isPhished）→ /phished を新しいタブで開く
+  //  ② 通常メールのリンク           → /safe を新しいタブで開く
+  // いずれも link_click を記録する（練習モードのみ記録しない）。
+  const handleLinkClick = useCallback((displayUrl: string, isPhished: boolean) => {
+    if (!practiceMode) tracker?.onLinkClick(displayUrl)
+    if (isPhished) {
+      if (email && sessionId) window.open(`/phished?${navQuery('link')}`, '_blank')
+    } else {
+      window.open(`/safe?${navQuery('link')}`, '_blank')
     }
-  }, [practiceMode, tracker, sessionId, email, lang])
+  }, [practiceMode, tracker, sessionId, email, navQuery])
+
+  // 添付クリック:
+  //  ① 罠メールの添付（isTrapped）→ /phished?type=attachment
+  //  ② 通常メールの添付           → /safe?type=attachment（無害な説明ページ）
+  // いずれも attachment_open を記録する（練習モードのみ記録しない）。
+  const handleAttachmentOpen = useCallback((isTrapped: boolean) => {
+    if (!practiceMode) tracker?.onAttachmentOpen()
+    if (isTrapped) {
+      if (email && sessionId) window.open(`/phished?${navQuery('attachment')}`, '_blank')
+    } else {
+      window.open(`/safe?${navQuery('attachment')}`, '_blank')
+    }
+  }, [practiceMode, tracker, sessionId, email, navQuery])
 
   if (!email) {
     return (

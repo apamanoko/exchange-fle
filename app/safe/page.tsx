@@ -28,9 +28,12 @@ function parseLang(raw: string | null): Lang {
 function SafeContent() {
   const searchParams = useSearchParams()
   const lang = parseLang(searchParams.get('ui_lang'))
-  // type / session_id / email_id はパラメータとして受け取るが、
-  // 通常行動のためログには記録しない。
+  const type = parseType(searchParams.get('type'))
+  // session_id / email_id はパラメータとして受け取るが、記録はクリック元（受信箱）側で行う。
   const t = getT(lang)
+
+  const title = type === 'attachment' ? t.safeAttachmentTitle : t.safeLinkTitle
+  const body  = type === 'attachment' ? t.safeAttachmentBody  : t.safeLinkBody
 
   const handleClose = useCallback(() => {
     window.close()
@@ -44,12 +47,12 @@ function SafeContent() {
         </div>
 
         <h1 className="text-xl font-bold text-gray-900 mb-4">
-          {t.safeLinkTitle}
+          {title}
         </h1>
 
         <div className="bg-white border border-green-200 rounded-xl p-4 mb-8 text-left">
           <p className="text-sm text-gray-700 leading-relaxed">
-            {t.safeLinkBody}
+            {body}
           </p>
         </div>
 

@@ -27,7 +27,7 @@ function pct(n: number, total: number): string {
 // 出力列（研究の試行単位テーブル）
 const TRIAL_COLUMNS: (keyof TrialRow)[] = [
   'session_id', 'attackType', 'lang', 'exposureIndex', 'slotIndex',
-  'isTrap', 'fell', 'repliedToTrap', 'suspected', 'ttaMs', 'hesitationCount',
+  'isTrap', 'clicked', 'fell', 'repliedToTrap', 'suspected', 'ttaMs', 'hesitationCount',
 ]
 
 /** null / undefined は空欄にする（fell は通常メールで空欄など） */

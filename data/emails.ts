@@ -79,8 +79,8 @@ export const emailsJa: Email[] = [
     bodyHtml: `<p>〇〇様</p><p>お世話になっております。Oxford Education Japan サポート担当の山田と申します。</p><p>このたびシステム更新に伴い、振込先口座が変更となりました。次回より新口座へのお振込みをお願いいたします。</p><p>変更後の口座情報は<strong>添付の確認書</strong>をご参照ください。ご不明点はお気軽にお問い合わせください。</p><p><strong>※ 旧口座への振込は{{D+9}}以降は受け付けできません。</strong></p><p>Oxford Education Japan<br>山田 太郎<br>Tel: 03-XXXX-XXXX</p>`,
     attachments: [{
       name: '振込先変更確認書.pdf.exe',
-      displayName: '振込先変更確認書.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -125,8 +125,8 @@ export const emailsJa: Email[] = [
     bodyHtml: `<p>お世話になっております。李です。</p><p>先日ご指摘いただいた不備を修正しました。お手数をおかけして大変申し訳ありません。</p><p>パスワード付きZIPで添付いたします。<br>解凍パスワード：<strong>2024</strong></p><p>よろしくお願いいたします。</p>`,
     attachments: [{
       name: '奨学金申請書_修正版.pdf.exe',
-      displayName: '奨学金申請書_修正版.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -257,8 +257,8 @@ export const emailsEn: Email[] = [
 <p>Springer Academic Support<br>Sarah Thompson<br>Tel: +44-XXXX-XXXX</p>`,
     attachments: [{
       name: 'bank_details_update.pdf.exe',
-      displayName: 'bank_details_update.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -317,8 +317,8 @@ Password: <strong>2024</strong></p>
 <p>Mohammed</p>`,
     attachments: [{
       name: 'scholarship_application_revised.pdf.exe',
-      displayName: 'scholarship_application_revised.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -457,8 +457,8 @@ export const emailsKo: Email[] = [
 <p>Oxford Education Korea<br>김 영수<br>Tel: 02-XXXX-XXXX</p>`,
     attachments: [{
       name: '계좌변경확인서.pdf.exe',
-      displayName: '계좌변경확인서.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -517,8 +517,8 @@ export const emailsKo: Email[] = [
 <p>박 지수 드림</p>`,
     attachments: [{
       name: '장학금신청서_수정본.pdf.exe',
-      displayName: '장학금신청서_수정본.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -658,8 +658,8 @@ export const emailsZh: Email[] = [
 <p>Oxford Education China<br>李 建国<br>Tel: 010-XXXX-XXXX</p>`,
     attachments: [{
       name: '账户变更确认函.pdf.exe',
-      displayName: '账户变更确认函.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -718,8 +718,8 @@ export const emailsZh: Email[] = [
 <p>刘 晓明</p>`,
     attachments: [{
       name: '奖学金申请书_修改版.pdf.exe',
-      displayName: '奖学金申请书_修改版.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -859,8 +859,8 @@ export const emailsIt: Email[] = [
 <p>Oxford Education Italy<br>Marco Bianchi<br>Tel: 02-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Conferma_Coordinate_Bancarie.pdf.exe',
-      displayName: 'Conferma_Coordinate_Bancarie.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -919,8 +919,8 @@ Password: <strong>2024</strong></p>
 <p>Lorenzo</p>`,
     attachments: [{
       name: 'Domanda_Borsa_Corretta.pdf.exe',
-      displayName: 'Domanda_Borsa_Corretta.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -1060,8 +1060,8 @@ export const emailsVi: Email[] = [
 <p>Oxford Education Vietnam<br>Trần Văn Hùng<br>Tel: 028-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Xac_nhan_tai_khoan_moi.pdf.exe',
-      displayName: 'Xac_nhan_tai_khoan_moi.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -1120,8 +1120,8 @@ Mật khẩu giải nén: <strong>2024</strong></p>
 <p>Trần Thị Mai</p>`,
     attachments: [{
       name: 'Ho_so_hoc_bong_da_sua.pdf.exe',
-      displayName: 'Ho_so_hoc_bong_da_sua.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -1261,8 +1261,8 @@ export const emailsEs: Email[] = [
 <p>Oxford Education Spain<br>Carlos Martínez<br>Tel: 91-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Confirmacion_Datos_Bancarios.pdf.exe',
-      displayName: 'Confirmacion_Datos_Bancarios.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -1321,8 +1321,8 @@ Contraseña: <strong>2024</strong></p>
 <p>Miguel</p>`,
     attachments: [{
       name: 'Solicitud_Beca_Corregida.pdf.exe',
-      displayName: 'Solicitud_Beca_Corregida.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -1462,8 +1462,8 @@ export const emailsPl: Email[] = [
 <p>Oxford Education Poland<br>Piotr Nowak<br>Tel: 22-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Potwierdzenie_Danych_Bankowych.pdf.exe',
-      displayName: 'Potwierdzenie_Danych_Bankowych.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -1522,8 +1522,8 @@ Hasło: <strong>2024</strong></p>
 <p>Aleksander</p>`,
     attachments: [{
       name: 'Podanie_Stypendium_Poprawione.pdf.exe',
-      displayName: 'Podanie_Stypendium_Poprawione.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -1663,8 +1663,8 @@ export const emailsNo: Email[] = [
 <p>Oxford Education Norway<br>Lars Hansen<br>Tlf: 22-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Bekreftelse_Bankdetaljer.pdf.exe',
-      displayName: 'Bekreftelse_Bankdetaljer.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -1723,8 +1723,8 @@ Passord: <strong>2024</strong></p>
 <p>Bjørn</p>`,
     attachments: [{
       name: 'Stipendsoknad_Rettet.pdf.exe',
-      displayName: 'Stipendsoknad_Rettet.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
@@ -1864,8 +1864,8 @@ export const emailsFi: Email[] = [
 <p>Oxford Education Finland<br>Juhani Korhonen<br>Puh: 09-XXXX-XXXX</p>`,
     attachments: [{
       name: 'Pankkitietojen_vahvistus.pdf.exe',
-      displayName: 'Pankkitietojen_vahvistus.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 312,
       isTrapped: true,
     }],
   },
@@ -1924,8 +1924,8 @@ Salasana: <strong>2024</strong></p>
 <p>Ville</p>`,
     attachments: [{
       name: 'Stipendihakemus_Korjattu.pdf.exe',
-      displayName: 'Stipendihakemus_Korjattu.pdf',
       mimeType: 'application/pdf',
+      sizeKB: 158,
       isTrapped: true,
     }],
   },
